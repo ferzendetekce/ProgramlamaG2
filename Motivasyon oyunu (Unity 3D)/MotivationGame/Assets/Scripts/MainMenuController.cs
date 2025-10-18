@@ -1,8 +1,14 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
+
+    [SerializeField] private TextMeshProUGUI welcomeText;
+
+    
+
     public void LoadVillageScene()
     {
         SceneManager.LoadScene("VillageScenes");
@@ -23,4 +29,11 @@ public class MainMenuController : MonoBehaviour
         Application.Quit();
         Debug.Log("Oyun kapatýldý");
     }
+
+    public void WelcomeTextChanger(string patientName) { 
+    
+        welcomeText.text = patientName+" hoþ geldiniz.";
+
+    }
+
 }

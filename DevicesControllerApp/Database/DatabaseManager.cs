@@ -19,11 +19,18 @@ namespace DevicesControllerApp.Database
 
         public bool OpenConnection()
         {
+            string connectionString = "Server=;port=;Database=...;user Id=...;password=..."; 
+            //burayı kendi database'nize uygun olarak doldurunuz
+
+            var connection = new NpgsqlConnection(connectionString);
+            connection.Open();
+            
             return false;
         }
 
         public bool CloseConnection()
         {
+            connection.Close();
             return false;
         }
 
@@ -307,3 +314,4 @@ namespace DevicesControllerApp.Database
         public int Index { get; set; }
     }
 }
+

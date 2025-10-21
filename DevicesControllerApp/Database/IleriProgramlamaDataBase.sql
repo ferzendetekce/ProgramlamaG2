@@ -29,6 +29,7 @@ CREATE TABLE Hasta_Bilgileri(
 
 
 CREATE TABLE Kullanicilar_Tablosu(
+	Kullanici_Id SERIAL PRIMARY KEY,
 	Kullanici_Adi_Soyadi VARCHAR(100) NOT NULL,
 	Sifre_Hash VARCHAR(255) NOT NULL,
 	TC VARCHAR(11) NOT NULL,
@@ -42,6 +43,7 @@ CREATE TABLE Kullanicilar_Tablosu(
 	Aktif_Pasif_Durumu VARCHAR(5) NOT NULL
 	
 );
+
 
 
 

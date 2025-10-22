@@ -33,3 +33,17 @@ C:\Users\PC\Source\Repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesCon
 C:\Users\PC\Source\Repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.csproj.CoreCompileInputs.cache
 C:\Users\PC\Source\Repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.exe
 C:\Users\PC\Source\Repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.pdb
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.csproj.AssemblyReference.cache
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.MainForm.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.Ayarlar.Settings.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.Hasta_kayit.PatientRegistration.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.Kullanici.UserRegistration.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.Properties.Resources.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.Raporlama.Reports.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.Servis.Service.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.Terapi.Therapy.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.Veri_izleme.DataMonitoring.resources
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.csproj.GenerateResource.cache
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.csproj.CoreCompileInputs.cache
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.exe
+C:\Users\Feyz\source\repos\ProgramlamaG2\DevicesControllerApp\obj\Debug\DevicesControllerApp.pdb

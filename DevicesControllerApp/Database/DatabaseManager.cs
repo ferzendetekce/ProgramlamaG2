@@ -463,7 +463,7 @@ namespace DevicesControllerApp.Database
 
         public bool CloseConnection()
         {
-            connection.Close();
+            //connection.Close();
             return false;
         }
 

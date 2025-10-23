@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RehabilitationSystem.Communication;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -14,6 +15,7 @@ namespace DevicesControllerApp.Veri_izleme
 
         // Arka planda veri üreten/alan sınıfın bir örneği
         private DeviceCommunication device;
+
         // "Örnek Al" butonunun aktif olup olmadığını tutan bayrak
         private bool freezeMode = false;
         // Ayak grafiklerindeki X ekseninde kaç nokta olacağını belirler
@@ -29,7 +31,7 @@ namespace DevicesControllerApp.Veri_izleme
         private void DataMonitoring_Load(object sender, EventArgs e)
         {
             // Kodun Visual Studio tasarım ekranında çalışmasını engeller.
-            if (!this.DesignMode)
+       /*     if (!this.DesignMode)
             {
                 // Grafiklerin ilk ayarlarını yapar
                 SetupCharts();
@@ -41,18 +43,18 @@ namespace DevicesControllerApp.Veri_izleme
                 device.OnNewData += Device_OnNewData; // Veri geldiğinde Device_OnNewData metodunu tetikle
                 device.Start(); // Veri akışını başlat
             }
-        }
+        }*/
 
         // Ana form kapatılırken çağrılacak olan metot. Arka plan işlemini durdurur
-        public void StopDeviceCommunication()
+       /* public void StopDeviceCommunication()
         {
             device?.Stop(); // device null değilse Stop() metodunu çağır
-        }
+        }*/
 
         // --- VERİ İŞLEME ---
 
         // Cihazdan yeni bir veri paketi geldiğinde tetikler
-        private void Device_OnNewData(object sender, NewDataEventArgs e)
+      /*  private void Device_OnNewData(object sender, NewDataEventArgs e)
         {
             // Veri arka plandan geldiği için UI'ı güvenli bir şekilde güncellemek gerekir
             if (this.InvokeRequired)
@@ -62,17 +64,17 @@ namespace DevicesControllerApp.Veri_izleme
                     // Ana UI thread'ine ProcessData metodunu çalıştırması için bir istek gönderir
                     this.Invoke(new Action(() => ProcessData(e)));
                 }
-                catch (ObjectDisposedException) { /* Program kapanırken hata oluşursa yoksay. */ }
+                catch (ObjectDisposedException) {  }
             }
             else
             {
                 // Zaten ana thread'de isek, metodu doğrudan çalıştır
                 ProcessData(e);
             }
-        }
+        }*/
 
         // Gelen veriyi alıp grafiklere işleyen ana metot
-        private void ProcessData(NewDataEventArgs e)
+      /*  private void ProcessData(NewDataEventArgs e)
         {
             // Sadece bir "adım" algılandığında grafikleri güncelle
             if (e.IsStepDetected)
@@ -90,7 +92,7 @@ namespace DevicesControllerApp.Veri_izleme
                 // Adım sayacını bir artır ve ekrandaki etiketi güncelle
                 stepCount++;
                 lblStepCounter.Text = stepCount.ToString();
-            }
+            }*/
         }
 
         // --- GRAFİK AYARLARI ---

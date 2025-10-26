@@ -31,8 +31,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.button11 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnService = new System.Windows.Forms.Button();
             this.btnReports = new System.Windows.Forms.Button();
@@ -67,8 +65,6 @@
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.Color.SandyBrown;
             this.splitContainer1.Panel1.Controls.Add(this.button11);
-            this.splitContainer1.Panel1.Controls.Add(this.button9);
-            this.splitContainer1.Panel1.Controls.Add(this.button8);
             this.splitContainer1.Panel1.Controls.Add(this.btnSettings);
             this.splitContainer1.Panel1.Controls.Add(this.btnService);
             this.splitContainer1.Panel1.Controls.Add(this.btnReports);
@@ -92,24 +88,6 @@
             this.button11.TabIndex = 10;
             this.button11.Text = "button11";
             this.button11.UseVisualStyleBackColor = true;
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(12, 396);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(133, 40);
-            this.button9.TabIndex = 8;
-            this.button9.Text = "button9";
-            this.button9.UseVisualStyleBackColor = true;
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(12, 350);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(133, 40);
-            this.button8.TabIndex = 7;
-            this.button8.Text = "button8";
-            this.button8.UseVisualStyleBackColor = true;
             // 
             // btnSettings
             // 
@@ -226,8 +204,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button btnSettings;
         private System.Windows.Forms.Button btnService;
         private System.Windows.Forms.Button btnReports;

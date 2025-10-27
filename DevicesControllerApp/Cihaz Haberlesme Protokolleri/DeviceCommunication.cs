@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace RehabilitationSystem.Communication
 {
-    public class DeviceCommunication
+    public class DeviceCommunication : IDisposable
     {
         private static DeviceCommunication _instance;
         private static readonly object _lock = new object();
 
         private SerialPort _serialPort;
         private Thread _readThread;
-        private bool _isReading;
+        private volatile bool _isReading;
         private Queue<byte[]> _commandQueue;
         private readonly object _queueLock = new object();
 
@@ -56,27 +57,93 @@ namespace RehabilitationSystem.Communication
         private DeviceCommunication()
         {
             // Başlangıç ayarları
+            _commandQueue = new Queue<byte[]>();
+            _loadCellBuffer = new Queue<LoadCellDataPacket>();
         }
 
         public bool OpenPort(string portName, int baudRate = 9600, Parity parity = Parity.None,
             int dataBits = 8, StopBits stopBits = StopBits.One)
         {
-            return false;
+            
+            if (IsPortOpen())
+            {
+                if (CurrentPort == portName && BaudRate == baudRate)
+                    return true;
+
+                ClosePort();
+            }
+
+            try
+            {
+                _serialPort = new SerialPort(portName, baudRate, parity, dataBits, stopBits)
+                {
+                    ReadTimeout = CommandTimeout,
+                    WriteTimeout = CommandTimeout
+                };
+
+                _serialPort.Open();
+
+                IsConnected = true;
+                CurrentPort = portName;
+                BaudRate = baudRate;
+
+                StartReadingThread();
+
+                LogCommunication($"Port {portName}@{baudRate} açıldı.", isError: false);
+                OnConnectionStatusChanged(true, portName);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                IsConnected = false;
+                _serialPort = null;
+                LogCommunication($"Port açma hatası ({portName}): {ex.Message}", isError: true);
+                OnErrorOccurred(ex.Message, ErrorLevel.Critical);
+                return false;
+            }
         }
 
         public bool ClosePort()
         {
-            return false;
+            if (!IsPortOpen())
+            {
+                return true;
+            }
+
+            try
+            {
+                StopReadingThread();
+
+                _serialPort.Close();
+                _serialPort.Dispose();
+                _serialPort = null;
+
+                IsConnected = false;
+                string oldPort = CurrentPort;
+                CurrentPort = string.Empty;
+
+                LogCommunication($"Port {oldPort} kapatıldı.", isError: false);
+                OnConnectionStatusChanged(false, oldPort);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogCommunication($"Port kapatma hatası: {ex.Message}", isError: true);
+                OnErrorOccurred(ex.Message, ErrorLevel.Error);
+                _serialPort = null;
+                IsConnected = false;
+                return false;
+            }
         }
 
         public string[] GetAvailablePorts()
         {
-            return null;
+            return SerialPort.GetPortNames();
         }
 
         public bool IsPortOpen()
         {
-            return false;
+            return _serialPort != null && _serialPort.IsOpen;
         }
 
         private void InitializePort()
@@ -135,21 +202,101 @@ namespace RehabilitationSystem.Communication
             // Komut kuyruğunu işleme
         }
 
-       
+
 
         private void StartReadingThread()
         {
-            // Okuma thread'ini başlatma
+            if (_isReading) return;
+            if (_serialPort == null || !_serialPort.IsOpen)
+            {
+                LogCommunication("Port açık değilken okuma thread'i başlatılamadı.", isError: true);
+                return;
+            }
+
+            _isReading = true;
+            _readThread = new Thread(ReadDataContinuously)
+            {
+                IsBackground = true,
+                Name = "DeviceReadThread"
+            };
+            _readThread.Start();
+            LogCommunication("Okuma thread'i başlatıldı.", isError: false);
         }
 
         private void StopReadingThread()
         {
-            // Okuma thread'ini durdurma
+            if (!_isReading) return;
+
+            _isReading = false;
+            try
+            {
+                if (_readThread != null && !_readThread.Join(CommandTimeout))
+                {
+                    LogCommunication("Okuma thread'i zaman aşımında durdurulamadı.", isError: true);
+                }
+            }
+            catch (Exception ex)
+            {
+                LogCommunication($"Okuma thread'i durdurulurken hata: {ex.Message}", isError: true);
+            }
+            _readThread = null;
+            LogCommunication("Okuma thread'i durduruldu.", isError: false);
         }
 
         private void ReadDataContinuously()
         {
-            // Sürekli veri okuma (thread içinde çalışacak)
+            while (_isReading)
+            {
+                try
+                {
+                    if (!IsPortOpen())
+                    {
+                        Thread.Sleep(100);
+                        continue;
+                    }
+
+                    int bytesToRead = _serialPort.BytesToRead;
+                    if (bytesToRead > 0)
+                    {
+                        byte[] buffer = new byte[bytesToRead];
+                        int bytesRead = _serialPort.Read(buffer, 0, bytesToRead);
+
+                        if (bytesRead > 0)
+                        {
+                            if (bytesRead < buffer.Length)
+                            {
+                                byte[] actualData = new byte[bytesRead];
+                                Array.Copy(buffer, actualData, bytesRead);
+                                ProcessReceivedData(actualData);
+                            }
+                            else
+                            {
+                                ProcessReceivedData(buffer);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Thread.Sleep(20);
+                    }
+                }
+                catch (TimeoutException)
+                {
+                }
+                catch (IOException ex)
+                {
+                    LogCommunication($"Okuma hatası (Port kesintisi?): {ex.Message}", isError: true);
+                    HandleCommunicationError(ex, "ReadDataContinuously");
+                    _isReading = false;
+                    OnConnectionStatusChanged(false, CurrentPort);
+                }
+                catch (Exception ex)
+                {
+                    LogCommunication($"Okuma thread'inde genel hata: {ex.Message}", isError: true);
+                    HandleCommunicationError(ex, "ReadDataContinuously (Genel)");
+                    Thread.Sleep(100);
+                }
+            }
         }
 
         private byte[] ReadFromPort(int bytesToRead, int timeoutMs)
@@ -333,16 +480,23 @@ namespace RehabilitationSystem.Communication
             // Cihaz durumu değişikliği event tetikleme
         }
 
-        
+
 
         private void HandleCommunicationError(Exception ex, string operation)
         {
-            // İletişim hatası yönetimi
+            string errorMsg = $"İletişim Hatası ({operation}): {ex.Message}";
+            LogCommunication(errorMsg, isError: true);
+            OnErrorOccurred(errorMsg, ErrorLevel.Error);
         }
 
         private void OnErrorOccurred(string errorMessage, ErrorLevel level)
         {
-            // Hata event tetikleme
+            ErrorOccurred?.Invoke(this, new ErrorEventArgs
+            {
+                ErrorMessage = errorMessage,
+                Level = level,
+                Timestamp = DateTime.Now
+            });
         }
 
         public string GetLastError()
@@ -360,11 +514,17 @@ namespace RehabilitationSystem.Communication
             return false;
         }
 
-      
+
 
         private void OnConnectionStatusChanged(bool isConnected, string portName)
         {
-            // Bağlantı durumu event tetikleme
+            LogCommunication($"Bağlantı durumu değişti: {isConnected}, Port: {portName}", false);
+            ConnectionStatusChanged?.Invoke(this, new ConnectionEventArgs
+            {
+                IsConnected = isConnected,
+                PortName = portName,
+                Timestamp = DateTime.Now
+            });
         }
 
         private void OnCommandResponseReceived(byte commandCode, byte[] response)
@@ -394,15 +554,27 @@ namespace RehabilitationSystem.Communication
 
         private void LogCommunication(string message, bool isError = false)
         {
-            // İletişim loglaması
+            string logPrefix = isError ? "[HATA]" : "[BİLGİ]";
+            System.Diagnostics.Debug.WriteLine($"{DateTime.Now:HH:mm:ss.fff} {logPrefix} {message}");
         }
 
         public void Dispose()
         {
-            // Kaynakları temizleme
+            ClosePort();
+
+            lock (_queueLock)
+            {
+                _commandQueue.Clear();
+            }
+            lock (_bufferLock)
+            {
+                _loadCellBuffer.Clear();
+            }
+
+            GC.SuppressFinalize(this);
         }
 
-       
+
     }
 
     #region Event Args Classes

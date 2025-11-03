@@ -121,7 +121,7 @@ namespace DevicesControllerApp.Kullanici
             FormuTemizle();
         }
 
-        // 2. DataGridView'de seçim değiştiğinde (Az önce oluşturduğunuz metot)
+        // 2. DataGridView'de seçim değiştiğinde  (Az önce oluşturduğunuz metot)
         private void dgvKullanicilar_SelectionChanged(object sender, EventArgs e)
         {
             // Eğer listede seçili bir satır varsa (ve satır sayısı 0'dan fazlaysa)

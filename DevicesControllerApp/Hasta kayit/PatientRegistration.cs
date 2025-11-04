@@ -16,5 +16,10 @@ namespace DevicesControllerApp.Hasta_kayit
         {
             InitializeComponent();
         }
+
+        private void PatientRegistration_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

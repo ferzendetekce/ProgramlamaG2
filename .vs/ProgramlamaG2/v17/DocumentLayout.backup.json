@@ -1,0 +1,112 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DevicesControllerApp\\Hasta kayit\\PatientRegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DevicesControllerApp\\Hasta kayit\\PatientRegistration.resx||{81828910-B8B3-4D2B-99A3-067027C180C1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.Designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DevicesControllerApp\\Hasta kayit\\PatientRegistration.Designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\DevicesControllerApp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DevicesControllerApp\\DevicesControllerApp.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DevicesControllerApp\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PatientRegistration.resx",
+              "DocumentMoniker": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.resx",
+              "RelativeDocumentMoniker": "DevicesControllerApp\\Hasta kayit\\PatientRegistration.resx",
+              "ToolTip": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.resx",
+              "RelativeToolTip": "DevicesControllerApp\\Hasta kayit\\PatientRegistration.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2025-11-04T14:10:33.267Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DevicesControllerApp.csproj",
+              "DocumentMoniker": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\DevicesControllerApp.csproj",
+              "RelativeDocumentMoniker": "DevicesControllerApp\\DevicesControllerApp.csproj",
+              "ToolTip": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\DevicesControllerApp.csproj",
+              "RelativeToolTip": "DevicesControllerApp\\DevicesControllerApp.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-11-04T14:09:46.442Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Program.cs",
+              "RelativeDocumentMoniker": "DevicesControllerApp\\Program.cs",
+              "ToolTip": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Program.cs",
+              "RelativeToolTip": "DevicesControllerApp\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-04T14:09:44.353Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PatientRegistration.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.Designer.cs",
+              "RelativeDocumentMoniker": "DevicesControllerApp\\Hasta kayit\\PatientRegistration.Designer.cs",
+              "ToolTip": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.Designer.cs",
+              "RelativeToolTip": "DevicesControllerApp\\Hasta kayit\\PatientRegistration.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T15:39:35.955Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PatientRegistration.cs",
+              "DocumentMoniker": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.cs",
+              "RelativeDocumentMoniker": "DevicesControllerApp\\Hasta kayit\\PatientRegistration.cs",
+              "ToolTip": "C:\\Users\\hoykan\\source\\repos\\ProgramlamaG2\\DevicesControllerApp\\Hasta kayit\\PatientRegistration.cs",
+              "RelativeToolTip": "DevicesControllerApp\\Hasta kayit\\PatientRegistration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T15:39:34.509Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

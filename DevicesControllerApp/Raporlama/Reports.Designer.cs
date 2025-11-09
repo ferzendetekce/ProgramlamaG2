@@ -28,580 +28,284 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblBaslangicTarihi = new System.Windows.Forms.Label();
-            this.lblBaslik = new System.Windows.Forms.Label();
-            this.dtpBaslangicTarihi = new System.Windows.Forms.DateTimePicker();
-            this.dtpBitisTarihi = new System.Windows.Forms.DateTimePicker();
-            this.lblBitisTarihi = new System.Windows.Forms.Label();
-            this.tabRaporlama = new System.Windows.Forms.TabControl();
-            this.tabHastaRaporlari = new System.Windows.Forms.TabPage();
-            this.cmbHastaSecimi = new System.Windows.Forms.ComboBox();
-            this.tabTerapiRaporlari = new System.Windows.Forms.TabPage();
-            this.tabOperatorRaporlari = new System.Windows.Forms.TabPage();
-            this.tabSistemRaporlari = new System.Windows.Forms.TabPage();
-            this.tabKarsilastirmaliRapor = new System.Windows.Forms.TabPage();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.lblTerapiIki = new System.Windows.Forms.Label();
-            this.cmbTerapiBir = new System.Windows.Forms.ComboBox();
-            this.cmbHastaKarsilastirma = new System.Windows.Forms.ComboBox();
-            this.lblTerapiBir = new System.Windows.Forms.Label();
-            this.lblHastaKarsilastirma = new System.Windows.Forms.Label();
-            this.btnPdfAktar = new System.Windows.Forms.Button();
-            this.btnExcelAktar = new System.Windows.Forms.Button();
-            this.lblEposta = new System.Windows.Forms.Label();
-            this.txtEposta = new System.Windows.Forms.TextBox();
-            this.btnEpostaGonder = new System.Windows.Forms.Button();
-            this.lblDil = new System.Windows.Forms.Label();
-            this.cmbDil = new System.Windows.Forms.ComboBox();
-            this.tabloRapor = new System.Windows.Forms.DataGridView();
-            this.btnHastalariListele = new System.Windows.Forms.Button();
-            this.lblHastaSecimi = new System.Windows.Forms.Label();
-            this.btnHastaDetayRaporu = new System.Windows.Forms.Button();
-            this.btnHastaTerapiGecmisi = new System.Windows.Forms.Button();
-            this.btnTerapiSayilari = new System.Windows.Forms.Button();
-            this.btnTerapiSureleri = new System.Windows.Forms.Button();
-            this.btnLoadcellGrafikGoster = new System.Windows.Forms.Button();
-            this.lblTerapiHastaSeciniz = new System.Windows.Forms.Label();
-            this.cmbTerapiHastaSecimi = new System.Windows.Forms.ComboBox();
-            this.lblTerapi = new System.Windows.Forms.Label();
-            this.cmbTerapiSecimi = new System.Windows.Forms.ComboBox();
-            this.btnOperatorTerapiIstatistik = new System.Windows.Forms.Button();
-            this.btnOperatorCalismaSaatleri = new System.Windows.Forms.Button();
-            this.btnHataLoglari = new System.Windows.Forms.Button();
-            this.btnKullanimIstatistikleri = new System.Windows.Forms.Button();
-            this.btnCihazPerformans = new System.Windows.Forms.Button();
-            this.btnKarsilastirmaliRapor = new System.Windows.Forms.Button();
-            this.tabRaporlama.SuspendLayout();
-            this.tabHastaRaporlari.SuspendLayout();
-            this.tabTerapiRaporlari.SuspendLayout();
-            this.tabOperatorRaporlari.SuspendLayout();
-            this.tabSistemRaporlari.SuspendLayout();
-            this.tabKarsilastirmaliRapor.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tabloRapor)).BeginInit();
+            this.pnlFiltreleme = new System.Windows.Forms.Panel();
+            this.buttonRaporOlustur = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.rbTerapist = new System.Windows.Forms.RadioButton();
+            this.rbHata = new System.Windows.Forms.RadioButton();
+            this.rbIlerleme = new System.Windows.Forms.RadioButton();
+            this.rbSeans = new System.Windows.Forms.RadioButton();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dtpBitis = new System.Windows.Forms.DateTimePicker();
+            this.dtpBaslangic = new System.Windows.Forms.DateTimePicker();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tbTc = new System.Windows.Forms.TextBox();
+            this.tbSoyad = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbAd = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pnlRaporSonuclari = new System.Windows.Forms.Panel();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.pnlFiltreleme.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.pnlRaporSonuclari.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
-            // lblBaslangicTarihi
-            // 
-            this.lblBaslangicTarihi.AutoSize = true;
-            this.lblBaslangicTarihi.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblBaslangicTarihi.Location = new System.Drawing.Point(61, 72);
-            this.lblBaslangicTarihi.Name = "lblBaslangicTarihi";
-            this.lblBaslangicTarihi.Size = new System.Drawing.Size(91, 15);
-            this.lblBaslangicTarihi.TabIndex = 0;
-            this.lblBaslangicTarihi.Text = "Başlangıç Tarihi";
-            // 
-            // lblBaslik
-            // 
-            this.lblBaslik.BackColor = System.Drawing.SystemColors.Window;
-            this.lblBaslik.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblBaslik.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.lblBaslik.ForeColor = System.Drawing.Color.DarkBlue;
-            this.lblBaslik.Location = new System.Drawing.Point(0, 0);
-            this.lblBaslik.Name = "lblBaslik";
-            this.lblBaslik.Size = new System.Drawing.Size(1343, 32);
-            this.lblBaslik.TabIndex = 1;
-            this.lblBaslik.Text = "RAPORLAMA MODÜLÜ";
-            this.lblBaslik.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // dtpBaslangicTarihi
-            // 
-            this.dtpBaslangicTarihi.CustomFormat = "dd.MM.yyyy";
-            this.dtpBaslangicTarihi.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpBaslangicTarihi.Location = new System.Drawing.Point(64, 91);
-            this.dtpBaslangicTarihi.Name = "dtpBaslangicTarihi";
-            this.dtpBaslangicTarihi.Size = new System.Drawing.Size(93, 20);
-            this.dtpBaslangicTarihi.TabIndex = 2;
-            // 
-            // dtpBitisTarihi
-            // 
-            this.dtpBitisTarihi.CustomFormat = "dd.MM.yyyy";
-            this.dtpBitisTarihi.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpBitisTarihi.Location = new System.Drawing.Point(191, 91);
-            this.dtpBitisTarihi.Name = "dtpBitisTarihi";
-            this.dtpBitisTarihi.Size = new System.Drawing.Size(93, 20);
-            this.dtpBitisTarihi.TabIndex = 4;
-            // 
-            // lblBitisTarihi
-            // 
-            this.lblBitisTarihi.AutoSize = true;
-            this.lblBitisTarihi.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblBitisTarihi.Location = new System.Drawing.Point(188, 72);
-            this.lblBitisTarihi.Name = "lblBitisTarihi";
-            this.lblBitisTarihi.Size = new System.Drawing.Size(64, 15);
-            this.lblBitisTarihi.TabIndex = 3;
-            this.lblBitisTarihi.Text = "Bitiş Tarihi";
-            // 
-            // tabRaporlama
-            // 
-            this.tabRaporlama.Controls.Add(this.tabHastaRaporlari);
-            this.tabRaporlama.Controls.Add(this.tabTerapiRaporlari);
-            this.tabRaporlama.Controls.Add(this.tabOperatorRaporlari);
-            this.tabRaporlama.Controls.Add(this.tabSistemRaporlari);
-            this.tabRaporlama.Controls.Add(this.tabKarsilastirmaliRapor);
-            this.tabRaporlama.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.tabRaporlama.Location = new System.Drawing.Point(322, 50);
-            this.tabRaporlama.Name = "tabRaporlama";
-            this.tabRaporlama.SelectedIndex = 0;
-            this.tabRaporlama.Size = new System.Drawing.Size(624, 90);
-            this.tabRaporlama.TabIndex = 5;
-            // 
-            // tabHastaRaporlari
-            // 
-            this.tabHastaRaporlari.Controls.Add(this.btnHastaTerapiGecmisi);
-            this.tabHastaRaporlari.Controls.Add(this.btnHastaDetayRaporu);
-            this.tabHastaRaporlari.Controls.Add(this.lblHastaSecimi);
-            this.tabHastaRaporlari.Controls.Add(this.btnHastalariListele);
-            this.tabHastaRaporlari.Controls.Add(this.cmbHastaSecimi);
-            this.tabHastaRaporlari.Location = new System.Drawing.Point(4, 24);
-            this.tabHastaRaporlari.Name = "tabHastaRaporlari";
-            this.tabHastaRaporlari.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHastaRaporlari.Size = new System.Drawing.Size(616, 62);
-            this.tabHastaRaporlari.TabIndex = 0;
-            this.tabHastaRaporlari.Text = "Hasta Raporları";
-            this.tabHastaRaporlari.UseVisualStyleBackColor = true;
-            // 
-            // cmbHastaSecimi
-            // 
-            this.cmbHastaSecimi.FormattingEnabled = true;
-            this.cmbHastaSecimi.Location = new System.Drawing.Point(184, 27);
-            this.cmbHastaSecimi.Name = "cmbHastaSecimi";
-            this.cmbHastaSecimi.Size = new System.Drawing.Size(121, 23);
-            this.cmbHastaSecimi.TabIndex = 0;
-            this.cmbHastaSecimi.SelectedIndexChanged += new System.EventHandler(this.cmbHastaSecimi_SelectedIndexChanged);
-            // 
-            // tabTerapiRaporlari
-            // 
-            this.tabTerapiRaporlari.Controls.Add(this.lblTerapi);
-            this.tabTerapiRaporlari.Controls.Add(this.cmbTerapiSecimi);
-            this.tabTerapiRaporlari.Controls.Add(this.lblTerapiHastaSeciniz);
-            this.tabTerapiRaporlari.Controls.Add(this.cmbTerapiHastaSecimi);
-            this.tabTerapiRaporlari.Controls.Add(this.btnLoadcellGrafikGoster);
-            this.tabTerapiRaporlari.Controls.Add(this.btnTerapiSureleri);
-            this.tabTerapiRaporlari.Controls.Add(this.btnTerapiSayilari);
-            this.tabTerapiRaporlari.Location = new System.Drawing.Point(4, 24);
-            this.tabTerapiRaporlari.Name = "tabTerapiRaporlari";
-            this.tabTerapiRaporlari.Padding = new System.Windows.Forms.Padding(3);
-            this.tabTerapiRaporlari.Size = new System.Drawing.Size(616, 62);
-            this.tabTerapiRaporlari.TabIndex = 1;
-            this.tabTerapiRaporlari.Text = "Terapi Raporları";
-            this.tabTerapiRaporlari.UseVisualStyleBackColor = true;
-            // 
-            // tabOperatorRaporlari
-            // 
-            this.tabOperatorRaporlari.Controls.Add(this.btnOperatorCalismaSaatleri);
-            this.tabOperatorRaporlari.Controls.Add(this.btnOperatorTerapiIstatistik);
-            this.tabOperatorRaporlari.Location = new System.Drawing.Point(4, 24);
-            this.tabOperatorRaporlari.Name = "tabOperatorRaporlari";
-            this.tabOperatorRaporlari.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOperatorRaporlari.Size = new System.Drawing.Size(616, 62);
-            this.tabOperatorRaporlari.TabIndex = 2;
-            this.tabOperatorRaporlari.Text = "Operatör Raporları";
-            this.tabOperatorRaporlari.UseVisualStyleBackColor = true;
-            // 
-            // tabSistemRaporlari
-            // 
-            this.tabSistemRaporlari.Controls.Add(this.btnCihazPerformans);
-            this.tabSistemRaporlari.Controls.Add(this.btnKullanimIstatistikleri);
-            this.tabSistemRaporlari.Controls.Add(this.btnHataLoglari);
-            this.tabSistemRaporlari.Location = new System.Drawing.Point(4, 24);
-            this.tabSistemRaporlari.Name = "tabSistemRaporlari";
-            this.tabSistemRaporlari.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSistemRaporlari.Size = new System.Drawing.Size(616, 62);
-            this.tabSistemRaporlari.TabIndex = 3;
-            this.tabSistemRaporlari.Text = "Sistem Raporlari";
-            this.tabSistemRaporlari.UseVisualStyleBackColor = true;
-            // 
-            // tabKarsilastirmaliRapor
-            // 
-            this.tabKarsilastirmaliRapor.Controls.Add(this.btnKarsilastirmaliRapor);
-            this.tabKarsilastirmaliRapor.Controls.Add(this.comboBox1);
-            this.tabKarsilastirmaliRapor.Controls.Add(this.lblTerapiIki);
-            this.tabKarsilastirmaliRapor.Controls.Add(this.cmbTerapiBir);
-            this.tabKarsilastirmaliRapor.Controls.Add(this.cmbHastaKarsilastirma);
-            this.tabKarsilastirmaliRapor.Controls.Add(this.lblTerapiBir);
-            this.tabKarsilastirmaliRapor.Controls.Add(this.lblHastaKarsilastirma);
-            this.tabKarsilastirmaliRapor.Location = new System.Drawing.Point(4, 24);
-            this.tabKarsilastirmaliRapor.Name = "tabKarsilastirmaliRapor";
-            this.tabKarsilastirmaliRapor.Padding = new System.Windows.Forms.Padding(3);
-            this.tabKarsilastirmaliRapor.Size = new System.Drawing.Size(616, 62);
-            this.tabKarsilastirmaliRapor.TabIndex = 4;
-            this.tabKarsilastirmaliRapor.Text = "Karşılaştırmalı Rapor";
-            this.tabKarsilastirmaliRapor.UseVisualStyleBackColor = true;
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(323, 28);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 23);
-            this.comboBox1.TabIndex = 5;
-            // 
-            // lblTerapiIki
-            // 
-            this.lblTerapiIki.AutoSize = true;
-            this.lblTerapiIki.Location = new System.Drawing.Point(320, 12);
-            this.lblTerapiIki.Name = "lblTerapiIki";
-            this.lblTerapiIki.Size = new System.Drawing.Size(51, 15);
-            this.lblTerapiIki.TabIndex = 4;
-            this.lblTerapiIki.Text = "Terapi 2";
-            // 
-            // cmbTerapiBir
-            // 
-            this.cmbTerapiBir.FormattingEnabled = true;
-            this.cmbTerapiBir.Location = new System.Drawing.Point(180, 28);
-            this.cmbTerapiBir.Name = "cmbTerapiBir";
-            this.cmbTerapiBir.Size = new System.Drawing.Size(121, 23);
-            this.cmbTerapiBir.TabIndex = 3;
-            // 
-            // cmbHastaKarsilastirma
-            // 
-            this.cmbHastaKarsilastirma.FormattingEnabled = true;
-            this.cmbHastaKarsilastirma.Location = new System.Drawing.Point(37, 28);
-            this.cmbHastaKarsilastirma.Name = "cmbHastaKarsilastirma";
-            this.cmbHastaKarsilastirma.Size = new System.Drawing.Size(121, 23);
-            this.cmbHastaKarsilastirma.TabIndex = 2;
-            // 
-            // lblTerapiBir
-            // 
-            this.lblTerapiBir.AutoSize = true;
-            this.lblTerapiBir.Location = new System.Drawing.Point(177, 12);
-            this.lblTerapiBir.Name = "lblTerapiBir";
-            this.lblTerapiBir.Size = new System.Drawing.Size(51, 15);
-            this.lblTerapiBir.TabIndex = 1;
-            this.lblTerapiBir.Text = "Terapi 1";
-            // 
-            // lblHastaKarsilastirma
-            // 
-            this.lblHastaKarsilastirma.AutoSize = true;
-            this.lblHastaKarsilastirma.Location = new System.Drawing.Point(37, 12);
-            this.lblHastaKarsilastirma.Name = "lblHastaKarsilastirma";
-            this.lblHastaKarsilastirma.Size = new System.Drawing.Size(78, 15);
-            this.lblHastaKarsilastirma.TabIndex = 0;
-            this.lblHastaKarsilastirma.Text = "Hasta Seçimi";
-            // 
-            // btnPdfAktar
-            // 
-            this.btnPdfAktar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnPdfAktar.Location = new System.Drawing.Point(979, 53);
-            this.btnPdfAktar.Name = "btnPdfAktar";
-            this.btnPdfAktar.Size = new System.Drawing.Size(75, 38);
-            this.btnPdfAktar.TabIndex = 7;
-            this.btnPdfAktar.Text = "PDF";
-            this.btnPdfAktar.UseVisualStyleBackColor = true;
-            // 
-            // btnExcelAktar
-            // 
-            this.btnExcelAktar.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnExcelAktar.Location = new System.Drawing.Point(979, 97);
-            this.btnExcelAktar.Name = "btnExcelAktar";
-            this.btnExcelAktar.Size = new System.Drawing.Size(75, 38);
-            this.btnExcelAktar.TabIndex = 8;
-            this.btnExcelAktar.Text = "Excel";
-            this.btnExcelAktar.UseVisualStyleBackColor = true;
-            // 
-            // lblEposta
-            // 
-            this.lblEposta.AutoSize = true;
-            this.lblEposta.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblEposta.Location = new System.Drawing.Point(1081, 70);
-            this.lblEposta.Name = "lblEposta";
-            this.lblEposta.Size = new System.Drawing.Size(48, 15);
-            this.lblEposta.TabIndex = 9;
-            this.lblEposta.Text = "E-Posta";
-            // 
-            // txtEposta
-            // 
-            this.txtEposta.Location = new System.Drawing.Point(1132, 67);
-            this.txtEposta.Name = "txtEposta";
-            this.txtEposta.Size = new System.Drawing.Size(122, 20);
-            this.txtEposta.TabIndex = 10;
-            // 
-            // btnEpostaGonder
-            // 
-            this.btnEpostaGonder.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnEpostaGonder.Location = new System.Drawing.Point(1084, 93);
-            this.btnEpostaGonder.Name = "btnEpostaGonder";
-            this.btnEpostaGonder.Size = new System.Drawing.Size(170, 23);
-            this.btnEpostaGonder.TabIndex = 11;
-            this.btnEpostaGonder.Text = "E-Posta Gönder";
-            this.btnEpostaGonder.UseVisualStyleBackColor = true;
-            // 
-            // lblDil
-            // 
-            this.lblDil.AutoSize = true;
-            this.lblDil.Location = new System.Drawing.Point(1257, 41);
-            this.lblDil.Name = "lblDil";
-            this.lblDil.Size = new System.Drawing.Size(19, 13);
-            this.lblDil.TabIndex = 12;
-            this.lblDil.Text = "Dil";
-            // 
-            // cmbDil
-            // 
-            this.cmbDil.FormattingEnabled = true;
-            this.cmbDil.Location = new System.Drawing.Point(1282, 38);
-            this.cmbDil.Name = "cmbDil";
-            this.cmbDil.Size = new System.Drawing.Size(44, 21);
-            this.cmbDil.TabIndex = 6;
-            // 
-            // tabloRapor
-            // 
-            this.tabloRapor.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tabloRapor.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tabloRapor.Location = new System.Drawing.Point(0, 146);
-            this.tabloRapor.Name = "tabloRapor";
-            this.tabloRapor.Size = new System.Drawing.Size(1343, 559);
-            this.tabloRapor.TabIndex = 13;
-            this.tabloRapor.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.tabloRapor_CellContentClick);
-            // 
-            // btnHastalariListele
-            // 
-            this.btnHastalariListele.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnHastalariListele.Location = new System.Drawing.Point(19, 12);
-            this.btnHastalariListele.Name = "btnHastalariListele";
-            this.btnHastalariListele.Size = new System.Drawing.Size(120, 44);
-            this.btnHastalariListele.TabIndex = 14;
-            this.btnHastalariListele.Text = "Hastaları Listele";
-            this.btnHastalariListele.UseVisualStyleBackColor = true;
-            this.btnHastalariListele.Click += new System.EventHandler(this.btnHastalariListele_Click);
-            // 
-            // lblHastaSecimi
-            // 
-            this.lblHastaSecimi.AutoSize = true;
-            this.lblHastaSecimi.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblHastaSecimi.Location = new System.Drawing.Point(181, 12);
-            this.lblHastaSecimi.Name = "lblHastaSecimi";
-            this.lblHastaSecimi.Size = new System.Drawing.Size(80, 15);
-            this.lblHastaSecimi.TabIndex = 14;
-            this.lblHastaSecimi.Text = "Hasta Seçiniz";
-            // 
-            // btnHastaDetayRaporu
-            // 
-            this.btnHastaDetayRaporu.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnHastaDetayRaporu.Location = new System.Drawing.Point(323, 12);
-            this.btnHastaDetayRaporu.Name = "btnHastaDetayRaporu";
-            this.btnHastaDetayRaporu.Size = new System.Drawing.Size(87, 44);
-            this.btnHastaDetayRaporu.TabIndex = 15;
-            this.btnHastaDetayRaporu.Text = "Hasta Detay Raporu";
-            this.btnHastaDetayRaporu.UseVisualStyleBackColor = true;
-            this.btnHastaDetayRaporu.Click += new System.EventHandler(this.btnHastaDetayRaporu_Click);
-            // 
-            // btnHastaTerapiGecmisi
-            // 
-            this.btnHastaTerapiGecmisi.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnHastaTerapiGecmisi.Location = new System.Drawing.Point(426, 12);
-            this.btnHastaTerapiGecmisi.Name = "btnHastaTerapiGecmisi";
-            this.btnHastaTerapiGecmisi.Size = new System.Drawing.Size(87, 44);
-            this.btnHastaTerapiGecmisi.TabIndex = 16;
-            this.btnHastaTerapiGecmisi.Text = "Hasta Terapi Geçmişi";
-            this.btnHastaTerapiGecmisi.UseVisualStyleBackColor = true;
-            this.btnHastaTerapiGecmisi.Click += new System.EventHandler(this.btnHastaTerapiGecmisi_Click);
-            // 
-            // btnTerapiSayilari
-            // 
-            this.btnTerapiSayilari.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnTerapiSayilari.Location = new System.Drawing.Point(13, 12);
-            this.btnTerapiSayilari.Name = "btnTerapiSayilari";
-            this.btnTerapiSayilari.Size = new System.Drawing.Size(77, 44);
-            this.btnTerapiSayilari.TabIndex = 15;
-            this.btnTerapiSayilari.Text = "Terapi Sayıları";
-            this.btnTerapiSayilari.UseVisualStyleBackColor = true;
-            // 
-            // btnTerapiSureleri
-            // 
-            this.btnTerapiSureleri.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnTerapiSureleri.Location = new System.Drawing.Point(103, 12);
-            this.btnTerapiSureleri.Name = "btnTerapiSureleri";
-            this.btnTerapiSureleri.Size = new System.Drawing.Size(75, 44);
-            this.btnTerapiSureleri.TabIndex = 16;
-            this.btnTerapiSureleri.Text = "Terapi Süreleri";
-            this.btnTerapiSureleri.UseVisualStyleBackColor = true;
-            // 
-            // btnLoadcellGrafikGoster
-            // 
-            this.btnLoadcellGrafikGoster.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnLoadcellGrafikGoster.Location = new System.Drawing.Point(509, 12);
-            this.btnLoadcellGrafikGoster.Name = "btnLoadcellGrafikGoster";
-            this.btnLoadcellGrafikGoster.Size = new System.Drawing.Size(94, 44);
-            this.btnLoadcellGrafikGoster.TabIndex = 17;
-            this.btnLoadcellGrafikGoster.Text = "Loadcell Verilerini Gör";
-            this.btnLoadcellGrafikGoster.UseVisualStyleBackColor = true;
-            // 
-            // lblTerapiHastaSeciniz
-            // 
-            this.lblTerapiHastaSeciniz.AutoSize = true;
-            this.lblTerapiHastaSeciniz.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblTerapiHastaSeciniz.Location = new System.Drawing.Point(224, 12);
-            this.lblTerapiHastaSeciniz.Name = "lblTerapiHastaSeciniz";
-            this.lblTerapiHastaSeciniz.Size = new System.Drawing.Size(80, 15);
-            this.lblTerapiHastaSeciniz.TabIndex = 19;
-            this.lblTerapiHastaSeciniz.Text = "Hasta Seçiniz";
-            // 
-            // cmbTerapiHastaSecimi
-            // 
-            this.cmbTerapiHastaSecimi.FormattingEnabled = true;
-            this.cmbTerapiHastaSecimi.Location = new System.Drawing.Point(227, 27);
-            this.cmbTerapiHastaSecimi.Name = "cmbTerapiHastaSecimi";
-            this.cmbTerapiHastaSecimi.Size = new System.Drawing.Size(121, 23);
-            this.cmbTerapiHastaSecimi.TabIndex = 18;
-            // 
-            // lblTerapi
-            // 
-            this.lblTerapi.AutoSize = true;
-            this.lblTerapi.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.lblTerapi.Location = new System.Drawing.Point(366, 12);
-            this.lblTerapi.Name = "lblTerapi";
-            this.lblTerapi.Size = new System.Drawing.Size(83, 15);
-            this.lblTerapi.TabIndex = 21;
-            this.lblTerapi.Text = "Terapi Seçiniz";
-            // 
-            // cmbTerapiSecimi
-            // 
-            this.cmbTerapiSecimi.FormattingEnabled = true;
-            this.cmbTerapiSecimi.Location = new System.Drawing.Point(369, 27);
-            this.cmbTerapiSecimi.Name = "cmbTerapiSecimi";
-            this.cmbTerapiSecimi.Size = new System.Drawing.Size(121, 23);
-            this.cmbTerapiSecimi.TabIndex = 20;
-            // 
-            // btnOperatorTerapiIstatistik
-            // 
-            this.btnOperatorTerapiIstatistik.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnOperatorTerapiIstatistik.Location = new System.Drawing.Point(19, 12);
-            this.btnOperatorTerapiIstatistik.Name = "btnOperatorTerapiIstatistik";
-            this.btnOperatorTerapiIstatistik.Size = new System.Drawing.Size(120, 44);
-            this.btnOperatorTerapiIstatistik.TabIndex = 15;
-            this.btnOperatorTerapiIstatistik.Text = "Terapi İstatistikleri";
-            this.btnOperatorTerapiIstatistik.UseVisualStyleBackColor = true;
-            // 
-            // btnOperatorCalismaSaatleri
-            // 
-            this.btnOperatorCalismaSaatleri.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnOperatorCalismaSaatleri.Location = new System.Drawing.Point(173, 12);
-            this.btnOperatorCalismaSaatleri.Name = "btnOperatorCalismaSaatleri";
-            this.btnOperatorCalismaSaatleri.Size = new System.Drawing.Size(120, 44);
-            this.btnOperatorCalismaSaatleri.TabIndex = 16;
-            this.btnOperatorCalismaSaatleri.Text = "Çalışma Saatleri";
-            this.btnOperatorCalismaSaatleri.UseVisualStyleBackColor = true;
-            // 
-            // btnHataLoglari
-            // 
-            this.btnHataLoglari.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnHataLoglari.Location = new System.Drawing.Point(22, 12);
-            this.btnHataLoglari.Name = "btnHataLoglari";
-            this.btnHataLoglari.Size = new System.Drawing.Size(120, 44);
-            this.btnHataLoglari.TabIndex = 16;
-            this.btnHataLoglari.Text = "Hata Logları";
-            this.btnHataLoglari.UseVisualStyleBackColor = true;
-            // 
-            // btnKullanimIstatistikleri
-            // 
-            this.btnKullanimIstatistikleri.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnKullanimIstatistikleri.Location = new System.Drawing.Point(215, 12);
-            this.btnKullanimIstatistikleri.Name = "btnKullanimIstatistikleri";
-            this.btnKullanimIstatistikleri.Size = new System.Drawing.Size(146, 44);
-            this.btnKullanimIstatistikleri.TabIndex = 17;
-            this.btnKullanimIstatistikleri.Text = "Kullanım İstatistikleri";
-            this.btnKullanimIstatistikleri.UseVisualStyleBackColor = true;
-            // 
-            // btnCihazPerformans
-            // 
-            this.btnCihazPerformans.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnCihazPerformans.Location = new System.Drawing.Point(438, 12);
-            this.btnCihazPerformans.Name = "btnCihazPerformans";
-            this.btnCihazPerformans.Size = new System.Drawing.Size(120, 44);
-            this.btnCihazPerformans.TabIndex = 18;
-            this.btnCihazPerformans.Text = "Cihaz Performans";
-            this.btnCihazPerformans.UseVisualStyleBackColor = true;
-            // 
-            // btnKarsilastirmaliRapor
-            // 
-            this.btnKarsilastirmaliRapor.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnKarsilastirmaliRapor.Location = new System.Drawing.Point(471, 12);
-            this.btnKarsilastirmaliRapor.Name = "btnKarsilastirmaliRapor";
-            this.btnKarsilastirmaliRapor.Size = new System.Drawing.Size(120, 44);
-            this.btnKarsilastirmaliRapor.TabIndex = 19;
-            this.btnKarsilastirmaliRapor.Text = "Raporu Görüntüle";
-            this.btnKarsilastirmaliRapor.UseVisualStyleBackColor = true;
+            // pnlFiltreleme
+            // 
+            this.pnlFiltreleme.Controls.Add(this.buttonRaporOlustur);
+            this.pnlFiltreleme.Controls.Add(this.groupBox3);
+            this.pnlFiltreleme.Controls.Add(this.groupBox2);
+            this.pnlFiltreleme.Controls.Add(this.groupBox1);
+            this.pnlFiltreleme.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlFiltreleme.Location = new System.Drawing.Point(0, 0);
+            this.pnlFiltreleme.Name = "pnlFiltreleme";
+            this.pnlFiltreleme.Size = new System.Drawing.Size(537, 868);
+            this.pnlFiltreleme.TabIndex = 0;
+            // 
+            // buttonRaporOlustur
+            // 
+            this.buttonRaporOlustur.Location = new System.Drawing.Point(136, 684);
+            this.buttonRaporOlustur.Name = "buttonRaporOlustur";
+            this.buttonRaporOlustur.Size = new System.Drawing.Size(226, 95);
+            this.buttonRaporOlustur.TabIndex = 3;
+            this.buttonRaporOlustur.Text = "RAPORU OLUŞTUR";
+            this.buttonRaporOlustur.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.rbTerapist);
+            this.groupBox3.Controls.Add(this.rbHata);
+            this.groupBox3.Controls.Add(this.rbIlerleme);
+            this.groupBox3.Controls.Add(this.rbSeans);
+            this.groupBox3.Location = new System.Drawing.Point(21, 385);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(483, 214);
+            this.groupBox3.TabIndex = 2;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "groupBox3";
+            // 
+            // rbTerapist
+            // 
+            this.rbTerapist.AutoSize = true;
+            this.rbTerapist.Location = new System.Drawing.Point(19, 174);
+            this.rbTerapist.Name = "rbTerapist";
+            this.rbTerapist.Size = new System.Drawing.Size(183, 20);
+            this.rbTerapist.TabIndex = 3;
+            this.rbTerapist.TabStop = true;
+            this.rbTerapist.Text = "Operatör/Terapist Raporu";
+            this.rbTerapist.UseVisualStyleBackColor = true;
+            // 
+            // rbHata
+            // 
+            this.rbHata.AutoSize = true;
+            this.rbHata.Location = new System.Drawing.Point(19, 133);
+            this.rbHata.Name = "rbHata";
+            this.rbHata.Size = new System.Drawing.Size(186, 20);
+            this.rbHata.TabIndex = 2;
+            this.rbHata.TabStop = true;
+            this.rbHata.Text = "Hata/Problem Log Raporu";
+            this.rbHata.UseVisualStyleBackColor = true;
+            // 
+            // rbIlerleme
+            // 
+            this.rbIlerleme.AutoSize = true;
+            this.rbIlerleme.Location = new System.Drawing.Point(19, 91);
+            this.rbIlerleme.Name = "rbIlerleme";
+            this.rbIlerleme.Size = new System.Drawing.Size(197, 20);
+            this.rbIlerleme.TabIndex = 1;
+            this.rbIlerleme.TabStop = true;
+            this.rbIlerleme.Text = "Performans/İlerleme Raporu";
+            this.rbIlerleme.UseVisualStyleBackColor = true;
+            // 
+            // rbSeans
+            // 
+            this.rbSeans.AutoSize = true;
+            this.rbSeans.Location = new System.Drawing.Point(19, 46);
+            this.rbSeans.Name = "rbSeans";
+            this.rbSeans.Size = new System.Drawing.Size(169, 20);
+            this.rbSeans.TabIndex = 0;
+            this.rbSeans.TabStop = true;
+            this.rbSeans.Text = "Seans/Kullanım Raporu";
+            this.rbSeans.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.dtpBitis);
+            this.groupBox2.Controls.Add(this.dtpBaslangic);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.label4);
+            this.groupBox2.Location = new System.Drawing.Point(21, 204);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(483, 174);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "groupBox2";
+            // 
+            // dtpBitis
+            // 
+            this.dtpBitis.Location = new System.Drawing.Point(141, 111);
+            this.dtpBitis.Name = "dtpBitis";
+            this.dtpBitis.Size = new System.Drawing.Size(200, 22);
+            this.dtpBitis.TabIndex = 6;
+            // 
+            // dtpBaslangic
+            // 
+            this.dtpBaslangic.Location = new System.Drawing.Point(141, 50);
+            this.dtpBaslangic.Name = "dtpBaslangic";
+            this.dtpBaslangic.Size = new System.Drawing.Size(200, 22);
+            this.dtpBaslangic.TabIndex = 5;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(19, 111);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(72, 16);
+            this.label5.TabIndex = 4;
+            this.label5.Text = "Bitiş Tarihi:";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(16, 50);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(107, 16);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Başlangıç Tarihi:";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.tbTc);
+            this.groupBox1.Controls.Add(this.tbSoyad);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.tbAd);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Location = new System.Drawing.Point(21, 34);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(483, 164);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "groupBox1";
+            // 
+            // tbTc
+            // 
+            this.tbTc.Location = new System.Drawing.Point(115, 124);
+            this.tbTc.Name = "tbTc";
+            this.tbTc.Size = new System.Drawing.Size(192, 22);
+            this.tbTc.TabIndex = 3;
+            // 
+            // tbSoyad
+            // 
+            this.tbSoyad.Location = new System.Drawing.Point(115, 84);
+            this.tbSoyad.Name = "tbSoyad";
+            this.tbSoyad.Size = new System.Drawing.Size(192, 22);
+            this.tbSoyad.TabIndex = 0;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(16, 131);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 16);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Tc No:";
+            // 
+            // tbAd
+            // 
+            this.tbAd.Location = new System.Drawing.Point(115, 40);
+            this.tbAd.Name = "tbAd";
+            this.tbAd.Size = new System.Drawing.Size(192, 22);
+            this.tbAd.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 90);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(50, 16);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Soyad:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 40);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(27, 16);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Ad:";
+            // 
+            // pnlRaporSonuclari
+            // 
+            this.pnlRaporSonuclari.Controls.Add(this.dataGridView1);
+            this.pnlRaporSonuclari.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlRaporSonuclari.Location = new System.Drawing.Point(537, 0);
+            this.pnlRaporSonuclari.Name = "pnlRaporSonuclari";
+            this.pnlRaporSonuclari.Size = new System.Drawing.Size(1254, 868);
+            this.pnlRaporSonuclari.TabIndex = 1;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(91, 34);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.RowTemplate.Height = 24;
+            this.dataGridView1.Size = new System.Drawing.Size(868, 624);
+            this.dataGridView1.TabIndex = 0;
             // 
             // Reports
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tabloRapor);
-            this.Controls.Add(this.cmbDil);
-            this.Controls.Add(this.lblDil);
-            this.Controls.Add(this.btnEpostaGonder);
-            this.Controls.Add(this.txtEposta);
-            this.Controls.Add(this.lblEposta);
-            this.Controls.Add(this.btnExcelAktar);
-            this.Controls.Add(this.btnPdfAktar);
-            this.Controls.Add(this.tabRaporlama);
-            this.Controls.Add(this.dtpBitisTarihi);
-            this.Controls.Add(this.lblBitisTarihi);
-            this.Controls.Add(this.dtpBaslangicTarihi);
-            this.Controls.Add(this.lblBaslik);
-            this.Controls.Add(this.lblBaslangicTarihi);
+            this.Controls.Add(this.pnlRaporSonuclari);
+            this.Controls.Add(this.pnlFiltreleme);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Reports";
-            this.Size = new System.Drawing.Size(1343, 705);
-            this.Load += new System.EventHandler(this.Reports_Load);
-            this.tabRaporlama.ResumeLayout(false);
-            this.tabHastaRaporlari.ResumeLayout(false);
-            this.tabHastaRaporlari.PerformLayout();
-            this.tabTerapiRaporlari.ResumeLayout(false);
-            this.tabTerapiRaporlari.PerformLayout();
-            this.tabOperatorRaporlari.ResumeLayout(false);
-            this.tabSistemRaporlari.ResumeLayout(false);
-            this.tabKarsilastirmaliRapor.ResumeLayout(false);
-            this.tabKarsilastirmaliRapor.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.tabloRapor)).EndInit();
+            this.Size = new System.Drawing.Size(1791, 868);
+            this.pnlFiltreleme.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.pnlRaporSonuclari.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Label lblBaslangicTarihi;
-        private System.Windows.Forms.Label lblBaslik;
-        private System.Windows.Forms.DateTimePicker dtpBaslangicTarihi;
-        private System.Windows.Forms.DateTimePicker dtpBitisTarihi;
-        private System.Windows.Forms.Label lblBitisTarihi;
-        private System.Windows.Forms.TabControl tabRaporlama;
-        private System.Windows.Forms.TabPage tabHastaRaporlari;
-        private System.Windows.Forms.TabPage tabTerapiRaporlari;
-        private System.Windows.Forms.TabPage tabOperatorRaporlari;
-        private System.Windows.Forms.TabPage tabSistemRaporlari;
-        private System.Windows.Forms.TabPage tabKarsilastirmaliRapor;
-        private System.Windows.Forms.ComboBox cmbHastaSecimi;
-        private System.Windows.Forms.ComboBox cmbTerapiBir;
-        private System.Windows.Forms.ComboBox cmbHastaKarsilastirma;
-        private System.Windows.Forms.Label lblTerapiBir;
-        private System.Windows.Forms.Label lblHastaKarsilastirma;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Label lblTerapiIki;
-        private System.Windows.Forms.Button btnPdfAktar;
-        private System.Windows.Forms.Button btnExcelAktar;
-        private System.Windows.Forms.Label lblEposta;
-        private System.Windows.Forms.TextBox txtEposta;
-        private System.Windows.Forms.Button btnEpostaGonder;
-        private System.Windows.Forms.Label lblDil;
-        private System.Windows.Forms.ComboBox cmbDil;
-        private System.Windows.Forms.DataGridView tabloRapor;
-        private System.Windows.Forms.Button btnHastalariListele;
-        private System.Windows.Forms.Button btnHastaDetayRaporu;
-        private System.Windows.Forms.Label lblHastaSecimi;
-        private System.Windows.Forms.Button btnHastaTerapiGecmisi;
-        private System.Windows.Forms.Button btnLoadcellGrafikGoster;
-        private System.Windows.Forms.Button btnTerapiSureleri;
-        private System.Windows.Forms.Button btnTerapiSayilari;
-        private System.Windows.Forms.Label lblTerapiHastaSeciniz;
-        private System.Windows.Forms.ComboBox cmbTerapiHastaSecimi;
-        private System.Windows.Forms.Label lblTerapi;
-        private System.Windows.Forms.ComboBox cmbTerapiSecimi;
-        private System.Windows.Forms.Button btnOperatorCalismaSaatleri;
-        private System.Windows.Forms.Button btnOperatorTerapiIstatistik;
-        private System.Windows.Forms.Button btnCihazPerformans;
-        private System.Windows.Forms.Button btnKullanimIstatistikleri;
-        private System.Windows.Forms.Button btnHataLoglari;
-        private System.Windows.Forms.Button btnKarsilastirmaliRapor;
+        private System.Windows.Forms.Panel pnlFiltreleme;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel pnlRaporSonuclari;
+        private System.Windows.Forms.RadioButton rbHata;
+        private System.Windows.Forms.RadioButton rbIlerleme;
+        private System.Windows.Forms.RadioButton rbSeans;
+        private System.Windows.Forms.DateTimePicker dtpBitis;
+        private System.Windows.Forms.DateTimePicker dtpBaslangic;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox tbTc;
+        private System.Windows.Forms.TextBox tbSoyad;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbAd;
+        private System.Windows.Forms.RadioButton rbTerapist;
+        private System.Windows.Forms.Button buttonRaporOlustur;
+        private System.Windows.Forms.DataGridView dataGridView1;
     }
 }

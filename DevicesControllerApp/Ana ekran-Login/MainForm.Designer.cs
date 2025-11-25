@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.button1 = new System.Windows.Forms.Button();
@@ -199,12 +200,19 @@
             // 
             // btnPatient
             // 
+            this.btnPatient.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnPatient.FlatAppearance.BorderSize = 0;
+            this.btnPatient.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnPatient.ForeColor = System.Drawing.Color.White;
+            this.btnPatient.Image = ((System.Drawing.Image)(resources.GetObject("btnPatient.Image")));
+            this.btnPatient.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnPatient.Location = new System.Drawing.Point(16, 91);
             this.btnPatient.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnPatient.Name = "btnPatient";
             this.btnPatient.Size = new System.Drawing.Size(177, 49);
             this.btnPatient.TabIndex = 1;
             this.btnPatient.Text = "HASTA KAYIT";
+            this.btnPatient.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnPatient.UseVisualStyleBackColor = true;
             this.btnPatient.Click += new System.EventHandler(this.btnPatient_Click);
             // 

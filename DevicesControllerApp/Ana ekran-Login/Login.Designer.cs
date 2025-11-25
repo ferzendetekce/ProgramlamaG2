@@ -39,7 +39,7 @@
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(193, 114);
             this.btnLogin.TabIndex = 0;
-            this.btnLogin.Text = "giriş 12";
+            this.btnLogin.Text = "giriş 123";
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 

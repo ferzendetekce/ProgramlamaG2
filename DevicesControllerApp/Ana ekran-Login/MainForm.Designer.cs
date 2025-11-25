@@ -30,6 +30,7 @@
         {
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button1 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button9 = new System.Windows.Forms.Button();
@@ -42,7 +43,6 @@
             this.btnPatient = new System.Windows.Forms.Button();
             this.btnTherapy = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -53,9 +53,9 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 578);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 785);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1070, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1489, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -84,13 +84,22 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1070, 578);
-            this.splitContainer1.SplitterDistance = 164;
+            this.splitContainer1.Size = new System.Drawing.Size(1489, 785);
+            this.splitContainer1.SplitterDistance = 228;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 625);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(133, 40);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(12, 488);
+            this.button11.Location = new System.Drawing.Point(12, 579);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(133, 40);
             this.button11.TabIndex = 10;
@@ -99,7 +108,7 @@
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(12, 442);
+            this.button10.Location = new System.Drawing.Point(12, 533);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(133, 40);
             this.button10.TabIndex = 9;
@@ -108,7 +117,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(12, 396);
+            this.button9.Location = new System.Drawing.Point(12, 487);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(133, 40);
             this.button9.TabIndex = 8;
@@ -117,7 +126,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(12, 350);
+            this.button8.Location = new System.Drawing.Point(12, 441);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(133, 40);
             this.button8.TabIndex = 7;
@@ -126,7 +135,7 @@
             // 
             // btnSettings
             // 
-            this.btnSettings.Location = new System.Drawing.Point(12, 304);
+            this.btnSettings.Location = new System.Drawing.Point(12, 395);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(133, 40);
             this.btnSettings.TabIndex = 6;
@@ -136,7 +145,7 @@
             // 
             // btnService
             // 
-            this.btnService.Location = new System.Drawing.Point(12, 258);
+            this.btnService.Location = new System.Drawing.Point(12, 349);
             this.btnService.Name = "btnService";
             this.btnService.Size = new System.Drawing.Size(133, 40);
             this.btnService.TabIndex = 5;
@@ -146,7 +155,7 @@
             // 
             // btnReports
             // 
-            this.btnReports.Location = new System.Drawing.Point(12, 212);
+            this.btnReports.Location = new System.Drawing.Point(12, 303);
             this.btnReports.Name = "btnReports";
             this.btnReports.Size = new System.Drawing.Size(133, 40);
             this.btnReports.TabIndex = 4;
@@ -156,7 +165,7 @@
             // 
             // btnMonitoring
             // 
-            this.btnMonitoring.Location = new System.Drawing.Point(12, 166);
+            this.btnMonitoring.Location = new System.Drawing.Point(12, 257);
             this.btnMonitoring.Name = "btnMonitoring";
             this.btnMonitoring.Size = new System.Drawing.Size(133, 40);
             this.btnMonitoring.TabIndex = 3;
@@ -166,7 +175,7 @@
             // 
             // btnUsers
             // 
-            this.btnUsers.Location = new System.Drawing.Point(12, 120);
+            this.btnUsers.Location = new System.Drawing.Point(12, 211);
             this.btnUsers.Name = "btnUsers";
             this.btnUsers.Size = new System.Drawing.Size(133, 40);
             this.btnUsers.TabIndex = 2;
@@ -176,11 +185,16 @@
             // 
             // btnPatient
             // 
+            this.btnPatient.BackgroundImage = global::DevicesControllerApp.Properties.Resources.Custom_Icon_Design_Pretty_Office_7_Save_64;
+            this.btnPatient.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnPatient.FlatAppearance.BorderSize = 3;
+            this.btnPatient.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnPatient.Location = new System.Drawing.Point(12, 74);
             this.btnPatient.Name = "btnPatient";
-            this.btnPatient.Size = new System.Drawing.Size(133, 40);
+            this.btnPatient.Size = new System.Drawing.Size(180, 70);
             this.btnPatient.TabIndex = 1;
             this.btnPatient.Text = "HASTA KAYIT";
+            this.btnPatient.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnPatient.UseVisualStyleBackColor = true;
             this.btnPatient.Click += new System.EventHandler(this.btnPatient_Click);
             // 
@@ -208,24 +222,15 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.splitContainer2.Size = new System.Drawing.Size(902, 578);
-            this.splitContainer2.SplitterDistance = 69;
+            this.splitContainer2.Size = new System.Drawing.Size(1257, 785);
+            this.splitContainer2.SplitterDistance = 93;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(12, 534);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(133, 40);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1070, 600);
+            this.ClientSize = new System.Drawing.Size(1489, 807);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Name = "MainForm";

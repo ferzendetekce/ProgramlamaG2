@@ -36,7 +36,10 @@ namespace DevicesControllerApp.Hasta_kayit
 
         private void button1_Click(object sender, EventArgs e)
         {
-            db.HastaSil(long.Parse(textBox2.Text));
+            if(db.HastaSil(textBox2.Text)==false)
+                MessageBox.Show("Silme işlemi başarısız");
+            else
+                MessageBox.Show("Silme işlemi başarılı");
         }
     }
 }

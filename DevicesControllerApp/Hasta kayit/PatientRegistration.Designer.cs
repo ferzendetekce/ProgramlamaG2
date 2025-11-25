@@ -81,7 +81,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(512, 80);
             this.textBox2.TabIndex = 4;
-            this.textBox2.Text = "Hasta Kayıt";
+            this.textBox2.Text = "11111111111";
             // 
             // PatientRegistration
             // 

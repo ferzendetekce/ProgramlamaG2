@@ -62,9 +62,9 @@ namespace DevicesControllerApp.Database
                 return null;
         }
 
-        public bool HastaSil(long tc)
+        public bool HastaSil(string tc)
         {
-            string query = "DELETE FROM hastalar WHERE tc_kimlik_no=11122233344";
+            string query = "DELETE FROM hastalar WHERE tc_kimlik_no='"+tc+"'";
             Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(query, conn);
             try
             {

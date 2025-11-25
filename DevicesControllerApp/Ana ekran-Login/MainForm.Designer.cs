@@ -211,7 +211,7 @@
             this.btnPatient.Name = "btnPatient";
             this.btnPatient.Size = new System.Drawing.Size(177, 49);
             this.btnPatient.TabIndex = 1;
-            this.btnPatient.Text = "HASTA KAYIT";
+            this.btnPatient.Text = "HASTA KAYt";
             this.btnPatient.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnPatient.UseVisualStyleBackColor = true;
             this.btnPatient.Click += new System.EventHandler(this.btnPatient_Click);

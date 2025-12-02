@@ -50,6 +50,7 @@ CREATE TABLE Hasta_Bilgileri(
 
 -- KULLANICILAR TABLOSU
 CREATE TABLE Kullanicilar_Tablosu(
+	Kullanici_Id SERIAL PRIMARY KEY,
     Kullanici_Adi_Soyadi VARCHAR(100) NOT NULL,
     Sifre_Hash VARCHAR(255) NOT NULL,
     TC VARCHAR(11),
@@ -147,8 +148,8 @@ INSERT INTO Sehirler_Tablosu (Plaka_Kodu, Sehir_Adi) VALUES
 (78, 'Karabük'),
 (79, 'Kilis'),
 (80, 'Osmaniye'),
-(81, 'Düzce');
-
+(81, 'Düzce');
+	
 CREATE TABLE Terapiler_Tablosu
 (
 	Terapi_Id serial PRIMARY KEY,
@@ -203,12 +204,12 @@ CREATE TABLE Terapiler_Tablosu
 	CONSTRAINT Fk_Hasta_Id
 	FOREIGN KEY (Hasta_Id) REFERENCES Hasta_Bilgileri(Hasta_Id),
 	CONSTRAINT Fk_Operator_Id
-	FOREIGN KEY (Operator_Id) REFERENCES Kullanicilar_Tablosu(Operator_Id)
+	FOREIGN KEY (Operator_Id) REFERENCES Kullanicilar_Tablosu(Kullanici_Id)
 );
 
 CREATE TABLE Loadcell_Verileri_Tablosu 
 (
-	Loadcell_Id serial PRIMARY KEY
+	Loadcell_Id serial PRIMARY KEY,
 	Terapi_Id int NOT NULL,
 
 	Loadcell_Karti_Sicakligi decimal(5,2) NOT NULL DEFAULT 0,
@@ -236,17 +237,17 @@ CREATE TABLE Loadcell_Verileri_Tablosu
 
 	Azaltilan_Agirlik_Degeeri decimal(6,2) NOT NULL DEFAULT 0,
 	Agirlik_Dengeleme_Degeri decimal(6,2) NOT NULL DEFAULT 0,
-	Olcum_Index_Numarasi int NOT NULL DEFAULT 0
+	Olcum_Index_Numarasi int NOT NULL DEFAULT 0,
 
 	Hastanin_Kullandigi_Taraf VARCHAR(100) CHECK (Hastanin_Kullandigi_Taraf 
-	IN ('Sol','Sağ','İki Taraf Birden'))
+	IN ('Sol','Sağ','İki Taraf Birden')),
 
 	--Buradaki FOREIGN KEY 3. tablodan alınmıştır.
 	CONSTRAINT Fk_Terapi_Id
-	FOREIGN KEY (Terapi_Id) REFERENCES Terapiler_Tablosu(Terapi_Id) ON CASCADE DELETE
+	FOREIGN KEY (Terapi_Id) REFERENCES Terapiler_Tablosu(Terapi_Id) ON DELETE CASCADE
 );
 
-CREATE TABLE Ayarlar_tablosu(
+CREATE TABLE Ayarlar_Tablosu(
 
 --burada ayar anahtarı yeni eklenicek ayarların ismi 
 --ayar değeri ise yeni eklenicek olan ayarlardaki değerler için kullanılır
@@ -267,7 +268,7 @@ CREATE TABLE Ayarlar_tablosu(
     Guncelleyen_kullanici_id INTEGER,
     
     PRIMARY KEY (Ayar_Anahtari),
-    FOREIGN KEY (Guncelleyen_kullanici_id) REFERENCES Kullanıcılar_Tablosu(Kullanıcı_Id)
+    FOREIGN KEY (Guncelleyen_kullanici_id) REFERENCES Kullanicilar_Tablosu(Kullanici_Id)
 );
 
 CREATE TABLE Cihaz_Durum_Loglari(
@@ -276,7 +277,7 @@ CREATE TABLE Cihaz_Durum_Loglari(
     Step_Motor_Durum BOOLEAN[],
     Limit_Switch_Durumlari BOOLEAN,
     Zaman_Damgasi TIMESTAMP DEFAULT NOW() NOT NULL,
-    Hata_Kodlari INTEGER[]
+    Hata_Kodlari INTEGER[]
 );
 
 CREATE TABLE Sistem_Loglari_Tablosu(

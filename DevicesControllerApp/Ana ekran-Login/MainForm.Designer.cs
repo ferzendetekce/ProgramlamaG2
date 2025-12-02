@@ -177,7 +177,7 @@
             // 
             this.btnUsers.Location = new System.Drawing.Point(12, 211);
             this.btnUsers.Name = "btnUsers";
-            this.btnUsers.Size = new System.Drawing.Size(133, 40);
+            this.btnUsers.Size = new System.Drawing.Size(180, 40);
             this.btnUsers.TabIndex = 2;
             this.btnUsers.Text = "KULLANICI KAYIT";
             this.btnUsers.UseVisualStyleBackColor = true;

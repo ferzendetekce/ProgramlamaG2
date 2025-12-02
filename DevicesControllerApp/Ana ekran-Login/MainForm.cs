@@ -37,11 +37,9 @@ namespace DevicesControllerApp
 
         private void btnPatient_Click(object sender, EventArgs e)
         {
-            PatientRegistration s = new PatientRegistration();
-            splitContainer2.Panel2.Controls.Clear();
-            splitContainer2.Panel2.Controls.Add(s);
-        }
+            //PatientRegistration s = new PatientRegistration();
 
+        }
         private void btnReports_Click(object sender, EventArgs e)
         {
             Reports s = new Reports();

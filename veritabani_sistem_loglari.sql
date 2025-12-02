@@ -1,16 +1,14 @@
-CREATE TABLE public.kullanicilar_tablosu (
-    kullanici_id bigint NOT NULL,
-    kullanici_adi_soyadi character varying(100) NOT NULL,
-    sifre_hash character varying(255) NOT NULL,
-    tc character varying(11),
-    pasaport_no character varying(20),
-    cinsiyet character varying(15),
-    rol character varying(10) NOT NULL,
-    e_posta character varying(320),
-    telefon character varying(15) NOT NULL,
-    kayit_tarihi timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
-    son_giris_tarihi timestamp without time zone NOT NULL,
-    aktif_pasif_durumu character varying(5) NOT NULL
+CREATE TABLE Sistem_Loglari_Tablosu(
+    Log_ID SERIAL PRIMARY KEY,  -- logun benzersiz ID'si
+    Kullanici_Id BIGINT,           
+    Islem_Tipi VARCHAR(50) NOT NULL,
+    Islem_Detayi TEXT,
+    Zaman_Damgasi TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    IP_Adresi VARCHAR(45),
+    Hata_Seviyesi VARCHAR(10) NOT NULL
+        CHECK (Hata_Seviyesi IN ('Info', 'Warning', 'Error', 'Critical')),
+
+    FOREIGN KEY (Kullanici_Id) REFERENCES Kullanicilar_Tablosu(Kullanici_Id)
 );
 
 

@@ -28,32 +28,221 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            this.chartSagTaban = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartSolTaban = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartSagTopuk = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartSolTopuk = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.chartAgirlik = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.lblStepCounter = new System.Windows.Forms.Label();
+            this.lblAdimSayisiBaslik = new System.Windows.Forms.Label();
+            this.lblVeriBaslik = new System.Windows.Forms.Label();
+            this.btnFreeze = new System.Windows.Forms.Button();
+            this.btnExportData = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSagTaban)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSolTaban)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSagTopuk)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSolTopuk)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartAgirlik)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // chartSagTaban
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.button1.Location = new System.Drawing.Point(504, 273);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(338, 142);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Veri İzleme";
-            this.button1.UseVisualStyleBackColor = true;
+            chartArea1.Name = "ChartArea1";
+            this.chartSagTaban.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.chartSagTaban.Legends.Add(legend1);
+            this.chartSagTaban.Location = new System.Drawing.Point(106, 103);
+            this.chartSagTaban.Name = "chartSagTaban";
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chartSagTaban.Series.Add(series1);
+            this.chartSagTaban.Size = new System.Drawing.Size(602, 300);
+            this.chartSagTaban.TabIndex = 3;
+            this.chartSagTaban.Text = "chart1";
+            // 
+            // chartSolTaban
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.chartSolTaban.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.chartSolTaban.Legends.Add(legend2);
+            this.chartSolTaban.Location = new System.Drawing.Point(767, 103);
+            this.chartSolTaban.Name = "chartSolTaban";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chartSolTaban.Series.Add(series2);
+            this.chartSolTaban.Size = new System.Drawing.Size(598, 300);
+            this.chartSolTaban.TabIndex = 4;
+            this.chartSolTaban.Text = "chart1";
+            // 
+            // chartSagTopuk
+            // 
+            chartArea3.Name = "ChartArea1";
+            this.chartSagTopuk.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chartSagTopuk.Legends.Add(legend3);
+            this.chartSagTopuk.Location = new System.Drawing.Point(106, 442);
+            this.chartSagTopuk.Name = "chartSagTopuk";
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chartSagTopuk.Series.Add(series3);
+            this.chartSagTopuk.Size = new System.Drawing.Size(602, 300);
+            this.chartSagTopuk.TabIndex = 5;
+            this.chartSagTopuk.Text = "chart1";
+            // 
+            // chartSolTopuk
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.chartSolTopuk.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chartSolTopuk.Legends.Add(legend4);
+            this.chartSolTopuk.Location = new System.Drawing.Point(767, 442);
+            this.chartSolTopuk.Name = "chartSolTopuk";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chartSolTopuk.Series.Add(series4);
+            this.chartSolTopuk.Size = new System.Drawing.Size(598, 300);
+            this.chartSolTopuk.TabIndex = 6;
+            this.chartSolTopuk.Text = "chart1";
+            // 
+            // chartAgirlik
+            // 
+            chartArea5.Name = "ChartArea1";
+            this.chartAgirlik.ChartAreas.Add(chartArea5);
+            legend5.Name = "Legend1";
+            this.chartAgirlik.Legends.Add(legend5);
+            this.chartAgirlik.Location = new System.Drawing.Point(1421, 103);
+            this.chartAgirlik.Name = "chartAgirlik";
+            series5.ChartArea = "ChartArea1";
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            this.chartAgirlik.Series.Add(series5);
+            this.chartAgirlik.Size = new System.Drawing.Size(211, 489);
+            this.chartAgirlik.TabIndex = 7;
+            this.chartAgirlik.Text = "chart1";
+            // 
+            // lblStepCounter
+            // 
+            this.lblStepCounter.AutoSize = true;
+            this.lblStepCounter.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.lblStepCounter.Location = new System.Drawing.Point(1560, 603);
+            this.lblStepCounter.Name = "lblStepCounter";
+            this.lblStepCounter.Size = new System.Drawing.Size(24, 25);
+            this.lblStepCounter.TabIndex = 9;
+            this.lblStepCounter.Text = "0";
+            this.lblStepCounter.Click += new System.EventHandler(this.lblStepCounter_Click);
+            // 
+            // lblAdimSayisiBaslik
+            // 
+            this.lblAdimSayisiBaslik.AutoSize = true;
+            this.lblAdimSayisiBaslik.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.lblAdimSayisiBaslik.Location = new System.Drawing.Point(1416, 603);
+            this.lblAdimSayisiBaslik.Name = "lblAdimSayisiBaslik";
+            this.lblAdimSayisiBaslik.Size = new System.Drawing.Size(126, 25);
+            this.lblAdimSayisiBaslik.TabIndex = 10;
+            this.lblAdimSayisiBaslik.Text = "Adım Sayısı";
+            // 
+            // lblVeriBaslik
+            // 
+            this.lblVeriBaslik.AutoSize = true;
+            this.lblVeriBaslik.BackColor = System.Drawing.Color.Transparent;
+            this.lblVeriBaslik.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.lblVeriBaslik.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.lblVeriBaslik.Location = new System.Drawing.Point(670, 29);
+            this.lblVeriBaslik.Name = "lblVeriBaslik";
+            this.lblVeriBaslik.Size = new System.Drawing.Size(278, 46);
+            this.lblVeriBaslik.TabIndex = 11;
+            this.lblVeriBaslik.Text = "VERİ İZLEME\r\n";
+            // 
+            // btnFreeze
+            // 
+            this.btnFreeze.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnFreeze.Image = global::DevicesControllerApp.Properties.Resources.Graphicrating_Koloria_Chart_Bar_Table_32;
+            this.btnFreeze.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnFreeze.Location = new System.Drawing.Point(1421, 637);
+            this.btnFreeze.Name = "btnFreeze";
+            this.btnFreeze.Size = new System.Drawing.Size(211, 49);
+            this.btnFreeze.TabIndex = 8;
+            this.btnFreeze.Text = "Örnek Al";
+            this.btnFreeze.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnFreeze.UseVisualStyleBackColor = true;
+            this.btnFreeze.Click += new System.EventHandler(this.btnFreeze_Click);
+            // 
+            // btnExportData
+            // 
+            this.btnExportData.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnExportData.Image = global::DevicesControllerApp.Properties.Resources.Fatcow_Farm_Fresh_Table_excel_32;
+            this.btnExportData.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnExportData.Location = new System.Drawing.Point(1421, 691);
+            this.btnExportData.Margin = new System.Windows.Forms.Padding(4);
+            this.btnExportData.Name = "btnExportData";
+            this.btnExportData.Size = new System.Drawing.Size(211, 51);
+            this.btnExportData.TabIndex = 2;
+            this.btnExportData.Text = "Dışarı Aktar";
+            this.btnExportData.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnExportData.UseVisualStyleBackColor = true;
+            this.btnExportData.Click += new System.EventHandler(this.btnExportData_Click);
             // 
             // DataMonitoring
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.button1);
+            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.Controls.Add(this.lblVeriBaslik);
+            this.Controls.Add(this.lblAdimSayisiBaslik);
+            this.Controls.Add(this.lblStepCounter);
+            this.Controls.Add(this.btnFreeze);
+            this.Controls.Add(this.chartAgirlik);
+            this.Controls.Add(this.chartSolTopuk);
+            this.Controls.Add(this.chartSagTopuk);
+            this.Controls.Add(this.chartSolTaban);
+            this.Controls.Add(this.chartSagTaban);
+            this.Controls.Add(this.btnExportData);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "DataMonitoring";
-            this.Size = new System.Drawing.Size(1346, 688);
+            this.Size = new System.Drawing.Size(1795, 847);
+            this.Load += new System.EventHandler(this.DataMonitoring_Load_1);
+            this.Click += new System.EventHandler(this.DataMonitoring_Click);
+            ((System.ComponentModel.ISupportInitialize)(this.chartSagTaban)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSolTaban)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSagTopuk)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartSolTopuk)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartAgirlik)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnExportData;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartSagTaban;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartSolTaban;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartSagTopuk;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartSolTopuk;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartAgirlik;
+        private System.Windows.Forms.Button btnFreeze;
+        private System.Windows.Forms.Label lblStepCounter;
+        private System.Windows.Forms.Label lblAdimSayisiBaslik;
+        private System.Windows.Forms.Label lblVeriBaslik;
     }
 }

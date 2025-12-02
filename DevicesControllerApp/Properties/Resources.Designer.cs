@@ -69,5 +69,35 @@ namespace DevicesControllerApp.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Fatcow_Farm_Fresh_Table_excel_32 {
+            get {
+                object obj = ResourceManager.GetObject("Fatcow-Farm-Fresh-Table-excel.32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Fatcow_Farm_Fresh_Table_heatmap_32 {
+            get {
+                object obj = ResourceManager.GetObject("Fatcow-Farm-Fresh-Table-heatmap.32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Graphicrating_Koloria_Chart_Bar_Table_32 {
+            get {
+                object obj = ResourceManager.GetObject("Graphicrating-Koloria-Chart-Bar-Table.32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

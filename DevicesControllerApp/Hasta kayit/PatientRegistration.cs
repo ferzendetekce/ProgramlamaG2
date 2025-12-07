@@ -53,6 +53,13 @@ namespace DevicesControllerApp.Hasta_kayit
                 label1.Text = "PATIENTS";
                 button3.Text = "SEARCH PATIENT";
                 button1.Text = " UPDATE PATIENT";
+                label3.Text = "Address";
+                label5.Text = "Weight";
+                label6.Text = "Height";
+                label4.Text = "Shoe Size";
+                label7.Text = "Hip Knee Distance";
+                label8.Text = "Knee Heel Distance";
+                label2.Text = "Gender:";
             }
             else
             {
@@ -69,7 +76,13 @@ namespace DevicesControllerApp.Hasta_kayit
                 label1.Text = "HASTALAR";
                 button3.Text = "HASTAYI ARA";
                 button1.Text = " HASTAYI GÜNCELLE";
-
+                label3.Text = "Adres";
+                label5.Text = "Kilo";
+                label6.Text = "Boy";
+                label4.Text = "Ayak No";
+                label7.Text = "Kalça Diz Mesafesi";
+                label8.Text = "Diz Topuk Mesafesi";
+                label2.Text = "Cinsiyet:";
             }
         }
 
@@ -182,6 +195,27 @@ namespace DevicesControllerApp.Hasta_kayit
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox8_TextChanged(object sender, EventArgs e)
+        {
+           
+            if (textBox8.Text.Length > 10)
+            {
+                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Phone Number must be 10 digits!" : "Telefon No 10 haneli olmalıdır!";
+                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
         }
     }
 }

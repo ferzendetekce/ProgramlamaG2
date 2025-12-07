@@ -209,5 +209,11 @@
   <ItemGroup>
     <None Include="Resources\Custom-Icon-Design-Pretty-Office-7-Save.64.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hopstarter-Button-Button-Delete.256.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Hopstarter-Button-Button-Add.256.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -45,6 +45,14 @@ namespace DevicesControllerApp.Hasta_kayit
                 lblTc.Text = "ID Number:";
                // btnKaydet.Text = "Save";
                 this.Text = "Patient Registration"; // Form Başlığı
+                this.labele1.Text
+                 = "Language:";
+                lblSehir.Text = "City:";
+                btnKaydet.Text = "SAVE PATIENT";
+                btnSil.Text = "DELETE PATIENT";
+                label1.Text = "PATIENTS";
+                button3.Text = "SEARCH PATIENT";
+                button1.Text = " UPDATE PATIENT";
             }
             else
             {
@@ -53,6 +61,15 @@ namespace DevicesControllerApp.Hasta_kayit
                 lblTc.Text = "TC Kimlik No:";
               //  btnKaydet.Text = "Kaydet";
                 this.Text = "Hasta Kayıt"; // Form Başlığı
+                this.labele1.Text
+                 = "Dil Seçimi:";
+                lblSehir.Text = "Şehir:";
+                btnKaydet.Text = "HASTA KAYDET";
+                btnSil.Text = "HASTA SİL";
+                label1.Text = "HASTALAR";
+                button3.Text = "HASTAYI ARA";
+                button1.Text = " HASTAYI GÜNCELLE";
+
             }
         }
 
@@ -150,6 +167,21 @@ namespace DevicesControllerApp.Hasta_kayit
             {
             //    MessageBox.Show("Hata: " + ex.Message);
             }
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

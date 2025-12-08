@@ -58,5 +58,17 @@ namespace DevicesControllerApp.Properties {
                 this["SavedPassword"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("tr")]
+        public string AppLanguage {
+            get {
+                return ((string)(this["AppLanguage"]));
+            }
+            set {
+                this["AppLanguage"] = value;
+            }
+        }
     }
 }

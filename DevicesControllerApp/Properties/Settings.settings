@@ -11,5 +11,8 @@
     <Setting Name="SavedPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="AppLanguage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tr</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

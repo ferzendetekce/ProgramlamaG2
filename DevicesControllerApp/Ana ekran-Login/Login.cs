@@ -26,6 +26,7 @@ namespace DevicesControllerApp.Ana_ekran_Login
             textBox2.ForeColor = Color.Gray;
             this.Load += Login_Load;
         }
+
         private void Login_Load(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.RememberMe)
@@ -180,6 +181,11 @@ namespace DevicesControllerApp.Ana_ekran_Login
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

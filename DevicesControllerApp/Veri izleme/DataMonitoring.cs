@@ -12,92 +12,189 @@ namespace DevicesControllerApp.Veri_izleme
     public partial class DataMonitoring : UserControl
     {
         // --- DEĞİŞKENLER ---
-
-        // Arka planda veri üreten/alan sınıfın bir örneği
         private DeviceCommunication device;
-        // "Örnek Al" butonunun aktif olup olmadığını tutan bayrak
         private bool freezeMode = false;
-        // Ayak grafiklerindeki X ekseninde kaç nokta olacağını belirler
         private int pointCount = 100;
-        // Algılanan adım sayısını tutar
         private int stepCount = 0;
+
+        // Dil Seçimi Değişkenleri
+        private ComboBox cmbLanguage;
+        private string currentLanguage = "TR"; // Varsayılan
 
         public DataMonitoring()
         {
             InitializeComponent();
+            InitializeLanguageComboBox();
+        }
+
+        // Dil Kutusunu Oluştur
+        private void InitializeLanguageComboBox()
+        {
+            cmbLanguage = new ComboBox();
+            cmbLanguage.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbLanguage.Items.Add("Türkçe");
+            cmbLanguage.Items.Add("English");
+            cmbLanguage.SelectedIndex = 0; // Türkçe Başla
+
+            // Konumunu ayarla
+            cmbLanguage.Location = new Point(1120, 15);
+            cmbLanguage.Size = new Size(100, 25);
+
+            cmbLanguage.SelectedIndexChanged += CmbLanguage_SelectedIndexChanged;
+
+            this.Controls.Add(cmbLanguage);
+            cmbLanguage.BringToFront();
         }
 
         private void DataMonitoring_Load_1(object sender, EventArgs e)
         {
-            // Kodun Visual Studio tasarım ekranında çalışmasını engeller.
             if (!this.DesignMode)
             {
-                // Grafiklerin ilk ayarlarını yapar
                 SetupCharts();
-                // Butonun başlangıç metnini ayarlar
-                btnFreeze.Text = "Örnek Al";
+                ApplyLanguage(); // Dili uygula
 
-                // Cihaz iletişimini başlatır ve veri gelmeye başladığında ne yapılacağını söyler
                 device = new DeviceCommunication();
-                device.OnNewData += Device_OnNewData; // Veri geldiğinde Device_OnNewData metodunu tetikle
-                device.Start(); // Veri akışını başlat
+                device.OnNewData += Device_OnNewData;
+                device.Start();
             }
         }
-      
 
-        // Ana form kapatılırken çağrılacak olan metot. Arka plan işlemini durdurur
+        // Dil Değişimi
+        private void CmbLanguage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            currentLanguage = (cmbLanguage.SelectedIndex == 0) ? "TR" : "EN";
+            ApplyLanguage();
+        }
+
+        // --- DİL AYARLARI ---
+        private void ApplyLanguage()
+        {
+            bool isTR = currentLanguage == "TR";
+
+            // 1. Etiket ve Buton Metinleri
+            lblVeriBaslik.Text = isTR ? "Veri İzleme" : "Data Monitoring";
+            btnExportData.Text = isTR ? "Dışarı Aktar" : "Export Data";
+            lblAdimSayisiBaslik.Text = isTR ? "Adım Sayısı" : "Step Count";
+
+            // 2. Grafik Başlıkları
+            UpdateChartTitle(chartSagTaban, isTR ? "Sağ Ayak Tabanı" : "Right Foot Sole");
+            UpdateChartTitle(chartSolTaban, isTR ? "Sol Ayak Tabanı" : "Left Foot Sole");
+            UpdateChartTitle(chartSagTopuk, isTR ? "Sağ Ayak Topuğu" : "Right Foot Heel");
+            UpdateChartTitle(chartSolTopuk, isTR ? "Sol Ayak Topuğu" : "Left Foot Heel");
+            UpdateChartTitle(chartAgirlik, isTR ? "Ağırlık Dengesi" : "Weight Balance");
+
+            // 3. Eksen Başlıkları ve Tooltip (İpucu) Yazıları
+            UpdateAxisAndTooltips(chartSagTaban, isTR);
+            UpdateAxisAndTooltips(chartSolTaban, isTR);
+            UpdateAxisAndTooltips(chartSagTopuk, isTR);
+            UpdateAxisAndTooltips(chartSolTopuk, isTR);
+
+            // 4. Grafik Seri İsimleri (Canlı / Örnek -> Live / Sample)
+            string liveText = isTR ? "Canlı" : "Live";
+            string sampleText = isTR ? "Örnek" : "Sample";
+
+            UpdateSeriesLegend(chartSagTaban, liveText, sampleText);
+            UpdateSeriesLegend(chartSolTaban, liveText, sampleText);
+            UpdateSeriesLegend(chartSagTopuk, liveText, sampleText);
+            UpdateSeriesLegend(chartSolTopuk, liveText, sampleText);
+
+            // Ağırlık Grafiği Seri Adı
+            if (chartAgirlik.Series.Count > 0)
+            {
+                // Bar grafiğinde LegendText kullanıyoruz
+                chartAgirlik.Series[0].LegendText = isTR ? "Ağırlık (kg)" : "Weight (kg)";
+                chartAgirlik.Series[0].ToolTip = isTR ? "Ağırlık: #VALY kg" : "Weight: #VALY kg";
+            }
+
+            // 5. Freeze Butonu
+            UpdateFreezeButtonText();
+        }
+
+        // Yardımcı Metot: Seri İsimlerini (Legend) Güncelle
+        private void UpdateSeriesLegend(Chart chart, string liveText, string sampleText)
+        {
+            // Kod içinde serileri "Canlı" ve "Örnek" adıyla çağırmaya devam ediyoruz,
+            // ama kullanıcıya görünen metni (LegendText) değiştiriyoruz.
+            if (chart.Series["Canlı"] != null) chart.Series["Canlı"].LegendText = liveText;
+            if (chart.Series["Örnek"] != null) chart.Series["Örnek"].LegendText = sampleText;
+        }
+
+        // Yardımcı Metot: Eksen ve Tooltip Güncelle
+        private void UpdateAxisAndTooltips(Chart chart, bool isTR)
+        {
+            if (chart.ChartAreas.Count > 0)
+            {
+                chart.ChartAreas[0].AxisX.Title = "Index";
+                chart.ChartAreas[0].AxisY.Title = isTR ? "Yük (kg)" : "Load (kg)";
+
+                // Fare ile üzerine gelince çıkan yazı
+                string tooltipFormat = isTR ? "Index: #VALX, Yük: #VALY kg" : "Index: #VALX, Load: #VALY kg";
+
+                if (chart.Series["Canlı"] != null) chart.Series["Canlı"].ToolTip = tooltipFormat;
+                if (chart.Series["Örnek"] != null) chart.Series["Örnek"].ToolTip = tooltipFormat;
+            }
+        }
+
+        // Yardımcı Metot: Buton Metni
+        private void UpdateFreezeButtonText()
+        {
+            bool isTR = currentLanguage == "TR";
+
+            if (freezeMode)
+                btnFreeze.Text = isTR ? "Örneği Temizle" : "Clear Sample";
+            else
+                btnFreeze.Text = isTR ? "Örnek Al" : "Take Sample";
+        }
+
+        private void UpdateChartTitle(Chart chart, string newTitle)
+        {
+            if (chart.Titles.Count > 0)
+                chart.Titles[0].Text = newTitle;
+            else
+                chart.Titles.Add(newTitle);
+        }
+
         public void StopDeviceCommunication()
         {
-            device?.Stop(); // device null değilse Stop() metodunu çağır
+            device?.Stop();
         }
 
         // --- VERİ İŞLEME ---
-
-        // Cihazdan yeni bir veri paketi geldiğinde tetikler
         private void Device_OnNewData(object sender, NewDataEventArgs e)
         {
-            // Veri arka plandan geldiği için UI'ı güvenli bir şekilde güncellemek gerekir
             if (this.InvokeRequired)
             {
-                try
-                {
-                    // Ana UI thread'ine ProcessData metodunu çalıştırması için bir istek gönderir
-                    this.Invoke(new Action(() => ProcessData(e)));
-                }
-                catch (ObjectDisposedException) { /* Program kapanırken hata oluşursa yoksay. */ }
+                try { this.Invoke(new Action(() => ProcessData(e))); }
+                catch (ObjectDisposedException) { }
             }
             else
             {
-                // Zaten ana thread'de isek, metodu doğrudan çalıştır
                 ProcessData(e);
             }
         }
 
-        // Gelen veriyi alıp grafiklere işleyen ana metot
         private void ProcessData(NewDataEventArgs e)
         {
-            // Sadece bir "adım" algılandığında grafikleri güncelle
             if (e.IsStepDetected)
             {
-                // Ayak grafiklerini gelen yeni verilerle güncelle
                 UpdateScatter(chartSagTaban, e.SagTabanData);
                 UpdateScatter(chartSolTaban, e.SolTabanData);
                 UpdateScatter(chartSagTopuk, e.SagTopukData);
                 UpdateScatter(chartSolTopuk, e.SolTopukData);
 
-                // Ağırlık grafiğini güncelle.
-                chartAgirlik.Series["Ağırlık (kg)"].Points.Clear();
-                chartAgirlik.Series["Ağırlık (kg)"].Points.AddY(e.AgirlikDengesi);
+                // Ağırlık grafiğini güncelle (index 0 kullanıyoruz, isim değişse de index sabittir)
+                if (chartAgirlik.Series.Count > 0)
+                {
+                    chartAgirlik.Series[0].Points.Clear();
+                    chartAgirlik.Series[0].Points.AddY(e.AgirlikDengesi);
+                }
 
-                // Adım sayacını bir artır ve ekrandaki etiketi güncelle
                 stepCount++;
                 lblStepCounter.Text = stepCount.ToString();
             }
         }
 
-        // --- GRAFİK AYARLARI ---
-
-        // Tüm grafiklerin ilk kurulumunu başlatan metot
+        // --- GRAFİK KURULUM ---
         private void SetupCharts()
         {
             SetupScatterChart(chartSagTaban, "Sağ Ayak Tabanı", Color.CornflowerBlue);
@@ -107,7 +204,6 @@ namespace DevicesControllerApp.Veri_izleme
             SetupBarChart(chartAgirlik, "Ağırlık Dengesi", 0, 100);
         }
 
-        // Ayak grafiklerinin (çizgi grafik) genel ayarlarını yapan metot
         private void SetupScatterChart(Chart chart, string title, Color color)
         {
             chart.Series.Clear();
@@ -115,20 +211,17 @@ namespace DevicesControllerApp.Veri_izleme
             chart.Titles.Add(title);
             var area = chart.ChartAreas[0];
 
-            // X ekseni ayarları (0'dan 100'e, etiketler 5'er aralıkla)
             area.AxisX.Minimum = 0;
             area.AxisX.Maximum = pointCount;
             area.AxisX.Title = "Index";
             area.AxisX.MajorGrid.LineColor = Color.LightGray;
             area.AxisX.Interval = 10;
 
-            // Y ekseni ayarları (0'dan 100'e, başlık kg).
             area.AxisY.Minimum = 0;
             area.AxisY.Maximum = 100;
-            area.AxisY.Title = "LoadCell (kg)";
+            area.AxisY.Title = "Yük (kg)";
             area.AxisY.MajorGrid.LineColor = Color.LightGray;
 
-            // Grafikte fare ile zoom yapma özelliğini aktif eder.
             area.CursorX.IsUserEnabled = true;
             area.CursorX.IsUserSelectionEnabled = true;
             area.AxisX.ScaleView.Zoomable = true;
@@ -136,26 +229,23 @@ namespace DevicesControllerApp.Veri_izleme
             area.CursorY.IsUserSelectionEnabled = true;
             area.AxisY.ScaleView.Zoomable = true;
 
-            // "Canlı" veri serisini oluşturur (renkli çizgiler)
+            // İÇ İSİMLER "Canlı" ve "Örnek" OLARAK KALIYOR (Kod hatası olmaması için)
+            // Görünen isimleri ApplyLanguage metodu düzeltecek.
             var live = chart.Series.Add("Canlı");
             live.ChartType = SeriesChartType.Line;
             live.Color = color;
             live.BorderWidth = 3;
             live.MarkerStyle = MarkerStyle.Circle;
             live.MarkerSize = 8;
-            live.ToolTip = "Index: #VALX, LoadCell: #VALY kg"; // Fare ile üzerine gelince çıkan bilgi
 
-            // "Örnek" veri serisini oluşturur (kırmızı çizgiler)
             var red = chart.Series.Add("Örnek");
             red.ChartType = SeriesChartType.Line;
             red.Color = Color.Red;
             red.BorderWidth = 3;
             red.MarkerStyle = MarkerStyle.Circle;
             red.MarkerSize = 8;
-            red.ToolTip = "Index: #VALX, LoadCell: #VALY kg";
         }
 
-        // Ağırlık Dengesi grafiğinin (sütun grafik) ayarlarını yapan metot
         private void SetupBarChart(Chart chart, string title, double min, double max)
         {
             chart.Series.Clear();
@@ -163,112 +253,92 @@ namespace DevicesControllerApp.Veri_izleme
             chart.Titles.Add(title);
             var area = chart.ChartAreas[0];
 
-            // Y ekseni ayarları (min/max değerleri dışarıdan alır)
             area.AxisY.Minimum = min;
             area.AxisY.Maximum = max;
             area.AxisY.Interval = 20;
             area.AxisY.MajorGrid.LineColor = Color.LightGray;
-
-            // X eksenini gizler, çünkü tek bir sütun var
             area.AxisX.LabelStyle.Enabled = false;
             area.AxisX.MajorTickMark.Enabled = false;
             area.AxisX.LineWidth = 0;
 
-            // "Ağırlık (kg)" serisini oluşturur
             var s = chart.Series.Add("Ağırlık (kg)");
             s.ChartType = SeriesChartType.Column;
             s.Color = Color.Gold;
-            s.ToolTip = "Ağırlık: #VALY kg";
         }
 
-        // Ayak grafiklerini yeni veri listesiyle güncelleyen yardımcı metot
         private void UpdateScatter(Chart chart, List<double> data)
         {
+            // Veri eklerken iç ismi kullanıyoruz
             var liveSeries = chart.Series["Canlı"];
-            liveSeries.Points.Clear(); // Eski noktaları temizle
+            liveSeries.Points.Clear();
             for (int i = 0; i < data.Count; i++)
             {
-                liveSeries.Points.AddXY(i, data[i]); // Yeni noktaları ekle
+                liveSeries.Points.AddXY(i, data[i]);
             }
         }
 
-        // --- BUTON OLAYLARI ---
-
-        // "Örnek Al" / "Örneği Temizle" butonuna tıklandığında çalışır
+        // --- BUTON VE ETKİLEŞİM ---
         private void btnFreeze_Click(object sender, EventArgs e)
         {
-            freezeMode = !freezeMode; // Durumu tersine çevir (true ise false, false ise true yap).
-
-            if (freezeMode) // Eğer "Örnek Al" moduna geçildiyse
+            freezeMode = !freezeMode;
+            if (freezeMode)
             {
-                // O anki canlı (renkli) verileri örnek (kırmızı) serisine kopyala
                 CopyBlueToRed(chartSagTaban);
                 CopyBlueToRed(chartSolTaban);
                 CopyBlueToRed(chartSagTopuk);
                 CopyBlueToRed(chartSolTopuk);
-                btnFreeze.Text = "Örneği Temizle"; // Butonun metnini değiştir
             }
-            else // Eğer "Örneği Temizle" moduna geçildiyse
+            else
             {
-                // Kırmızı serideki tüm verileri temizle
                 ClearRed(chartSagTaban);
                 ClearRed(chartSolTaban);
                 ClearRed(chartSagTopuk);
                 ClearRed(chartSolTopuk);
-                btnFreeze.Text = "Örnek Al"; // Butonun metnini eski haline getir
             }
+            UpdateFreezeButtonText();
         }
 
-        private void DataMonitoring_Click(object sender, EventArgs e)
-        {
-        }
-
-        // "Verileri Dışa Aktar" butonuna tıklandığında çalışır
         private void btnExportData_Click(object sender, EventArgs e)
         {
-            // "Farklı Kaydet" penceresini oluşturur ve işi bitince temizler
+            bool isTR = currentLanguage == "TR";
+
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
-                // Pencere ayarları
-                sfd.Filter = "CSV Dosyası (*.csv)|*.csv";       // Sadece .csv dosyalarını gösterir
-                sfd.Title = "Grafik Verilerini Dışa Aktar";    // Pencere başlığını ayarlar
-                sfd.FileName = $"rehabilitasyon_veri_{DateTime.Now:yyyyMMdd_HHmmss}.csv"; // Otomatik dosya adı oluşturur
+                sfd.Filter = isTR ? "CSV Dosyası (*.csv)|*.csv" : "CSV File (*.csv)|*.csv";
+                sfd.Title = isTR ? "Grafik Verilerini Dışa Aktar" : "Export Chart Data";
+                sfd.FileName = $"rehab_data_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
 
-                // Kullanıcı "Kaydet" butonuna basarsa devam et
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    // Hata oluşma ihtimaline karşı kodları bu bloğa al
                     try
                     {
-                        // CSV içeriğini oluştur
                         var sb = new StringBuilder();
-                        sb.AppendLine("Grafik;Index;LoadCell_kg"); // CSV başlık satırını ekle
+                        sb.AppendLine("Chart;Index;Value_kg");
 
-                        // Her grafiğin verisini CSV metnine ekle.
-                        ExportChartDataToCsv(sb, chartSagTaban, "Sag_Taban");
-                        ExportChartDataToCsv(sb, chartSolTaban, "Sol_Taban");
-                        ExportChartDataToCsv(sb, chartSagTopuk, "Sag_Topuk");
-                        ExportChartDataToCsv(sb, chartSolTopuk, "Sol_Topuk");
+                        ExportChartDataToCsv(sb, chartSagTaban, "Right_Sole");
+                        ExportChartDataToCsv(sb, chartSolTaban, "Left_Sole");
+                        ExportChartDataToCsv(sb, chartSagTopuk, "Right_Heel");
+                        ExportChartDataToCsv(sb, chartSolTopuk, "Left_Heel");
 
-                        // Dosyaya yaz ve kullanıcıyı bilgilendir
-                        File.WriteAllText(sfd.FileName, sb.ToString()); // Oluşturulan metni dosyaya yaz
-                        MessageBox.Show("Veriler başarıyla dışa aktarıldı!", "Başarılı", MessageBoxButtons.OK, MessageBoxIcon.Information); // Başarı mesajı göster.
+                        File.WriteAllText(sfd.FileName, sb.ToString());
+
+                        string msg = isTR ? "Veriler başarıyla dışa aktarıldı!" : "Data exported successfully!";
+                        string title = isTR ? "Başarılı" : "Success";
+                        MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    catch (Exception ex) // Yazma sırasında bir hata olursa...
+                    catch (Exception ex)
                     {
-                        // Hata mesajını kullanıcıya göster
-                        MessageBox.Show("Hata: " + ex.Message, "Dışa Aktarma Hatası", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        string msg = isTR ? "Hata: " : "Error: ";
+                        string title = isTR ? "Dışa Aktarma Hatası" : "Export Error";
+                        MessageBox.Show(msg + ex.Message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
 
         // --- YARDIMCI METOTLAR ---
-
-        // Verilen bir grafiğin verisini CSV metnine ekleyen metot
         private void ExportChartDataToCsv(StringBuilder sb, Chart chart, string chartName)
         {
-            // Eğer ekranda bir örnek (kırmızı) gösteriliyorsa onu, yoksa canlı veriyi al
             var seriesToExport = freezeMode ? chart.Series["Örnek"] : chart.Series["Canlı"];
             foreach (var point in seriesToExport.Points)
             {
@@ -276,30 +346,23 @@ namespace DevicesControllerApp.Veri_izleme
             }
         }
 
-        // Bir grafikteki "Canlı" seriyi "Örnek" serisine kopyalayan metot
         private void CopyBlueToRed(Chart chart)
         {
             var blue = chart.Series["Canlı"];
             var red = chart.Series["Örnek"];
-            red.Points.Clear(); // Önceki örneği temizle
+            red.Points.Clear();
             foreach (var p in blue.Points)
-                red.Points.AddXY(p.XValue, p.YValues[0]); // Canlıdaki her noktayı örneğe ekle
+                red.Points.AddXY(p.XValue, p.YValues[0]);
         }
 
-        // Bir grafikteki "Örnek" serisini temizleyen metot
         private void ClearRed(Chart chart)
         {
             chart.Series["Örnek"].Points.Clear();
         }
 
+        private void DataMonitoring_Click(object sender, EventArgs e) { }
         private void chartSagTopuk_Click(object sender, EventArgs e) { }
         private void lblAdimSayisiBaslik_Click(object sender, EventArgs e) { }
-
-        private void lblStepCounter_Click(object sender, EventArgs e)
-        {
-
-        }
-
-      
+        private void lblStepCounter_Click(object sender, EventArgs e) { }
     }
 }

@@ -23,9 +23,8 @@ namespace DevicesControllerApp
         public MainForm()
         {
             InitializeComponent();
-            Login login = new Login();
-            login.ShowDialog();
-            this.Text = login.username;
+           
+            
         }
 
         private void btnSettings_Click(object sender, EventArgs e)
@@ -77,6 +76,11 @@ namespace DevicesControllerApp
             Therapy s = new Therapy();
             splitContainer2.Panel2.Controls.Clear();
             splitContainer2.Panel2.Controls.Add(s);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -107,6 +107,12 @@
     <Compile Include="Ana ekran-Login\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ana ekran-Login\resetpassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ana ekran-Login\resetpassword.Designer.cs">
+      <DependentUpon>resetpassword.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ayarlar\Settings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -160,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Ana ekran-Login\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ana ekran-Login\resetpassword.resx">
+      <DependentUpon>resetpassword.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ayarlar\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>

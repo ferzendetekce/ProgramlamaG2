@@ -70,5 +70,10 @@ namespace DevicesControllerApp.Ana_ekran_Login
         {
 
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

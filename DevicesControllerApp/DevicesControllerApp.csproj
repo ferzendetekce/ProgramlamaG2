@@ -146,9 +146,6 @@
     <Compile Include="Terapi\Therapy.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Terapi\Therapy.Designer.cs">
-      <DependentUpon>Therapy.cs</DependentUpon>
-    </Compile>
     <Compile Include="Veri izleme\DataMonitoring.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -185,6 +182,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Servis\Service.resx">
       <DependentUpon>Service.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Terapi\Therapy.en.resx">
+      <DependentUpon>Therapy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Terapi\Therapy.resx">
       <DependentUpon>Therapy.cs</DependentUpon>

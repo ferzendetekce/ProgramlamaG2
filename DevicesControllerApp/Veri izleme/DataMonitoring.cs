@@ -1,319 +1,356 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using RehabilitationSystem.Communication;
+using Npgsql;
 
 namespace DevicesControllerApp.Veri_izleme
 {
     public partial class DataMonitoring : UserControl
     {
-        // --- DEĞİŞKENLER ---
-        private DeviceCommunication device;
-        private bool freezeMode = false;
-        private int pointCount = 100;
-        private int stepCount = 0;
+        // --- Sabit seri anahtarları (kodu kırmamak için DEĞİŞMEZ) ---
+        private const string SERIES_LIVE = "Canlı";
+        private const string SERIES_SAMPLE = "Örnek";
 
-        // Dil Seçimi Değişkenleri
-        private ComboBox cmbLanguage;
-        private string currentLanguage = "TR"; // Varsayılan
+        private int pointCount = 100;
+        private DataTable dtSimulationData;
+        private int simIndex = 0;
+
+        private string currentLang = "TR";
+
+        private const string ConnectionString =
+            "Host=localhost;Port=5432;Database=veri_izleme;Username=postgres;Password=1234";
+
+        private enum SampleState { None, Recording, Stopped }
+        private SampleState sampleState = SampleState.None;
 
         public DataMonitoring()
         {
             InitializeComponent();
-            InitializeLanguageComboBox();
-        }
-
-        // Dil Kutusunu Oluştur
-        private void InitializeLanguageComboBox()
-        {
-            cmbLanguage = new ComboBox();
-            cmbLanguage.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbLanguage.Items.Add("Türkçe");
-            cmbLanguage.Items.Add("English");
-            cmbLanguage.SelectedIndex = 0; // Türkçe Başla
-
-            // Konumunu ayarla
-            cmbLanguage.Location = new Point(1120, 15);
-            cmbLanguage.Size = new Size(100, 25);
-
-            cmbLanguage.SelectedIndexChanged += CmbLanguage_SelectedIndexChanged;
-
-            this.Controls.Add(cmbLanguage);
-            cmbLanguage.BringToFront();
         }
 
         private void DataMonitoring_Load_1(object sender, EventArgs e)
         {
             if (!this.DesignMode)
             {
+                cmbDataDil.Items.Clear();
+                cmbDataDil.Items.Add("Türkçe");
+                cmbDataDil.Items.Add("English");
+                cmbDataDil.Items.Add("العربية");
+                cmbDataDil.SelectedIndex = 0;
+
                 SetupCharts();
-                ApplyLanguage(); // Dili uygula
 
-                device = new DeviceCommunication();
-                device.OnNewData += Device_OnNewData;
-                device.Start();
+                dgvRehList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                dgvRehList.MultiSelect = false;
+                dgvRehList.ReadOnly = true;
+                dgvRehList.AllowUserToAddRows = false;
+
+                ChangeLanguage("TR");
+                LoadRehabilitationList();
             }
         }
 
-        // Dil Değişimi
-        private void CmbLanguage_SelectedIndexChanged(object sender, EventArgs e)
+        private void cmbDataDil_SelectedIndexChanged(object sender, EventArgs e)
         {
-            currentLanguage = (cmbLanguage.SelectedIndex == 0) ? "TR" : "EN";
-            ApplyLanguage();
+            if (cmbDataDil.SelectedIndex == 1) ChangeLanguage("EN");
+            else if (cmbDataDil.SelectedIndex == 2) ChangeLanguage("AR");
+            else ChangeLanguage("TR");
         }
 
-        // --- DİL AYARLARI ---
-        private void ApplyLanguage()
+        private void ChangeLanguage(string lang)
         {
-            bool isTR = currentLanguage == "TR";
+            currentLang = lang;
 
-            // 1. Etiket ve Buton Metinleri
-            lblVeriBaslik.Text = isTR ? "Veri İzleme" : "Data Monitoring";
-            btnExportData.Text = isTR ? "Dışarı Aktar" : "Export Data";
-            lblAdimSayisiBaslik.Text = isTR ? "Adım Sayısı" : "Step Count";
-
-            // 2. Grafik Başlıkları
-            UpdateChartTitle(chartSagTaban, isTR ? "Sağ Ayak Tabanı" : "Right Foot Sole");
-            UpdateChartTitle(chartSolTaban, isTR ? "Sol Ayak Tabanı" : "Left Foot Sole");
-            UpdateChartTitle(chartSagTopuk, isTR ? "Sağ Ayak Topuğu" : "Right Foot Heel");
-            UpdateChartTitle(chartSolTopuk, isTR ? "Sol Ayak Topuğu" : "Left Foot Heel");
-            UpdateChartTitle(chartAgirlik, isTR ? "Ağırlık Dengesi" : "Weight Balance");
-
-            // 3. Eksen Başlıkları ve Tooltip (İpucu) Yazıları
-            UpdateAxisAndTooltips(chartSagTaban, isTR);
-            UpdateAxisAndTooltips(chartSolTaban, isTR);
-            UpdateAxisAndTooltips(chartSagTopuk, isTR);
-            UpdateAxisAndTooltips(chartSolTopuk, isTR);
-
-            // 4. Grafik Seri İsimleri (Canlı / Örnek -> Live / Sample)
-            string liveText = isTR ? "Canlı" : "Live";
-            string sampleText = isTR ? "Örnek" : "Sample";
-
-            UpdateSeriesLegend(chartSagTaban, liveText, sampleText);
-            UpdateSeriesLegend(chartSolTaban, liveText, sampleText);
-            UpdateSeriesLegend(chartSagTopuk, liveText, sampleText);
-            UpdateSeriesLegend(chartSolTopuk, liveText, sampleText);
-
-            // Ağırlık Grafiği Seri Adı
-            if (chartAgirlik.Series.Count > 0)
+            if (lang == "EN")
             {
-                // Bar grafiğinde LegendText kullanıyoruz
-                chartAgirlik.Series[0].LegendText = isTR ? "Ağırlık (kg)" : "Weight (kg)";
-                chartAgirlik.Series[0].ToolTip = isTR ? "Ağırlık: #VALY kg" : "Weight: #VALY kg";
+                UpdateChartTitle(chartSagTaban, "Right Sole");
+                UpdateChartTitle(chartSolTaban, "Left Sole");
+                UpdateChartTitle(chartSagTopuk, "Right Heel");
+                UpdateChartTitle(chartSolTopuk, "Left Heel");
+                UpdateChartTitle(chartAgirlik, "Weight Balance");
+
+                btnExportData.Text = "Export";
+
+                if (dgvRehList.Columns.Count >= 3)
+                {
+                    dgvRehList.Columns[0].HeaderText = "ID";
+                    dgvRehList.Columns[1].HeaderText = "Patient ID";
+                    dgvRehList.Columns[2].HeaderText = "Date/Time";
+                }
+
+                if (chartAgirlik.Series.Count > 0) chartAgirlik.Series[0].Name = "Balanced Weight";
             }
-
-            // 5. Freeze Butonu
-            UpdateFreezeButtonText();
-        }
-
-        // Yardımcı Metot: Seri İsimlerini (Legend) Güncelle
-        private void UpdateSeriesLegend(Chart chart, string liveText, string sampleText)
-        {
-            // Kod içinde serileri "Canlı" ve "Örnek" adıyla çağırmaya devam ediyoruz,
-            // ama kullanıcıya görünen metni (LegendText) değiştiriyoruz.
-            if (chart.Series["Canlı"] != null) chart.Series["Canlı"].LegendText = liveText;
-            if (chart.Series["Örnek"] != null) chart.Series["Örnek"].LegendText = sampleText;
-        }
-
-        // Yardımcı Metot: Eksen ve Tooltip Güncelle
-        private void UpdateAxisAndTooltips(Chart chart, bool isTR)
-        {
-            if (chart.ChartAreas.Count > 0)
+            else if (lang == "AR")
             {
-                chart.ChartAreas[0].AxisX.Title = "Index";
-                chart.ChartAreas[0].AxisY.Title = isTR ? "Yük (kg)" : "Load (kg)";
+                UpdateChartTitle(chartSagTaban, "باطن القدم اليمنى");
+                UpdateChartTitle(chartSolTaban, "باطن القدم اليسرى");
+                UpdateChartTitle(chartSagTopuk, "كعب القدم اليمنى");
+                UpdateChartTitle(chartSolTopuk, "كعب القدم اليسرى");
+                UpdateChartTitle(chartAgirlik, "توازن الوزن");
 
-                // Fare ile üzerine gelince çıkan yazı
-                string tooltipFormat = isTR ? "Index: #VALX, Yük: #VALY kg" : "Index: #VALX, Load: #VALY kg";
+                btnExportData.Text = "تصدير";
 
-                if (chart.Series["Canlı"] != null) chart.Series["Canlı"].ToolTip = tooltipFormat;
-                if (chart.Series["Örnek"] != null) chart.Series["Örnek"].ToolTip = tooltipFormat;
+                if (dgvRehList.Columns.Count >= 3)
+                {
+                    dgvRehList.Columns[0].HeaderText = "المعرّف";
+                    dgvRehList.Columns[1].HeaderText = "رقم المريض";
+                    dgvRehList.Columns[2].HeaderText = "التاريخ/الوقت";
+                }
+
+                if (chartAgirlik.Series.Count > 0) chartAgirlik.Series[0].Name = "الوزن المتوازن";
             }
-        }
-
-        // Yardımcı Metot: Buton Metni
-        private void UpdateFreezeButtonText()
-        {
-            bool isTR = currentLanguage == "TR";
-
-            if (freezeMode)
-                btnFreeze.Text = isTR ? "Örneği Temizle" : "Clear Sample";
             else
-                btnFreeze.Text = isTR ? "Örnek Al" : "Take Sample";
+            {
+                UpdateChartTitle(chartSagTaban, "Sağ Ayak Tabanı");
+                UpdateChartTitle(chartSolTaban, "Sol Ayak Tabanı");
+                UpdateChartTitle(chartSagTopuk, "Sağ Ayak Topuğu");
+                UpdateChartTitle(chartSolTopuk, "Sol Ayak Topuğu");
+                UpdateChartTitle(chartAgirlik, "Ağırlık Dengesi");
+
+                btnExportData.Text = "Dışarı Aktar";
+
+                if (dgvRehList.Columns.Count >= 3)
+                {
+                    dgvRehList.Columns[0].HeaderText = "ID";
+                    dgvRehList.Columns[1].HeaderText = "Hasta No";
+                    dgvRehList.Columns[2].HeaderText = "Tarih/Saat";
+                }
+
+                if (chartAgirlik.Series.Count > 0) chartAgirlik.Series[0].Name = "Dengelenmiş Ağırlık";
+            }
+
+            SetHeaderLabels();
+            UpdateSampleButtonText();
+
+            // >>> Canlı / Örnek yazıları da dil değişince güncellensin
+            ApplySeriesDisplayNames();
+        }
+
+        private void UpdateSampleButtonText()
+        {
+            if (currentLang == "EN")
+            {
+                switch (sampleState)
+                {
+                    case SampleState.None: btnFreeze.Text = "Take Sample"; break;
+                    case SampleState.Recording: btnFreeze.Text = "Stop"; break;
+                    case SampleState.Stopped: btnFreeze.Text = "Delete Sample"; break;
+                    default: btnFreeze.Text = "Take Sample"; break;
+                }
+            }
+            else if (currentLang == "AR")
+            {
+                switch (sampleState)
+                {
+                    case SampleState.None: btnFreeze.Text = "تسجيل عينة"; break;
+                    case SampleState.Recording: btnFreeze.Text = "إيقاف"; break;
+                    case SampleState.Stopped: btnFreeze.Text = "حذف العينة"; break;
+                    default: btnFreeze.Text = "تسجيل عينة"; break;
+                }
+            }
+            else
+            {
+                switch (sampleState)
+                {
+                    case SampleState.None: btnFreeze.Text = "Örnek Al"; break;
+                    case SampleState.Recording: btnFreeze.Text = "Durdur"; break;
+                    case SampleState.Stopped: btnFreeze.Text = "Örnek Sil"; break;
+                    default: btnFreeze.Text = "Örnek Al"; break;
+                }
+            }
         }
 
         private void UpdateChartTitle(Chart chart, string newTitle)
         {
-            if (chart.Titles.Count > 0)
-                chart.Titles[0].Text = newTitle;
-            else
-                chart.Titles.Add(newTitle);
+            if (chart.Titles.Count > 0) chart.Titles[0].Text = newTitle;
+            else chart.Titles.Add(newTitle);
         }
 
-        public void StopDeviceCommunication()
+        // -------------------- LISTE --------------------
+        private void LoadRehabilitationList()
         {
-            device?.Stop();
-        }
-
-        // --- VERİ İŞLEME ---
-        private void Device_OnNewData(object sender, NewDataEventArgs e)
-        {
-            if (this.InvokeRequired)
+            try
             {
-                try { this.Invoke(new Action(() => ProcessData(e))); }
-                catch (ObjectDisposedException) { }
+                using (var conn = new NpgsqlConnection(ConnectionString))
+                {
+                    conn.Open();
+
+                    string sql =
+                        "SELECT terapi_id, hasta_id, terapi_baslangic_zamani " +
+                        "FROM public.terapiler_tablosu " +
+                        "ORDER BY terapi_id DESC";
+
+                    using (var da = new NpgsqlDataAdapter(sql, conn))
+                    {
+                        var dt = new DataTable();
+                        da.Fill(dt);
+                        dgvRehList.DataSource = dt;
+
+                        ChangeLanguage(currentLang);
+                    }
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ProcessData(e);
+                MessageBox.Show(BuildDbErrorMessage(ex), "Database");
             }
         }
 
-        private void ProcessData(NewDataEventArgs e)
+        private void dgvRehList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.IsStepDetected)
-            {
-                UpdateScatter(chartSagTaban, e.SagTabanData);
-                UpdateScatter(chartSolTaban, e.SolTabanData);
-                UpdateScatter(chartSagTopuk, e.SagTopukData);
-                UpdateScatter(chartSolTopuk, e.SolTopukData);
+            if (e.RowIndex < 0) return;
+            if (dgvRehList.SelectedRows.Count == 0) return;
 
-                // Ağırlık grafiğini güncelle (index 0 kullanıyoruz, isim değişse de index sabittir)
+            int secilenId = Convert.ToInt32(dgvRehList.SelectedRows[0].Cells[0].Value);
+            LoadSimulationDataFromDB(secilenId);
+
+            if (dtSimulationData == null || dtSimulationData.Rows.Count == 0)
+            {
+                MessageBox.Show(BuildNoDataMessage(secilenId), "Info");
+                return;
+            }
+
+            sampleState = SampleState.None;
+            UpdateSampleButtonText();
+
+            ClearAllCharts();
+            simIndex = 0;
+
+            timerSim.Stop();
+            timerSim.Start();
+        }
+
+        private void LoadSimulationDataFromDB(int terapiId)
+        {
+            dtSimulationData = new DataTable();
+
+            try
+            {
+                using (var conn = new NpgsqlConnection(ConnectionString))
+                {
+                    conn.Open();
+
+                    string sql = @"
+                        SELECT *
+                        FROM public.loadcell_verileri_tablosu
+                        WHERE terapi_id = @id
+                        ORDER BY loadcell_id ASC";
+
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", terapiId);
+
+                        using (var da = new NpgsqlDataAdapter(cmd))
+                        {
+                            da.Fill(dtSimulationData);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(BuildLoadcellErrorMessage(ex), "Database");
+            }
+        }
+
+        // -------------------- TIMER --------------------
+        private void timerSim_Tick(object sender, EventArgs e)
+        {
+            if (dtSimulationData == null || dtSimulationData.Rows.Count == 0)
+            {
+                timerSim.Stop();
+                return;
+            }
+
+            if (simIndex >= dtSimulationData.Rows.Count)
+            {
+                timerSim.Stop();
+                return;
+            }
+
+            try
+            {
+                DataRow row = dtSimulationData.Rows[simIndex];
+
+                double sagTopuk = Clamp01To100(GetDouble(row, "sag_topuk_basinc_degeri"));
+                double solTopuk = Clamp01To100(GetDouble(row, "sol_topuk_basinc_degeri"));
+                double sagTaban = Clamp01To100(GetDouble(row, "sag_on_ayak_basinc_degeri"));
+                double solTaban = Clamp01To100(GetDouble(row, "sol_on_ayak_basinc_degeri"));
+
+                DateTime ts = GetDateTime(row, "zaman_damgasi", DateTime.Now);
+
+                AddPointToChartLive(chartSagTopuk, ts, sagTopuk);
+                AddPointToChartLive(chartSolTopuk, ts, solTopuk);
+                AddPointToChartLive(chartSagTaban, ts, sagTaban);
+                AddPointToChartLive(chartSolTaban, ts, solTaban);
+
+                if (sampleState == SampleState.Recording)
+                {
+                    AddPointToChartSample(chartSagTopuk, ts, sagTopuk);
+                    AddPointToChartSample(chartSolTopuk, ts, solTopuk);
+                    AddPointToChartSample(chartSagTaban, ts, sagTaban);
+                    AddPointToChartSample(chartSolTaban, ts, solTaban);
+                }
+
+                double agirlikDengeleme = GetDouble(row, "agirlik_dengeleme_degeri");
+                double azaltilanAgirlik = GetDouble(row, "azaltilan_agirlik_degeri");
+                double dengelenmisAgirlik = Clamp01To100(agirlikDengeleme - azaltilanAgirlik);
+
                 if (chartAgirlik.Series.Count > 0)
                 {
                     chartAgirlik.Series[0].Points.Clear();
-                    chartAgirlik.Series[0].Points.AddY(e.AgirlikDengesi);
+                    chartAgirlik.Series[0].Points.AddY(dengelenmisAgirlik);
                 }
 
-                stepCount++;
-                lblStepCounter.Text = stepCount.ToString();
+                simIndex++;
             }
-        }
-
-        // --- GRAFİK KURULUM ---
-        private void SetupCharts()
-        {
-            SetupScatterChart(chartSagTaban, "Sağ Ayak Tabanı", Color.CornflowerBlue);
-            SetupScatterChart(chartSolTaban, "Sol Ayak Tabanı", Color.MediumSeaGreen);
-            SetupScatterChart(chartSagTopuk, "Sağ Ayak Topuğu", Color.Yellow);
-            SetupScatterChart(chartSolTopuk, "Sol Ayak Topuğu", Color.MediumPurple);
-            SetupBarChart(chartAgirlik, "Ağırlık Dengesi", 0, 100);
-        }
-
-        private void SetupScatterChart(Chart chart, string title, Color color)
-        {
-            chart.Series.Clear();
-            chart.Titles.Clear();
-            chart.Titles.Add(title);
-            var area = chart.ChartAreas[0];
-
-            area.AxisX.Minimum = 0;
-            area.AxisX.Maximum = pointCount;
-            area.AxisX.Title = "Index";
-            area.AxisX.MajorGrid.LineColor = Color.LightGray;
-            area.AxisX.Interval = 10;
-
-            area.AxisY.Minimum = 0;
-            area.AxisY.Maximum = 100;
-            area.AxisY.Title = "Yük (kg)";
-            area.AxisY.MajorGrid.LineColor = Color.LightGray;
-
-            area.CursorX.IsUserEnabled = true;
-            area.CursorX.IsUserSelectionEnabled = true;
-            area.AxisX.ScaleView.Zoomable = true;
-            area.CursorY.IsUserEnabled = true;
-            area.CursorY.IsUserSelectionEnabled = true;
-            area.AxisY.ScaleView.Zoomable = true;
-
-            // İÇ İSİMLER "Canlı" ve "Örnek" OLARAK KALIYOR (Kod hatası olmaması için)
-            // Görünen isimleri ApplyLanguage metodu düzeltecek.
-            var live = chart.Series.Add("Canlı");
-            live.ChartType = SeriesChartType.Line;
-            live.Color = color;
-            live.BorderWidth = 3;
-            live.MarkerStyle = MarkerStyle.Circle;
-            live.MarkerSize = 8;
-
-            var red = chart.Series.Add("Örnek");
-            red.ChartType = SeriesChartType.Line;
-            red.Color = Color.Red;
-            red.BorderWidth = 3;
-            red.MarkerStyle = MarkerStyle.Circle;
-            red.MarkerSize = 8;
-        }
-
-        private void SetupBarChart(Chart chart, string title, double min, double max)
-        {
-            chart.Series.Clear();
-            chart.Titles.Clear();
-            chart.Titles.Add(title);
-            var area = chart.ChartAreas[0];
-
-            area.AxisY.Minimum = min;
-            area.AxisY.Maximum = max;
-            area.AxisY.Interval = 20;
-            area.AxisY.MajorGrid.LineColor = Color.LightGray;
-            area.AxisX.LabelStyle.Enabled = false;
-            area.AxisX.MajorTickMark.Enabled = false;
-            area.AxisX.LineWidth = 0;
-
-            var s = chart.Series.Add("Ağırlık (kg)");
-            s.ChartType = SeriesChartType.Column;
-            s.Color = Color.Gold;
-        }
-
-        private void UpdateScatter(Chart chart, List<double> data)
-        {
-            // Veri eklerken iç ismi kullanıyoruz
-            var liveSeries = chart.Series["Canlı"];
-            liveSeries.Points.Clear();
-            for (int i = 0; i < data.Count; i++)
+            catch (Exception ex)
             {
-                liveSeries.Points.AddXY(i, data[i]);
+                timerSim.Stop();
+                MessageBox.Show(BuildRuntimeErrorMessage(ex), "Runtime");
             }
         }
 
-        // --- BUTON VE ETKİLEŞİM ---
+        // -------------------- SAMPLE BUTTON --------------------
         private void btnFreeze_Click(object sender, EventArgs e)
         {
-            freezeMode = !freezeMode;
-            if (freezeMode)
+            switch (sampleState)
             {
-                CopyBlueToRed(chartSagTaban);
-                CopyBlueToRed(chartSolTaban);
-                CopyBlueToRed(chartSagTopuk);
-                CopyBlueToRed(chartSolTopuk);
+                case SampleState.None:
+                    ClearSampleCharts();
+                    sampleState = SampleState.Recording;
+                    break;
+
+                case SampleState.Recording:
+                    sampleState = SampleState.Stopped;
+                    break;
+
+                case SampleState.Stopped:
+                    ClearSampleCharts();
+                    sampleState = SampleState.None;
+                    break;
             }
-            else
-            {
-                ClearRed(chartSagTaban);
-                ClearRed(chartSolTaban);
-                ClearRed(chartSagTopuk);
-                ClearRed(chartSolTopuk);
-            }
-            UpdateFreezeButtonText();
+
+            UpdateSampleButtonText();
         }
 
+        // -------------------- EXPORT --------------------
         private void btnExportData_Click(object sender, EventArgs e)
         {
-            bool isTR = currentLanguage == "TR";
-
             using (SaveFileDialog sfd = new SaveFileDialog())
             {
-                sfd.Filter = isTR ? "CSV Dosyası (*.csv)|*.csv" : "CSV File (*.csv)|*.csv";
-                sfd.Title = isTR ? "Grafik Verilerini Dışa Aktar" : "Export Chart Data";
+                sfd.Filter = "CSV File (*.csv)|*.csv";
                 sfd.FileName = $"rehab_data_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
 
                 if (sfd.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
-                        var sb = new StringBuilder();
-                        sb.AppendLine("Chart;Index;Value_kg");
+                        var sb = new System.Text.StringBuilder();
+                        sb.AppendLine("Chart;Time;Value");
 
                         ExportChartDataToCsv(sb, chartSagTaban, "Right_Sole");
                         ExportChartDataToCsv(sb, chartSolTaban, "Left_Sole");
@@ -321,48 +358,302 @@ namespace DevicesControllerApp.Veri_izleme
                         ExportChartDataToCsv(sb, chartSolTopuk, "Left_Heel");
 
                         File.WriteAllText(sfd.FileName, sb.ToString());
-
-                        string msg = isTR ? "Veriler başarıyla dışa aktarıldı!" : "Data exported successfully!";
-                        string title = isTR ? "Başarılı" : "Success";
-                        MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(BuildExportOkMessage(), "Export");
                     }
                     catch (Exception ex)
                     {
-                        string msg = isTR ? "Hata: " : "Error: ";
-                        string title = isTR ? "Dışa Aktarma Hatası" : "Export Error";
-                        MessageBox.Show(msg + ex.Message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(BuildExportErrorMessage(ex), "Export");
                     }
                 }
             }
         }
 
-        // --- YARDIMCI METOTLAR ---
-        private void ExportChartDataToCsv(StringBuilder sb, Chart chart, string chartName)
+        private void ExportChartDataToCsv(System.Text.StringBuilder sb, Chart chart, string chartName)
         {
-            var seriesToExport = freezeMode ? chart.Series["Örnek"] : chart.Series["Canlı"];
-            foreach (var point in seriesToExport.Points)
+            bool hasSample = (sampleState == SampleState.Recording || sampleState == SampleState.Stopped);
+            var series = hasSample ? chart.Series[SERIES_SAMPLE] : chart.Series[SERIES_LIVE];
+
+            foreach (var p in series.Points)
             {
-                sb.AppendLine($"{chartName};{point.XValue};{point.YValues[0]}");
+                DateTime t = DateTime.FromOADate(p.XValue);
+                sb.AppendLine($"{chartName};{t:HH:mm:ss};{p.YValues[0]}");
             }
         }
 
-        private void CopyBlueToRed(Chart chart)
+        // -------------------- CHART SETUP --------------------
+        private void SetupCharts()
         {
-            var blue = chart.Series["Canlı"];
-            var red = chart.Series["Örnek"];
-            red.Points.Clear();
-            foreach (var p in blue.Points)
-                red.Points.AddXY(p.XValue, p.YValues[0]);
+            SetupScatterChart(chartSagTaban, "Sağ Ayak Tabanı", Color.CornflowerBlue);
+            SetupScatterChart(chartSolTaban, "Sol Ayak Tabanı", Color.MediumSeaGreen);
+            SetupScatterChart(chartSagTopuk, "Sağ Ayak Topuğu", Color.Yellow);
+            SetupScatterChart(chartSolTopuk, "Sol Ayak Topuğu", Color.MediumPurple);
+
+            SetupBarChart(chartAgirlik, "Ağırlık Dengesi", 0, 100);
+
+            // İlk kurulumdan sonra legend yazılarını da ayarla
+            ApplySeriesDisplayNames();
         }
 
-        private void ClearRed(Chart chart)
+        private void SetupScatterChart(Chart chart, string title, Color color)
         {
-            chart.Series["Örnek"].Points.Clear();
+            chart.Series.Clear();
+            chart.Titles.Clear();
+            chart.Titles.Add(title);
+
+            EnsureLegend(chart);
+
+            var area = chart.ChartAreas[0];
+            area.AxisX.LabelStyle.Format = "HH:mm:ss";
+            area.AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
+            area.AxisX.MajorGrid.LineColor = Color.LightGray;
+
+            area.AxisY.Minimum = 0;
+            area.AxisY.Maximum = 100;
+            area.AxisY.MajorGrid.LineColor = Color.LightGray;
+
+            var live = chart.Series.Add(SERIES_LIVE);
+            live.ChartType = SeriesChartType.Line;
+            live.Color = color;
+            live.BorderWidth = 3;
+            live.XValueType = ChartValueType.DateTime;
+            live.IsVisibleInLegend = true;
+
+            var sample = chart.Series.Add(SERIES_SAMPLE);
+            sample.ChartType = SeriesChartType.Line;
+            sample.Color = Color.Red;
+            sample.BorderWidth = 3;
+            sample.XValueType = ChartValueType.DateTime;
+            sample.IsVisibleInLegend = true;
+        }
+
+        private void SetupBarChart(Chart chart, string title, double min, double max)
+        {
+            chart.Series.Clear();
+            chart.Titles.Clear();
+            chart.Titles.Add(title);
+
+            EnsureLegend(chart);
+
+            var area = chart.ChartAreas[0];
+            area.AxisY.Minimum = min;
+            area.AxisY.Maximum = max;
+            area.AxisY.MajorGrid.LineColor = Color.LightGray;
+
+            area.AxisX.LabelStyle.Enabled = false;
+            area.AxisX.MajorTickMark.Enabled = false;
+
+            var s = chart.Series.Add("Dengelenmiş Ağırlık");
+            s.ChartType = SeriesChartType.Column;
+            s.Color = Color.Gold;
+            s.IsVisibleInLegend = false; // tek sütun, legend kalabalık yapmasın
+        }
+
+        private void EnsureLegend(Chart chart)
+        {
+            if (chart.Legends.Count == 0)
+                chart.Legends.Add(new Legend("Legend1"));
+
+            chart.Legends[0].Enabled = true;
+        }
+
+        // >>> DİL DEĞİŞİNCE: legend’de görünen “Canlı/Örnek” yazıları değişsin
+        private void ApplySeriesDisplayNames()
+        {
+            string liveText = GetLiveSeriesText();
+            string sampleText = GetSampleSeriesText();
+
+            foreach (var ch in new[] { chartSagTaban, chartSolTaban, chartSagTopuk, chartSolTopuk })
+            {
+                if (ch == null) continue;
+                EnsureLegend(ch);
+
+                if (ch.Series.IndexOf(SERIES_LIVE) >= 0)
+                    ch.Series[SERIES_LIVE].LegendText = liveText;
+
+                if (ch.Series.IndexOf(SERIES_SAMPLE) >= 0)
+                    ch.Series[SERIES_SAMPLE].LegendText = sampleText;
+            }
+        }
+
+        private string GetLiveSeriesText()
+        {
+            if (currentLang == "EN") return "Live";
+            if (currentLang == "AR") return "مباشر";
+            return "Canlı";
+        }
+
+        private string GetSampleSeriesText()
+        {
+            if (currentLang == "EN") return "Sample";
+            if (currentLang == "AR") return "عينة";
+            return "Örnek";
+        }
+
+        // -------------------- POINT ADD --------------------
+        private void AddPointToChartLive(Chart chart, DateTime xTime, double yValue)
+        {
+            var series = chart.Series[SERIES_LIVE];
+            series.XValueType = ChartValueType.DateTime;
+
+            series.Points.AddXY(xTime, yValue);
+
+            if (series.Points.Count > pointCount) series.Points.RemoveAt(0);
+            chart.ChartAreas[0].RecalculateAxesScale();
+        }
+
+        private void AddPointToChartSample(Chart chart, DateTime xTime, double yValue)
+        {
+            var series = chart.Series[SERIES_SAMPLE];
+            series.XValueType = ChartValueType.DateTime;
+
+            series.Points.AddXY(xTime, yValue);
+
+            if (series.Points.Count > pointCount) series.Points.RemoveAt(0);
+            chart.ChartAreas[0].RecalculateAxesScale();
+        }
+
+        // -------------------- CLEAR --------------------
+        private void ClearAllCharts()
+        {
+            foreach (var ch in new[] { chartSagTaban, chartSolTaban, chartSagTopuk, chartSolTopuk })
+            {
+                ch.Series[SERIES_LIVE].Points.Clear();
+                ch.Series[SERIES_SAMPLE].Points.Clear();
+            }
+
+            if (chartAgirlik.Series.Count > 0) chartAgirlik.Series[0].Points.Clear();
+        }
+
+        private void ClearSampleCharts()
+        {
+            foreach (var ch in new[] { chartSagTaban, chartSolTaban, chartSagTopuk, chartSolTopuk })
+                ch.Series[SERIES_SAMPLE].Points.Clear();
+        }
+
+        // -------------------- SAFE READ --------------------
+        private double Clamp01To100(double v)
+        {
+            if (v < 0) return 0;
+            if (v > 100) return 100;
+            return v;
+        }
+
+        private double GetDouble(DataRow row, string col)
+        {
+            if (!row.Table.Columns.Contains(col)) return 0;
+            return row[col] != DBNull.Value ? Convert.ToDouble(row[col]) : 0;
+        }
+
+        private DateTime GetDateTime(DataRow row, string col, DateTime fallback)
+        {
+            if (!row.Table.Columns.Contains(col)) return fallback;
+            return row[col] != DBNull.Value ? Convert.ToDateTime(row[col]) : fallback;
+        }
+
+        // -------------------- LABELS --------------------
+        private Label FindLabelRecursive(Control root, string labelName)
+        {
+            foreach (Control c in root.Controls)
+            {
+                var lbl = c as Label;
+                if (lbl != null && string.Equals(lbl.Name, labelName, StringComparison.Ordinal))
+                    return lbl;
+
+                var found = FindLabelRecursive(c, labelName);
+                if (found != null) return found;
+            }
+            return null;
+        }
+
+        private void SetHeaderLabels()
+        {
+            Label lblData = FindLabelRecursive(this, "lblDataBaslık");
+            if (lblData == null) lblData = FindLabelRecursive(this, "lblDataBaslik");
+
+            Label lblVeri = FindLabelRecursive(this, "lblVeriBaslik");
+            if (lblVeri == null) lblVeri = FindLabelRecursive(this, "lblVeriBaslık");
+
+            if (currentLang == "EN")
+            {
+                if (lblData != null) lblData.Text = "Past Rehabilitation Records";
+                if (lblVeri != null) lblVeri.Text = "Data Monitoring";
+            }
+            else if (currentLang == "AR")
+            {
+                if (lblData != null) lblData.Text = "سجلات التأهيل السابقة";
+                if (lblVeri != null) lblVeri.Text = "مراقبة البيانات";
+            }
+            else
+            {
+                if (lblData != null) lblData.Text = "Geçmiş Rehabilitasyon Kayıtları";
+                if (lblVeri != null) lblVeri.Text = "Veri İzleme";
+            }
+        }
+
+        // -------------------- MESSAGES --------------------
+        private string BuildDbErrorMessage(Exception ex)
+        {
+            if (currentLang == "EN")
+                return "Cannot connect to the database. Check if PostgreSQL is running and the connection string is correct.\n\nDetails: " + ex.Message;
+
+            if (currentLang == "AR")
+                return "تعذّر الاتصال بقاعدة البيانات. تأكد من تشغيل PostgreSQL وصحة بيانات الاتصال.\n\nالتفاصيل: " + ex.Message;
+
+            return "Veritabanına bağlanılamadı. PostgreSQL çalışıyor mu ve bağlantı bilgileri doğru mu kontrol et.\n\nDetay: " + ex.Message;
+        }
+
+        private string BuildLoadcellErrorMessage(Exception ex)
+        {
+            if (currentLang == "EN")
+                return "Loadcell data could not be loaded. Check table/column names and permissions.\n\nDetails: " + ex.Message;
+
+            if (currentLang == "AR")
+                return "تعذّر تحميل بيانات الحساسات (Loadcell). تحقق من أسماء الجداول/الأعمدة والصلاحيات.\n\nالتفاصيل: " + ex.Message;
+
+            return "Loadcell verileri yüklenemedi. Tablo/sütun adlarını ve yetkileri kontrol et.\n\nDetay: " + ex.Message;
+        }
+
+        private string BuildNoDataMessage(int terapiId)
+        {
+            if (currentLang == "EN")
+                return $"No loadcell data found for Therapy ID = {terapiId}. Check loadcell_verileri_tablosu.";
+
+            if (currentLang == "AR")
+                return $"لا توجد بيانات Loadcell للمعرّف العلاجي = {terapiId}. تحقق من جدول loadcell_verileri_tablosu.";
+
+            return $"Terapi ID = {terapiId} için loadcell verisi bulunamadı. loadcell_verileri_tablosu tablosunu kontrol et.";
+        }
+
+        private string BuildRuntimeErrorMessage(Exception ex)
+        {
+            if (currentLang == "EN")
+                return "An error occurred while processing the data stream.\n\nDetails: " + ex.Message;
+
+            if (currentLang == "AR")
+                return "حدث خطأ أثناء معالجة تدفق البيانات.\n\nالتفاصيل: " + ex.Message;
+
+            return "Veri akışı işlenirken hata oluştu.\n\nDetay: " + ex.Message;
+        }
+
+        private string BuildExportOkMessage()
+        {
+            if (currentLang == "EN") return "Export completed.";
+            if (currentLang == "AR") return "تم التصدير بنجاح.";
+            return "Dışarı aktarma tamamlandı.";
+        }
+
+        private string BuildExportErrorMessage(Exception ex)
+        {
+            if (currentLang == "EN")
+                return "Export failed.\n\nDetails: " + ex.Message;
+
+            if (currentLang == "AR")
+                return "فشل التصدير.\n\nالتفاصيل: " + ex.Message;
+
+            return "Dışarı aktarma başarısız.\n\nDetay: " + ex.Message;
         }
 
         private void DataMonitoring_Click(object sender, EventArgs e) { }
         private void chartSagTopuk_Click(object sender, EventArgs e) { }
-        private void lblAdimSayisiBaslik_Click(object sender, EventArgs e) { }
-        private void lblStepCounter_Click(object sender, EventArgs e) { }
     }
 }

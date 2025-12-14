@@ -38,55 +38,7 @@ namespace DevicesControllerApp.Ana_ekran_Login
         }
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string usernameInput = textBox1.Text.Trim();   // kullanıcı adı
-            string passwordInput = textBox2.Text.Trim();   // şifre (TC)
-
-            if (string.IsNullOrWhiteSpace(usernameInput) || string.IsNullOrWhiteSpace(passwordInput))
-            {
-                MessageBox.Show("Lütfen kullanıcı adı ve şifre giriniz!");
-                return;
-            }
-
-            try
-            {
-               
-                if (!DevicesControllerApp.Database.DatabaseManager.Instance.OpenConnection())
-                {
-                    MessageBox.Show("Veritabanı bağlantısı başarısız!");
-                    return;
-                }
-
-                
-                bool loginOK = DevicesControllerApp.Database.DatabaseManager.Instance
-                    .ValidateUserLogin(usernameInput, passwordInput);
-
-                if (loginOK)
-                {
-                   
-                    DataRow userRow = DevicesControllerApp.Database.DatabaseManager.Instance
-                        .GetUserByUsername(usernameInput);
-
-                    string adSoyad = userRow["kullanici_adi_soyadi"].ToString();
-                    string rol = userRow["rol"].ToString();
-
-                    MessageBox.Show("Giriş başarılı! Hoşgeldiniz " + adSoyad);
-
-                   
-                    Login.LoggedUser = adSoyad;
-                    Login.LoggedRole = rol;
-
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Kullanıcı adı veya şifre yanlış!");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Hata: " + ex.Message);
-            }
+            
         }
 
 

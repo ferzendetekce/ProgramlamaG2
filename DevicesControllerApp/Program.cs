@@ -9,7 +9,7 @@ namespace DevicesControllerApp
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
+           Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             Login loginForm = new Login();
@@ -19,7 +19,7 @@ namespace DevicesControllerApp
             {
                 
                 Application.Run(new MainForm());
-            }
+           }
 
           
             else

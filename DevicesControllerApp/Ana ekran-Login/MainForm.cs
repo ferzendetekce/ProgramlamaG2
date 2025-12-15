@@ -136,6 +136,8 @@ namespace DevicesControllerApp
             {
                 label3.Text = "Misafir";
             }
+            label4.Text = "Bağlı";
+            label4.ForeColor = Color.LimeGreen;
 
         }
 
@@ -168,7 +170,8 @@ namespace DevicesControllerApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-
+            label4.Text = "Bağlı Değil";
+            label4.ForeColor = Color.Red;
             Login login = new Login();
             login.StartPosition = FormStartPosition.CenterScreen;
 

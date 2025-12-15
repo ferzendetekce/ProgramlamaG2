@@ -21,20 +21,20 @@ namespace DevicesControllerApp
     public partial class MainForm : Form
     {
         private Size originalFormSize;
-        private int sideMenuOriginalWidth = 270; // العرض الأساسي
+        private int sideMenuOriginalWidth = 270;
         private bool sideMenuOpened = true;
 
         public MainForm()
         {
             InitializeComponent();
-            // حفظ حجم الفورم الأصلي (كما هو في Visual Studio)
+            //  
             originalFormSize = this.Size;
 
-            // جعل الفورم يغطي كامل الشاشة
+            // 
             this.FormBorderStyle = FormBorderStyle.None;
             this.Bounds = Screen.PrimaryScreen.Bounds;
 
-            // تكبير وتصغير كل العناصر لتناسب حجم الشاشة
+            // 
             ScaleControls(this,
                           Screen.PrimaryScreen.Bounds.Width / (float)originalFormSize.Width,
                           Screen.PrimaryScreen.Bounds.Height / (float)originalFormSize.Height);
@@ -49,15 +49,15 @@ namespace DevicesControllerApp
         {
             foreach (Control ctrl in parent.Controls)
             {
-                // تغيير الحجم
+                // 
                 ctrl.Width = (int)(ctrl.Width * scaleX);
                 ctrl.Height = (int)(ctrl.Height * scaleY);
 
-                // تغيير الموضع
+                // 
                 ctrl.Left = (int)(ctrl.Left * scaleX);
                 ctrl.Top = (int)(ctrl.Top * scaleY);
 
-                // إذا كان يحتوي على عناصر فرعية، طبق عليهم نفس الشيء
+                // A
                 if (ctrl.HasChildren)
                     ScaleControls(ctrl, scaleX, scaleY);
             }
@@ -65,7 +65,7 @@ namespace DevicesControllerApp
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            Settings s= new Settings();
+            Settings s = new Settings();
             splitContainer2.Panel2.Controls.Clear();
             splitContainer2.Panel2.Controls.Add(s);
         }
@@ -91,7 +91,7 @@ namespace DevicesControllerApp
             splitContainer2.Panel2.Controls.Add(s);
         }
 
-     
+
 
         private void btnMonitoring_Click(object sender, EventArgs e)
         {
@@ -123,12 +123,12 @@ namespace DevicesControllerApp
         {
             if (sideMenuOpened)
             {
-                // إغلاق القائمة الجانبية
-                splitContainer1.SplitterDistance = 40; // عرض صغير عند الإغلاق
+
+                splitContainer1.SplitterDistance = 40;
             }
             else
             {
-                // إعادة فتحها بالحجم الأصلي
+
                 splitContainer1.SplitterDistance = sideMenuOriginalWidth;
             }
 
@@ -148,15 +148,15 @@ namespace DevicesControllerApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-           // فتح صفحة تسجيل الدخول
-    Login login = new Login();
-    login.StartPosition = FormStartPosition.CenterScreen;
 
-    // إظهار صفحة تسجيل الدخول
-    login.Show();
+            Login login = new Login();
+            login.StartPosition = FormStartPosition.CenterScreen;
 
-    // إغلاق الصفحة الحالية (MainForm)
-    this.Close();
+
+            login.Show();
+
+            //  (MainForm)
+            this.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -181,7 +181,7 @@ namespace DevicesControllerApp
 
         }
 
-        
+
 
         private void labelTime_Click(object sender, EventArgs e)
         {
@@ -190,7 +190,7 @@ namespace DevicesControllerApp
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            // Güncel tarih ve saati al
+            // Güncel tarih ve saati
             DateTime simdikiZaman = DateTime.Now;
 
             // Tarih ve saat bilgisini istediğin formatta göster

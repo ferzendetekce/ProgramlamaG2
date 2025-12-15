@@ -33,7 +33,7 @@ namespace DevicesControllerApp.Ana_ekran_Login
             string tc = txtTC.Text.Trim();
             string newPass = txtNewPassword.Text.Trim();
 
-            //
+            //s
             if (
                 string.IsNullOrWhiteSpace(username) ||
                 string.IsNullOrWhiteSpace(tc) ||

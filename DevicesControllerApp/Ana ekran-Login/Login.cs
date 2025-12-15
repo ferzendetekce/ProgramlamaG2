@@ -17,6 +17,7 @@ namespace DevicesControllerApp.Ana_ekran_Login
         public static string LoggedUser = "";
         public static string LoggedRole = "";
        
+        //
         public Login()
         {
             InitializeComponent();

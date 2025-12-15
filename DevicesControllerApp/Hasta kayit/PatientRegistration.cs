@@ -8,34 +8,83 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-
-using System.Text.RegularExpressions;// For Regex
+using System.Text.RegularExpressions; // Regex için
 
 namespace DevicesControllerApp.Hasta_kayit
 {
     public partial class PatientRegistration : UserControl
     {
-        Database.DatabaseManager db = Database.DatabaseManager.Instance;
+        // DatabaseManager örneğini çağırıyoruz
+        DatabaseManager db = DatabaseManager.Instance;
+
         public PatientRegistration()
         {
             InitializeComponent();
-            db.OpenConnection();
-           dataGridView1.DataSource= db.GetAllCitys();
+        }
+
+        // --- FORM YÜKLENİRKEN (LOAD) ---
+        private void PatientRegistration_Load(object sender, EventArgs e)
+        {
+            // Şehirleri ComboBox'a doldur
             comboBox1.DataSource = db.GetAllCitys();
             comboBox1.DisplayMember = "sehir_adi";
             comboBox1.ValueMember = "plaka_kodu";
+
+            // Cinsiyet combobox'unu önce veritabanından alınan izinli değerlerle doldurmaya çalış
+            try
+            {
+                var allowed = db.GetAllowedValues("hasta_bilgileri", "cinsiyet");
+                List<KeyValuePair<string, string>> genders;
+                if (allowed != null && allowed.Count > 0)
+                {
+                    genders = allowed.Select(v => new KeyValuePair<string, string>(v, v)).ToList();
+                }
+                else
+                {
+                    // Fallback: önceki gösterim/değer eşlemesi
+                    genders = new List<KeyValuePair<string, string>>()
+                    {
+                        new KeyValuePair<string,string>("Erkek / Man", "Erkek"),
+                        new KeyValuePair<string,string>("Kadın / Woman", "Kadın")
+                    };
+                }
+
+                comboBox2.DisplayMember = "Key"; // gösterilecek metin
+                comboBox2.ValueMember = "Value"; // veritabanına gönderilecek değer
+                comboBox2.DataSource = genders;
+            }
+            catch
+            {
+                // ignore and fallback to default
+                comboBox2.DisplayMember = "Key";
+                comboBox2.ValueMember = "Value";
+                comboBox2.DataSource = new List<KeyValuePair<string, string>>()
+                {
+                    new KeyValuePair<string,string>("Erkek / Man", "Erkek"),
+                    new KeyValuePair<string,string>("Kadın / Woman", "Kadın")
+                };
+            }
+
+            // Gri alanı (DataGridView2) doldur
+            VerileriYenile();
         }
+
+        // --- LİSTEYİ YENİLEME METODU ---
+        private void VerileriYenile()
+        {
+            // Veritabanından verileri çek ve Grid'e bağla
+            dataGridView2.DataSource = db.GetAllPatients();
+        }
+
+        // --- DİL DEĞİŞTİRME SEÇENEĞİ ---
         private void cmbDil_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Seçilen dile göre metodu çağır
-            if (cmbDil.SelectedItem.ToString() == "English")
+            if (cmbDil.SelectedItem != null)
             {
-                DiliDegistir("en");
-            }
-            else
-            {
-                DiliDegistir("tr");
+                if (cmbDil.SelectedItem.ToString() == "English")
+                    DiliDegistir("en");
+                else
+                    DiliDegistir("tr");
             }
         }
 
@@ -43,19 +92,16 @@ namespace DevicesControllerApp.Hasta_kayit
         {
             if (dil == "en")
             {
-                // İngilizce Metinler
                 lblAdSoyad.Text = "Name Surname:";
                 lblTc.Text = "ID Number:";
-                // btnKaydet.Text = "Save";
-                this.Text = "Patient Registration"; // Form Başlığı
-                this.labele1.Text
-                 = "Language:";
+                this.Text = "Patient Registration";
+                this.labele1.Text = "Language:";
                 lblSehir.Text = "City:";
                 btnKaydet.Text = "SAVE PATIENT";
                 btnSil.Text = "DELETE PATIENT";
                 label1.Text = "PATIENTS";
                 button3.Text = "SEARCH PATIENT";
-                button1.Text = " UPDATE PATIENT";
+                button1.Text = "UPDATE PATIENT";
                 label3.Text = "Address";
                 label5.Text = "Weight";
                 label6.Text = "Height";
@@ -65,7 +111,7 @@ namespace DevicesControllerApp.Hasta_kayit
                 label2.Text = "Gender:";
                 lblyakinad.Text = "Name";
                 label13.Text = "Surname";
-                label14.Text= "Degree of Kinship";
+                label14.Text = "Degree of Kinship";
                 label15.Text = "Phone Number:(+90)";
                 label16.Text = "Disease Diagnosis";
                 label11.Text = "Patient Close Information";
@@ -74,19 +120,16 @@ namespace DevicesControllerApp.Hasta_kayit
             }
             else
             {
-                // Türkçe Metinler (Varsayılan)
                 lblAdSoyad.Text = "Ad Soyad:";
                 lblTc.Text = "TC Kimlik No:";
-                //  btnKaydet.Text = "Kaydet";
-                this.Text = "Hasta Kayıt"; // Form Başlığı
-                this.labele1.Text
-                 = "Dil Seçimi:";
+                this.Text = "Hasta Kayıt";
+                this.labele1.Text = "Dil Seçimi:";
                 lblSehir.Text = "Şehir:";
                 btnKaydet.Text = "HASTA KAYDET";
                 btnSil.Text = "HASTA SİL";
                 label1.Text = "HASTALAR";
                 button3.Text = "HASTAYI ARA";
-                button1.Text = " HASTAYI GÜNCELLE";
+                button1.Text = "HASTAYI GÜNCELLE";
                 label3.Text = "Adres";
                 label5.Text = "Kilo";
                 label6.Text = "Boy";
@@ -105,347 +148,253 @@ namespace DevicesControllerApp.Hasta_kayit
             }
         }
 
-
-        private void PatientRegistration_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            MessageBox.Show(" Plaka no:" + comboBox1.SelectedValue.ToString() + "Şehir:"+ comboBox1.Text);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            
-            
-            
-            
-            if(db.HastaSil(textBox2.Text)==false)
-                MessageBox.Show("Silme işlemi başarısız");
-            else
-                MessageBox.Show("Silme işlemi başarılı");
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-             
-           
-            
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        // --- KAYDET BUTONU ---
         private void btnKaydet_Click(object sender, EventArgs e)
         {
-            string adSoyad = textBox1.Text.Trim(); 
-            string tcNo = textBox2.Text.Trim();
-            string kiloStr = textBox4.Text.Trim();
-            string boyStr = textBox5.Text.Trim();
-            string ayaknoStr = textBox7.Text.Trim();
-            string kalcadizStr = textBox11.Text.Trim();
-            string diztopukStr = textBox6.Text.Trim();
-            string Ad = textBox9.Text.Trim();
-            string Soyad = textBox10.Text.Trim();
-
-            string email = txtmail.Text.Trim();
-
-
-
-            // 2. HATA DENETİMLERİ (Validations)
-
-            if (string.IsNullOrEmpty(adSoyad) || string.IsNullOrEmpty(tcNo))
+            // 1. Validasyonlar (Hata Denetimi)
+            if (string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrEmpty(textBox2.Text))
             {
-                
                 string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Please fill all fields!" : "Lütfen tüm alanları doldurunuz!";
                 MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (tcNo.Length != 11)
+            if (textBox2.Text.Length != 11)
             {
                 string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "ID must be 11 digits!" : "TC Kimlik No 11 haneli olmalıdır!";
                 MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-           
 
-            
-            if (!string.IsNullOrEmpty(kiloStr) && !kiloStr.All(char.IsDigit))
+            // Sayısal alan kontrolleri
+            if (!CheckNumeric(textBox4, "Weight/Kilo") || !CheckNumeric(textBox5, "Height/Boy") ||
+                !CheckNumeric(textBox7, "Shoe Size/Ayak No") || !CheckNumeric(textBox11, "Hip Knee/Kalça Diz") ||
+                !CheckNumeric(textBox6, "Knee Heel/Diz Topuk"))
             {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Weight must contain only digits!" : "Kilo bilgisi sadece rakamlardan oluşmalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox4.Focus();
                 return;
             }
 
-           
-            if (string.IsNullOrEmpty(kiloStr) || int.Parse(kiloStr) <= 0)
+            // Ad ve Soyadı Ayırma
+            string tamAd = textBox1.Text.Trim();
+            string ad = tamAd;
+            string soyad = "";
+            if (tamAd.Contains(" "))
             {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Weight information must not be left blank!" : "Kilo bilgisi Boş Kalmamalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox4.Focus();
-                return;
-            }
-            if (textBox8.Text.Length > 10 || textBox8.Text.Length<10)
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Phone Number must be 10 digits!" : "Telefon No 10 haneli olmalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (!string.IsNullOrEmpty(boyStr) && !boyStr.All(char.IsDigit))
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Height must contain only digits!" : "Boy bilgisi sadece rakamlardan oluşmalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox5.Focus();
-                return;
+                int sonBosluk = tamAd.LastIndexOf(' ');
+                ad = tamAd.Substring(0, sonBosluk);
+                soyad = tamAd.Substring(sonBosluk + 1);
             }
 
+            // Değerleri Parse Etme
+            decimal.TryParse(textBox4.Text, out decimal kilo);
+            decimal.TryParse(textBox5.Text, out decimal boy);
+            decimal.TryParse(textBox7.Text, out decimal ayak);
+            decimal.TryParse(textBox11.Text, out decimal kalcaDiz);
+            decimal.TryParse(textBox6.Text, out decimal dizTopuk);
 
-            if (string.IsNullOrEmpty(boyStr) || int.Parse(boyStr) <= 0)
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Height information must not be left blank!" : "Boy bilgisi Boş Kalmamalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox5.Focus();
-                return;
-            }
-            if (!string.IsNullOrEmpty(ayaknoStr) && !ayaknoStr.All(char.IsDigit))
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Shoe Size must contain only digits!" : "Ayak Numarası bilgisi sadece rakamlardan oluşmalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox7.Focus();
-                return;
-            }
+            int sehirPlaka = 0;
+            if (comboBox1.SelectedValue != null)
+                int.TryParse(comboBox1.SelectedValue.ToString(), out sehirPlaka);
 
+            // Normalize gender value to match database check constraint (use SelectedValue now)
+            string genderValue = comboBox2.SelectedValue != null ? comboBox2.SelectedValue.ToString() : comboBox2.Text ?? string.Empty;
 
-            if (string.IsNullOrEmpty(ayaknoStr) || int.Parse(ayaknoStr) <= 0)
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Shoe Size information must not be left blank!" : "Ayak Numarası bilgisi Boş Kalmamalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox7.Focus();
-                return;
-            }
-            if (!string.IsNullOrEmpty(kalcadizStr) && !kalcadizStr.All(char.IsDigit))
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Hip Knee Distance must contain only digits!" : "Kalça Diz Mesafesi bilgisi sadece rakamlardan oluşmalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox11.Focus();
-                return;
-            }
+            // Veritabanına Kaydetme
+            bool sonuc = db.AddPatient(
+                textBox2.Text.Trim(), // TC
+                ad, soyad,
+                dateTimePicker1.Value, // Doğum Tarihi
+                txtmail.Text.Trim(), // Mail
+                textBox3.Text.Trim(), // Adres
+                textBox8.Text.Trim(), // Telefon
+                genderValue, // Cinsiyet (normalize edilmiş)
+                textBox9.Text.Trim(), // Yakın Ad
+                textBox10.Text.Trim(), // Yakın Soyad
+                comboBox4.Text, // Yakınlık
+                textBox12.Text.Trim(), // Yakın Tel
+                comboBox3.Text, // Tanı
+                boy, kilo, ayak, kalcaDiz, dizTopuk,
+                sehirPlaka
+            );
 
-
-            if (string.IsNullOrEmpty(kalcadizStr) || int.Parse(kalcadizStr) <= 0)
+            if (sonuc)
             {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Hip Knee Distance information must not be left blank!" : "Kalça Diz Mesafesi  bilgisi Boş Kalmamalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox11.Focus();
-                return;
+                string mesaj = (btnKaydet.Text == "SAVE PATIENT") ? "Patient Saved." : "Hasta başarıyla kaydedildi.";
+                MessageBox.Show(mesaj, "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                VerileriYenile(); // Listeyi güncelle
             }
-            if (!string.IsNullOrEmpty(diztopukStr) && !diztopukStr.All(char.IsDigit))
+        }
+
+        // --- SİL BUTONU (Mevcut kodunuzda button1_Click Sil butonu olarak atanmıştı) ---
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBox2.Text))
             {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Knee Heel Distance Distance must contain only digits!" : "Diz Topuk Mesafesi bilgisi sadece rakamlardan oluşmalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox6.Focus();
+                MessageBox.Show("Lütfen silinecek kişinin TC Numarasını giriniz.");
                 return;
             }
 
-
-            if (string.IsNullOrEmpty(diztopukStr) || int.Parse(diztopukStr) <= 0)
+            if (MessageBox.Show("Silmek istediğinize emin misiniz?", "Onay", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Knee Heel Distance information must not be left blank!" : "Diz Topuk Mesafesi  bilgisi Boş Kalmamalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                textBox6.Focus();
-                return;
-            }
-            
-            if (string.IsNullOrEmpty(Ad) || string.IsNullOrEmpty(Soyad))
-            {
-
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Please make sure you enter the patient's close name and surname.!" : "Lütfen hasta yakın ad soyad girdiğinizden emin olunuz!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (textBox12.Text.Length > 10 || textBox12.Text.Length < 10)
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Phone Number must be 10 digits!" : "Telefon No 10 haneli olmalıdır!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (comboBox2.SelectedIndex == -1)
-            {
-                
-                string uyari = (btnKaydet.Text == "SAVE PATIENT")
-                               ? "Please select a gender!"
-                               : "Lütfen bir cinsiyet seçiniz!";
-
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                comboBox2.Focus(); 
-                return; 
-
-            }
-            if (comboBox4.SelectedIndex == -1)
-            {
-
-                string uyari = (btnKaydet.Text == "SAVE PATIENT")
-                               ? "Please select a kinship!"
-                               : "Lütfen bir yakın seçiniz!";
-
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                comboBox4.Focus(); 
-                return; 
-            }
-            //---- E-Posta Kontrolleri ----//
-            if (string.IsNullOrEmpty(email))
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Please enter an email address!" : "Lütfen bir e-posta adresi giriniz!";
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtmail.Focus();
-                return;
-            }
-
-            
-            string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-
-            if (!Regex.IsMatch(email, emailPattern))
-            {
-                string uyari = (btnKaydet.Text == "SAVE PATIENT")
-                               ? "Please enter a valid email address (e.g., example@domain.com)!"
-                               : "Lütfen geçerli bir e-posta adresi giriniz (örn: ornek@alanadi.com)!";
-
-                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtmail.Focus();
-                return;
-            }
-            //---------------------
-
-            // 3. VERİTABANI KAYDI (DatabaseManager kullanımı)
-            // try
-            {
-           //     DatabaseManager db = new DatabaseManager();
-               
-             // Fonksiyonu DatabaseManager.cs içinde oluşturman gerekecek
-              
-                // bool sonuc = db.HastaEkle(adSoyad, tcNo, sehir);
-
-               // if (sonuc)
+                if (db.DeletePatientByTC(textBox2.Text))
                 {
-              //      string mesaj = (btnKaydet.Text == "SAVE PATIENT") ? "Patient Saved." : "Hasta başarıyla kaydedildi.";
-                 //   MessageBox.Show(mesaj, "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    // Kutuları temizle
-                  // lblAdSoyad.Text = "";
-                    //lblTc.Text = "";
+                    MessageBox.Show("Silme işlemi başarılı");
+                    VerileriYenile(); // Listeyi Güncelle
+                }
+                else
+                {
+                    MessageBox.Show("Silme işlemi başarısız");
                 }
             }
-           // catch (Exception ex)
+        }
+
+        // Handler for btnSil (designer wired). Performs same deletion logic.
+        private void btnSil_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBox2.Text))
             {
-            //    MessageBox.Show("Hata: " + ex.Message);
+                MessageBox.Show("Lütfen silinecek kişinin TC Numarasını giriniz.");
+                return;
+            }
+
+            if (MessageBox.Show("Silmek istediğinize emin misiniz?", "Onay", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                if (db.DeletePatientByTC(textBox2.Text.Trim()))
+                {
+                    string mesaj = (btnKaydet.Text == "SAVE PATIENT") ? "Patient Deleted." : "Silme işlemi başarılı";
+                    MessageBox.Show(mesaj, "Bilgi", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    VerileriYenile(); // Listeyi Güncelle
+                }
+                else
+                {
+                    string hata = (btnKaydet.Text == "SAVE PATIENT") ? "Delete failed." : "Silme işlemi başarısız";
+                    MessageBox.Show(hata, "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
+        // --- GÜNCELLE BUTONU (button1_Click_1 Güncelle butonu olarak atanmıştı) ---
         private void button1_Click_1(object sender, EventArgs e)
         {
+            // Ad ve Soyadı Ayırma
+            string tamAd = textBox1.Text.Trim();
+            string ad = tamAd;
+            string soyad = "";
+            if (tamAd.Contains(" "))
+            {
+                int sonBosluk = tamAd.LastIndexOf(' ');
+                ad = tamAd.Substring(0, sonBosluk);
+                soyad = tamAd.Substring(sonBosluk + 1);
+            }
 
+            decimal.TryParse(textBox4.Text, out decimal kilo);
+            decimal.TryParse(textBox5.Text, out decimal boy);
+            decimal.TryParse(textBox7.Text, out decimal ayak);
+            decimal.TryParse(textBox11.Text, out decimal kalcaDiz);
+            decimal.TryParse(textBox6.Text, out decimal dizTopuk);
+
+            bool sonuc = db.UpdatePatientByTC(
+                 textBox2.Text.Trim(), // Referans TC
+                 ad, soyad, txtmail.Text, textBox3.Text, textBox8.Text,
+                 boy, kilo, ayak, kalcaDiz, dizTopuk
+            );
+
+            if (sonuc)
+            {
+                MessageBox.Show("Güncelleme işlemi başarılı");
+                VerileriYenile();
+            }
+            else
+            {
+                MessageBox.Show("Güncelleme işlemi başarısız");
+            }
         }
 
-        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        // --- LİSTEDEN SEÇİNCE KUTULARI DOLDURMA ---
+        // Tasarım ekranında CellClick eventine bunu bağlamalısınız!
+        private void dataGridView2_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (e.RowIndex >= 0)
+            {
+                DataGridViewRow row = dataGridView2.Rows[e.RowIndex];
 
+                string ad = row.Cells["ad"].Value != DBNull.Value ? row.Cells["ad"].Value.ToString() : "";
+                string soyad = row.Cells["soyad"].Value != DBNull.Value ? row.Cells["soyad"].Value.ToString() : "";
+                textBox1.Text = ad + " " + soyad;
+
+                textBox2.Text = row.Cells["tc"].Value?.ToString();
+                txtmail.Text = row.Cells["e_mail"].Value?.ToString();
+                textBox3.Text = row.Cells["adresi"].Value?.ToString();
+                textBox8.Text = row.Cells["hasta_telefon_no"].Value?.ToString();
+
+                textBox4.Text = row.Cells["kilo_kg"].Value?.ToString();
+                textBox5.Text = row.Cells["boy_cm"].Value?.ToString();
+                textBox7.Text = row.Cells["ayak_no"].Value?.ToString();
+                textBox11.Text = row.Cells["kalca_diz_mesafesi"].Value?.ToString();
+                textBox6.Text = row.Cells["diz_topuk_mesafesi"].Value?.ToString();
+                // Set gender combobox based on DB value if present
+                var genderDbVal = row.Cells["cinsiyet"].Value?.ToString();
+                if (!string.IsNullOrEmpty(genderDbVal))
+                {
+                    try { comboBox2.SelectedValue = genderDbVal; } catch { /* ignore if value not found */ }
+                }
+            }
         }
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
+        // Yardımcı Metod: Sayısal Kontrol
+        private bool CheckNumeric(TextBox box, string fieldName)
         {
-
+            string val = box.Text.Trim();
+            if (!string.IsNullOrEmpty(val) && !val.All(char.IsDigit))
+            {
+                MessageBox.Show($"{fieldName} sadece rakam içermelidir!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                box.Focus();
+                return false;
+            }
+            return true;
         }
 
-        private void label6_Click(object sender, EventArgs e)
+        // --- GEREKSİZ BOŞ EVENTLER (Tasarım hatası vermemesi için silmedim) ---
+        private void textBox1_TextChanged(object sender, EventArgs e) { }
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { MessageBox.Show(" Plaka no:" + comboBox1.SelectedValue + " Şehir:" + comboBox1.Text); }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+        private void label1_Click(object sender, EventArgs e) { }
+        private void label2_Click(object sender, EventArgs e) { }
+        private void textBox2_TextChanged(object sender, EventArgs e) { }
+        private void label1_Click_1(object sender, EventArgs e) { }
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e) { } // Bunu CellClick ile değiştireceğiz
+        private void textBox3_TextChanged(object sender, EventArgs e) { }
+        private void label6_Click(object sender, EventArgs e) { }
+        private void textBox8_TextChanged(object sender, EventArgs e) { }
+        private void comboBox2_SelectedIndexChanged_1(object sender, EventArgs e) { }
+        private void textBox3_TextChanged_1(object sender, EventArgs e) { }
+        private void textBox4_TextChanged(object sender, EventArgs e) { }
+        private void textBox5_TextChanged(object sender, EventArgs e) { }
+        private void textBox7_TextChanged(object sender, EventArgs e) { }
+        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e) { }
+        private void textBox6_TextChanged(object sender, EventArgs e) { }
+        private void textBox11_TextChanged(object sender, EventArgs e) { }
+        private void groupBox2_Enter(object sender, EventArgs e) { }
+        private void lblyakinad_Click(object sender, EventArgs e) { }
+
+        private void button3_Click(object sender, EventArgs e)
         {
+            // Hastayı ara butonuna basıldığında: textBox1 içeriği ad soyad, textBox2 ise TC olabilir.
+            string term = string.Empty;
+            if (!string.IsNullOrEmpty(textBox2.Text))
+                term = textBox2.Text.Trim();
+            else if (!string.IsNullOrEmpty(textBox1.Text))
+                term = textBox1.Text.Trim();
 
-        }
+            if (string.IsNullOrEmpty(term))
+            {
+                MessageBox.Show("Aramak için isim veya TC giriniz.");
+                return;
+            }
 
-        private void textBox8_TextChanged(object sender, EventArgs e)
-        {
-           
-           
-        }
-
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox3_TextChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox5_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox7_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void maskedTextBox1_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
-        {
-
-        }
-
-        private void textBox6_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void comboBox2_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox11_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void lblyakinad_Click(object sender, EventArgs e)
-        {
-
+            // DataTable ile sorgu yap ve Grid'i güncelle
+            var dt = db.SearchPatients(term);
+            dataGridView2.DataSource = dt;
         }
     }
 }

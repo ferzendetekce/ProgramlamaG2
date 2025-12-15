@@ -375,6 +375,7 @@
             this.label3.Size = new System.Drawing.Size(50, 15);
             this.label3.TabIndex = 13;
             this.label3.Text = "Yönetici";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label2
             // 
@@ -385,6 +386,7 @@
             this.label2.Size = new System.Drawing.Size(124, 16);
             this.label2.TabIndex = 12;
             this.label2.Text = "Dr. Ahmet Yılmaz";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // pictureBox2
             // 

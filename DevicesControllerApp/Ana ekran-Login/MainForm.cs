@@ -116,6 +116,26 @@ namespace DevicesControllerApp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            if (Login.LoggedRole == "Doktor")
+            {
+                label2.Text = "Dr. " + Login.LoggedUser;
+            }
+            else
+            {
+                label2.Text = Login.LoggedUser;
+            }
+            if (Login.LoggedRole == "Admin")
+            {
+                label3.Text = "Yönetici";
+            }
+            else if (Login.LoggedRole == "Operator")
+            {
+                label3.Text = "Operatör";
+            }
+            else if (Login.LoggedRole == "Guest")
+            {
+                label3.Text = "Misafir";
+            }
 
         }
 
@@ -195,6 +215,16 @@ namespace DevicesControllerApp
 
             // Tarih ve saat bilgisini istediğin formatta göster
             labelTime.Text = simdikiZaman.ToString("dd/MM/yyyy HH:mm:ss");
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

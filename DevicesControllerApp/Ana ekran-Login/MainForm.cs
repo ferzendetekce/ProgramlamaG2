@@ -161,7 +161,7 @@ namespace DevicesControllerApp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // Uyarı mesajı göster
+            // sUyarı mesajı göster
             DialogResult result = MessageBox.Show(
                 "Programı kapatmak istiyor musunuz?", // mesaj metni
                 "Uyarı",                              // başlık

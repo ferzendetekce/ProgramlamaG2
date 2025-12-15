@@ -1,12 +1,6 @@
 ﻿using DevicesControllerApp.Database;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DevicesControllerApp.Ana_ekran_Login
@@ -20,6 +14,7 @@ namespace DevicesControllerApp.Ana_ekran_Login
         public resetpassword()
         {
             InitializeComponent();
+
             txtUsername.Text = placeholderUsername;
             txtUsername.ForeColor = Color.Gray;
 
@@ -31,27 +26,45 @@ namespace DevicesControllerApp.Ana_ekran_Login
             txtNewPassword.UseSystemPasswordChar = false;
         }
 
+        //RESET
         private void btnReset_Click(object sender, EventArgs e)
         {
             string username = txtUsername.Text.Trim();
             string tc = txtTC.Text.Trim();
             string newPass = txtNewPassword.Text.Trim();
 
-            if (username == "" || tc == "" || newPass == "")
+            //
+            if (
+                string.IsNullOrWhiteSpace(username) ||
+                string.IsNullOrWhiteSpace(tc) ||
+                string.IsNullOrWhiteSpace(newPass) ||
+                username == placeholderUsername ||
+                tc == placeholderTC ||
+                newPass == placeholderPassword
+            )
             {
-                MessageBox.Show("Lütfen tüm alanları doldurun!");
+                MessageBox.Show("Lütfen tüm alanları doğru şekilde doldurun!");
                 return;
             }
 
-            if (!DatabaseManager.Instance.OpenConnection())
+            var db = DatabaseManager.Instance;
+
+            if (!db.OpenConnection())
             {
                 MessageBox.Show("Veritabanı bağlantı hatası!");
                 return;
             }
 
-            bool ok = DatabaseManager.Instance.ResetPassword(username, tc, newPass);
+            bool ok = false;
 
-            DatabaseManager.Instance.CloseConnection();
+            try
+            {
+                ok = db.ResetPassword(username, tc, newPass);
+            }
+            finally
+            {
+                db.CloseConnection();
+            }
 
             if (ok)
             {
@@ -64,60 +77,48 @@ namespace DevicesControllerApp.Ana_ekran_Login
             }
         }
 
-        private void txtUsername_TextChanged(object sender, EventArgs e)
-        {
+        //EVENTS REQUIRED BY DESIGNER
 
-        }
+        private void txtUsername_TextChanged(object sender, EventArgs e) { }
 
-        private void txtTC_TextChanged(object sender, EventArgs e)
-        {
+        private void txtTC_TextChanged(object sender, EventArgs e) { }
 
-        }
+        private void txtNewPassword_TextChanged(object sender, EventArgs e) { }
 
-        private void txtNewPassword_TextChanged(object sender, EventArgs e)
-        {
+        private void resetpassword_Load(object sender, EventArgs e) { }
 
-        }
+        private void label1_Click(object sender, EventArgs e) { }
 
-        private void resetpassword_Load(object sender, EventArgs e)
-        {
+        private void pictureBox1_Click(object sender, EventArgs e) { }
 
-        }
+        private void panel1_Paint(object sender, PaintEventArgs e) { }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Close(); // يغلق Form1
-        }
-
+        //SHOW / HIDE PASSWORD
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxShowPassword.Checked)
             {
-                txtNewPassword.UseSystemPasswordChar = false; // إظهار كلمة السر
+                txtNewPassword.UseSystemPasswordChar = false;
             }
             else
             {
-                // نخفي فقط إذا المستخدم كتب كلمة فعلية وليس Placeholder
                 if (txtNewPassword.ForeColor != Color.Gray)
                     txtNewPassword.UseSystemPasswordChar = true;
             }
         }
 
+        //CLOSE
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        //PLACEHOLDERS
         private void txtUsername_Enter(object sender, EventArgs e)
         {
             if (txtUsername.ForeColor == Color.Gray)
@@ -125,10 +126,18 @@ namespace DevicesControllerApp.Ana_ekran_Login
                 txtUsername.Clear();
                 txtUsername.ForeColor = Color.Black;
             }
-
         }
 
         private void txtUsername_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtUsername.Text))
+            {
+                txtUsername.Text = placeholderUsername;
+                txtUsername.ForeColor = Color.Gray;
+            }
+        }
+
+        private void txtUsername_Leave_1(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtUsername.Text))
             {
@@ -174,24 +183,14 @@ namespace DevicesControllerApp.Ana_ekran_Login
                 txtNewPassword.ForeColor = Color.Gray;
             }
         }
-        private void txtUsername_Leave_1(object sender, EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(txtUsername.Text))
-            {
-                txtUsername.Text = "Kullancı Adı ";
-                txtUsername.ForeColor = Color.Gray;
-            }
-        }
 
         private void resetpassword_Shown(object sender, EventArgs e)
         {
-            this.ActiveControl = null; // يمنع التركيز على أي TextBox
+            this.ActiveControl = null;
 
             txtNewPassword.UseSystemPasswordChar = false;
             txtNewPassword.Text = placeholderPassword;
             txtNewPassword.ForeColor = Color.Gray;
         }
     }
-
 }
-    

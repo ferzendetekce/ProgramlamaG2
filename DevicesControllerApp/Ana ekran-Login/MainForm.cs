@@ -170,16 +170,16 @@ namespace DevicesControllerApp
 
         private void button1_Click(object sender, EventArgs e)
         {
-            label4.Text = "Bağlı Değil";
-            label4.ForeColor = Color.Red;
+            this.Hide();
+
+           
             Login login = new Login();
             login.StartPosition = FormStartPosition.CenterScreen;
 
+          
+            login.FormClosed += (s, args) => Application.Exit();
 
             login.Show();
-
-            //  (MainForm)
-            this.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)

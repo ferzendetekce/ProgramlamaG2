@@ -114,9 +114,11 @@ namespace DevicesControllerApp.Hasta_kayit
                 label14.Text = "Degree of Kinship";
                 label15.Text = "Phone Number:(+90)";
                 label16.Text = "Disease Diagnosis";
-                label11.Text = "Patient Close Information";
+                label11.Text = "PATIENT CLOSE INFORMATION";
                 label9.Text = "Phone Number:(+90)";
                 label10.Text = "Date of Birth";
+                label12.Text = "PERSONAL INFORMATION";
+
             }
             else
             {
@@ -142,27 +144,144 @@ namespace DevicesControllerApp.Hasta_kayit
                 label14.Text = "Yakınlık Derecesi";
                 label15.Text = "Telefon No:(+90)";
                 label16.Text = "Hastalık Tanısı";
-                label11.Text = "Hasta Yakın Bilgileri";
+                label11.Text = "HASTA YAKIN BİLGİLERİ";
                 label9.Text = "Telefon No:(+90)";
                 label10.Text = "Doğum Tarihi";
+                label12.Text = "KİŞİSEL BİLGİLER";
             }
         }
 
         // --- KAYDET BUTONU ---
         private void btnKaydet_Click(object sender, EventArgs e)
         {
+            
+            
             // 1. Validasyonlar (Hata Denetimi)
-            if (string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrEmpty(textBox2.Text))
+            //textbox blank
+            string tel = textBox8.Text;
+            if (string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrEmpty(textBox2.Text) || string.IsNullOrEmpty(textBox3.Text) || string.IsNullOrEmpty(textBox4.Text) || string.IsNullOrEmpty(textBox5.Text) || string.IsNullOrEmpty(textBox6.Text)
+                 || string.IsNullOrEmpty(textBox7.Text) || string.IsNullOrEmpty(textBox8.Text) || string.IsNullOrEmpty(textBox9.Text) || string.IsNullOrEmpty(textBox10.Text) || string.IsNullOrEmpty(textBox11.Text) || string.IsNullOrEmpty(textBox12.Text))
             {
                 string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "Please fill all fields!" : "Lütfen tüm alanları doldurunuz!";
                 MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            //---------------------------
+            //adsoyad kontrol
+            string adSoyad = textBox1.Text.Trim();
 
-            if (textBox2.Text.Length != 11)
+            foreach (char c in adSoyad)
+            {
+                if (!char.IsLetter(c) && c != ' ')
+                {
+                    string uyari = (btnKaydet.Text == "SAVE PATIENT")
+                        ? "Name and surname must contain only letters!"
+                        : "Ad Soyad sadece harf içermelidir!";
+
+                    MessageBox.Show(uyari, "Hata/Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    textBox1.Focus();
+                    return;
+                }
+            }
+            //--------------------------------------------------
+            //tc
+             if (textBox2.Text.Length != 11)
             {
                 string uyari = (btnKaydet.Text == "SAVE PATIENT") ? "ID must be 11 digits!" : "TC Kimlik No 11 haneli olmalıdır!";
                 MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox2.Focus();
+                return;
+                
+            }
+            foreach (char c in textBox2.Text)
+            {
+                if (!char.IsDigit(c))
+                {
+                    string uyari = (btnKaydet.Text == "SAVE PATIENT")
+                        ? "ID must contain only digits!"
+                        : "TC Kimlik No sadece rakamlardan oluşmalıdır!";
+
+                    MessageBox.Show(uyari, "Hata/Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                    textBox2.Focus();
+                    return;
+                }
+            }
+            //-----
+
+            //TELEFON
+
+            if (tel.Length != 10)
+            {
+                string uyari = (btnKaydet.Text == "SAVE PATIENT")
+                    ? "Phone number must be 10 digits after +90!"
+                    : "+90'dan sonra telefon numarası 10 haneli olmalıdır!";
+
+                MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                textBox8.Focus();
+                return;
+            }
+            for (int i = 1; i < tel.Length; i++)
+            {
+                if (!char.IsDigit(tel[i]))
+                {
+                    string uyari = (btnKaydet.Text == "SAVE PATIENT")
+                        ? "Phone number cannot contain letters!"
+                        : "Telefon numarası harf içeremez!";
+
+                    MessageBox.Show(uyari, "Hata/Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    textBox8.Focus();
+                    return;
+                }
+            }
+            //----------------------
+            //mail
+            string email = txtmail.Text.Trim();
+
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+
+            if (!Regex.IsMatch(email, pattern))
+            {
+                string uyari = (btnKaydet.Text == "SAVE PATIENT")
+                    ? "Please enter a valid email address!"
+                    : "Geçerli bir e-posta adresi giriniz!";
+
+                MessageBox.Show(uyari, "Hata/Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                txtmail.Focus();
+                return;
+            }
+            //--
+            //Hastalık tanısı combo
+            if (comboBox3.SelectedIndex == -1)
+            {
+                string uyari = (btnKaydet.Text == "SAVE PATIENT")
+                    ? "Please select a disease!"
+                    : "Lütfen bir hastalık seçiniz!";
+
+                MessageBox.Show(uyari, "Hata/Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                comboBox3.Select();
+                return;
+            }
+
+            //------
+            //Hasta yakin combo
+            if (comboBox4.SelectedIndex == -1)
+            {
+                string uyari = (btnKaydet.Text == "SAVE PATIENT")
+                    ? "Please select a relative!"
+                    : "Lütfen bir yakın seçiniz!";
+
+                MessageBox.Show(uyari, "Hata/Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                comboBox4.Select();
                 return;
             }
 
@@ -292,10 +411,11 @@ namespace DevicesControllerApp.Hasta_kayit
             decimal.TryParse(textBox7.Text, out decimal ayak);
             decimal.TryParse(textBox11.Text, out decimal kalcaDiz);
             decimal.TryParse(textBox6.Text, out decimal dizTopuk);
+            
 
             bool sonuc = db.UpdatePatientByTC(
                  textBox2.Text.Trim(), // Referans TC
-                 ad, soyad, txtmail.Text, textBox3.Text, textBox8.Text,
+                 ad, soyad,txtmail.Text, textBox3.Text, textBox8.Text,
                  boy, kilo, ayak, kalcaDiz, dizTopuk
             );
 
@@ -345,12 +465,21 @@ namespace DevicesControllerApp.Hasta_kayit
         private bool CheckNumeric(TextBox box, string fieldName)
         {
             string val = box.Text.Trim();
+            bool isEnglish = btnKaydet.Text == "SAVE PATIENT";
+
             if (!string.IsNullOrEmpty(val) && !val.All(char.IsDigit))
             {
-                MessageBox.Show($"{fieldName} sadece rakam içermelidir!", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string uyari = isEnglish
+                    ? $"{fieldName} must contain only numbers!"
+                    : $"{fieldName} sadece rakam içermelidir!";
+
+                MessageBox.Show(uyari, "Hata/Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                 box.Focus();
                 return false;
             }
+
             return true;
         }
 
@@ -395,6 +524,11 @@ namespace DevicesControllerApp.Hasta_kayit
             // DataTable ile sorgu yap ve Grid'i güncelle
             var dt = db.SearchPatients(term);
             dataGridView2.DataSource = dt;
+        }
+
+        private void textBox9_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

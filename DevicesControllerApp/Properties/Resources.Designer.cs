@@ -73,6 +73,16 @@ namespace DevicesControllerApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Everaldo_Crystal_Clear_Action_remove_128 {
+            get {
+                object obj = ResourceManager.GetObject("Everaldo-Crystal-Clear-Action-remove.128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Hopstarter_Button_Button_Add_256 {
             get {
                 object obj = ResourceManager.GetObject("Hopstarter-Button-Button-Add.256", resourceCulture);

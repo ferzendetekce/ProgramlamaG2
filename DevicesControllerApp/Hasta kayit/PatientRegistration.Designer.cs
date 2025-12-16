@@ -33,7 +33,6 @@ namespace DevicesControllerApp.Hasta_kayit
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.btnSil = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.lblAdSoyad = new System.Windows.Forms.Label();
             this.lblSehir = new System.Windows.Forms.Label();
@@ -41,8 +40,6 @@ namespace DevicesControllerApp.Hasta_kayit
             this.cmbDil = new System.Windows.Forms.ComboBox();
             this.btnKaydet = new System.Windows.Forms.Button();
             this.labele1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.button1 = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
@@ -81,12 +78,15 @@ namespace DevicesControllerApp.Hasta_kayit
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label12 = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.btnSil = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox1
@@ -118,17 +118,6 @@ namespace DevicesControllerApp.Hasta_kayit
             this.dataGridView1.Size = new System.Drawing.Size(8, 8);
             this.dataGridView1.TabIndex = 2;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // btnSil
-            // 
-            this.btnSil.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.btnSil.Location = new System.Drawing.Point(529, 625);
-            this.btnSil.Name = "btnSil";
-            this.btnSil.Size = new System.Drawing.Size(247, 45);
-            this.btnSil.TabIndex = 3;
-            this.btnSil.Text = "HASTA SİL";
-            this.btnSil.UseVisualStyleBackColor = true;
-            this.btnSil.Click += new System.EventHandler(this.btnSil_Click);
             // 
             // textBox2
             // 
@@ -181,7 +170,7 @@ namespace DevicesControllerApp.Hasta_kayit
             "Türkçe",
             "English"});
             this.cmbDil.Location = new System.Drawing.Point(309, 35);
-            this.cmbDil.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cmbDil.Margin = new System.Windows.Forms.Padding(2);
             this.cmbDil.Name = "cmbDil";
             this.cmbDil.Size = new System.Drawing.Size(139, 21);
             this.cmbDil.TabIndex = 7;
@@ -189,13 +178,14 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             // btnKaydet
             // 
+            this.btnKaydet.BackColor = System.Drawing.Color.Lime;
             this.btnKaydet.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.btnKaydet.Location = new System.Drawing.Point(70, 625);
+            this.btnKaydet.Location = new System.Drawing.Point(0, 617);
             this.btnKaydet.Name = "btnKaydet";
-            this.btnKaydet.Size = new System.Drawing.Size(242, 50);
+            this.btnKaydet.Size = new System.Drawing.Size(361, 58);
             this.btnKaydet.TabIndex = 3;
             this.btnKaydet.Text = "HASTA EKLE";
-            this.btnKaydet.UseVisualStyleBackColor = true;
+            this.btnKaydet.UseVisualStyleBackColor = false;
             this.btnKaydet.Click += new System.EventHandler(this.btnKaydet_Click);
             // 
             // labele1
@@ -208,29 +198,9 @@ namespace DevicesControllerApp.Hasta_kayit
             this.labele1.Text = "Dil Seçimi:";
             this.labele1.Click += new System.EventHandler(this.label1_Click_1);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::DevicesControllerApp.Properties.Resources.Hopstarter_Button_Button_Add_256;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 622);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(64, 50);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 9;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Image = global::DevicesControllerApp.Properties.Resources.Hopstarter_Button_Button_Delete_256;
-            this.pictureBox2.Location = new System.Drawing.Point(475, 622);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(55, 53);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 10;
-            this.pictureBox2.TabStop = false;
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(318, 625);
+            this.button1.Location = new System.Drawing.Point(367, 625);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(84, 50);
             this.button1.TabIndex = 11;
@@ -442,7 +412,7 @@ namespace DevicesControllerApp.Hasta_kayit
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(298, 89);
             this.label11.TabIndex = 37;
-            this.label11.Text = "Hasta Yakın Bilgileri";
+            this.label11.Text = "HASTA YAKIN BİLGİLERİ";
             this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // textBox9
@@ -451,6 +421,7 @@ namespace DevicesControllerApp.Hasta_kayit
             this.textBox9.Name = "textBox9";
             this.textBox9.Size = new System.Drawing.Size(138, 20);
             this.textBox9.TabIndex = 38;
+            this.textBox9.TextChanged += new System.EventHandler(this.textBox9_TextChanged);
             // 
             // textBox10
             // 
@@ -514,10 +485,17 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             // comboBox3
             // 
+            this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox3.FormattingEnabled = true;
+            this.comboBox3.Items.AddRange(new object[] {
+            "Yürüme Bozukluğu - Tanı: A1",
+            "Yürüme Bozukluğu - Tanı: A2",
+            "Yürüme Bozukluğu - Tanı: A3",
+            "Yürüme Bozukluğu - Tanı: A4",
+            "Yürüme Bozukluğu - Tanı: A5"});
             this.comboBox3.Location = new System.Drawing.Point(137, 428);
             this.comboBox3.Name = "comboBox3";
-            this.comboBox3.Size = new System.Drawing.Size(121, 21);
+            this.comboBox3.Size = new System.Drawing.Size(204, 21);
             this.comboBox3.TabIndex = 48;
             // 
             // comboBox4
@@ -563,7 +541,7 @@ namespace DevicesControllerApp.Hasta_kayit
             this.groupBox1.Controls.Add(this.cmbDil);
             this.groupBox1.Location = new System.Drawing.Point(769, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(443, 625);
+            this.groupBox1.Size = new System.Drawing.Size(448, 625);
             this.groupBox1.TabIndex = 51;
             this.groupBox1.TabStop = false;
             // 
@@ -618,6 +596,39 @@ namespace DevicesControllerApp.Hasta_kayit
             this.label12.Text = "KİŞİSEL BİLGİLER";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = global::DevicesControllerApp.Properties.Resources.Hopstarter_Button_Button_Delete_256;
+            this.pictureBox2.Location = new System.Drawing.Point(475, 622);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(55, 53);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 10;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::DevicesControllerApp.Properties.Resources.Hopstarter_Button_Button_Add_256;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 622);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(64, 50);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
+            // 
+            // btnSil
+            // 
+            this.btnSil.BackColor = System.Drawing.Color.IndianRed;
+            this.btnSil.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnSil.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnSil.Location = new System.Drawing.Point(475, 622);
+            this.btnSil.Name = "btnSil";
+            this.btnSil.Size = new System.Drawing.Size(340, 53);
+            this.btnSil.TabIndex = 3;
+            this.btnSil.Text = "HASTA SİL";
+            this.btnSil.UseVisualStyleBackColor = false;
+            this.btnSil.Click += new System.EventHandler(this.btnSil_Click);
+            // 
             // PatientRegistration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -637,13 +648,13 @@ namespace DevicesControllerApp.Hasta_kayit
             this.Size = new System.Drawing.Size(1215, 907);
             this.Load += new System.EventHandler(this.PatientRegistration_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

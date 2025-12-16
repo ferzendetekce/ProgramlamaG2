@@ -215,5 +215,8 @@
   <ItemGroup>
     <None Include="Resources\Hopstarter-Button-Button-Add.256.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Everaldo-Crystal-Clear-Action-remove.128.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -303,16 +303,18 @@ WHERE c.relname = @table AND pc.contype = 'c' AND pg_get_constraintdef(pc.oid) I
 
         // HASTA GÜNCELLE
         public bool UpdatePatientByTC(string refTcNo, string firstName, string lastName,
-            string email, string address, string phone,
-            decimal height, decimal weight, decimal shoeSize, decimal hipKneeDistance, decimal kneeHeelDistance)
+            DateTime birthDate, string email, string address, string phone,
+            decimal height, decimal weight, decimal shoeSize, decimal hipKneeDistance, decimal kneeHeelDistance,
+            string yakinAd, string yakinSoyad, string yakinDerece, string yakinTel)
         {
             try
             {
                 if (OpenConnection())
                 {
                     string query = @"UPDATE hasta_bilgileri SET 
-                        ad=@ad, soyad=@soyad, e_mail=@email, adresi=@adres, hasta_telefon_no=@tel,
+                        ad=@ad, soyad=@soyad, dogum_tarihi=@dogum, e_mail=@email, adresi=@adres, hasta_telefon_no=@tel,
                         boy_cm=@boy, kilo_kg=@kilo, ayak_no=@ayak, kalca_diz_mesafesi=@kalcaDiz, diz_topuk_mesafesi=@dizTopuk,
+                        hasta_yakini_adi=@yakinAd, hasta_yakini_soyadi=@yakinSoyad, hasta_yakini_neyi=@yakinDerece, hasta_yakini_telefon_no=@yakinTel,
                         guncelleme_tarihi=NOW()
                         WHERE tc=@refTc";
 
@@ -320,6 +322,7 @@ WHERE c.relname = @table AND pc.contype = 'c' AND pg_get_constraintdef(pc.oid) I
                     {
                         cmd.Parameters.AddWithValue("@ad", firstName);
                         cmd.Parameters.AddWithValue("@soyad", lastName);
+                        cmd.Parameters.AddWithValue("@dogum", birthDate);
                         cmd.Parameters.AddWithValue("@email", email);
                         cmd.Parameters.AddWithValue("@adres", address);
                         cmd.Parameters.AddWithValue("@tel", phone);
@@ -328,17 +331,17 @@ WHERE c.relname = @table AND pc.contype = 'c' AND pg_get_constraintdef(pc.oid) I
                         cmd.Parameters.AddWithValue("@ayak", shoeSize);
                         cmd.Parameters.AddWithValue("@kalcaDiz", hipKneeDistance);
                         cmd.Parameters.AddWithValue("@dizTopuk", kneeHeelDistance);
+                        cmd.Parameters.AddWithValue("@yakinAd", yakinAd);
+                        cmd.Parameters.AddWithValue("@yakinSoyad", yakinSoyad);
+                        cmd.Parameters.AddWithValue("@yakinDerece", yakinDerece);
+                        cmd.Parameters.AddWithValue("@yakinTel", yakinTel);
                         cmd.Parameters.AddWithValue("@refTc", refTcNo);
 
                         return cmd.ExecuteNonQuery() > 0;
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Güncelleme Hatası: " + ex.Message);
-                return false;
-            }
+            catch (Exception ex) { MessageBox.Show("Güncelleme Hatası: " + ex.Message); }
             return false;
         }
 

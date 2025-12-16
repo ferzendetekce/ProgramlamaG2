@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions; // Regex için
+using System.Globalization; // For numeric parsing/formatting
 
 namespace DevicesControllerApp.Hasta_kayit
 {
@@ -411,12 +412,15 @@ namespace DevicesControllerApp.Hasta_kayit
             decimal.TryParse(textBox7.Text, out decimal ayak);
             decimal.TryParse(textBox11.Text, out decimal kalcaDiz);
             decimal.TryParse(textBox6.Text, out decimal dizTopuk);
-            
 
+            // Yeni: hasta yakın ve doğum tarihi bilgilerini de gönder
             bool sonuc = db.UpdatePatientByTC(
                  textBox2.Text.Trim(), // Referans TC
-                 ad, soyad,txtmail.Text, textBox3.Text, textBox8.Text,
-                 boy, kilo, ayak, kalcaDiz, dizTopuk
+                 ad, soyad,
+                 dateTimePicker1.Value,
+                 txtmail.Text, textBox3.Text, textBox8.Text,
+                 boy, kilo, ayak, kalcaDiz, dizTopuk,
+                 textBox9.Text.Trim(), textBox10.Text.Trim(), comboBox4.Text, textBox12.Text.Trim()
             );
 
             if (sonuc)
@@ -447,16 +451,90 @@ namespace DevicesControllerApp.Hasta_kayit
                 textBox3.Text = row.Cells["adresi"].Value?.ToString();
                 textBox8.Text = row.Cells["hasta_telefon_no"].Value?.ToString();
 
-                textBox4.Text = row.Cells["kilo_kg"].Value?.ToString();
-                textBox5.Text = row.Cells["boy_cm"].Value?.ToString();
-                textBox7.Text = row.Cells["ayak_no"].Value?.ToString();
-                textBox11.Text = row.Cells["kalca_diz_mesafesi"].Value?.ToString();
-                textBox6.Text = row.Cells["diz_topuk_mesafesi"].Value?.ToString();
+                // Numeric fields: try parse as decimal and format as int if whole, otherwise as double with up to 2 decimals
+                Func<object, string> formatNumeric = (obj) =>
+                {
+                    if (obj == null || obj == DBNull.Value) return string.Empty;
+                    if (obj is decimal decVal)
+                    {
+                        if (decimal.Truncate(decVal) == decVal)
+                            return ((long)decVal).ToString(CultureInfo.CurrentCulture);
+                        return decimal.Round(decVal, 2).ToString("0.##", CultureInfo.CurrentCulture);
+                    }
+                    if (obj is double dbl)
+                    {
+                        if (Math.Truncate(dbl) == dbl)
+                            return ((long)dbl).ToString(CultureInfo.CurrentCulture);
+                        return dbl.ToString("0.##", CultureInfo.CurrentCulture);
+                    }
+                    // fallback parse
+                    if (decimal.TryParse(obj.ToString(), NumberStyles.Number, CultureInfo.CurrentCulture, out decimal parsed))
+                    {
+                        if (decimal.Truncate(parsed) == parsed)
+                            return ((long)parsed).ToString(CultureInfo.CurrentCulture);
+                        return decimal.Round(parsed, 2).ToString("0.##", CultureInfo.CurrentCulture);
+                    }
+                    return obj.ToString();
+                };
+
+                textBox4.Text = formatNumeric(row.Cells["kilo_kg"].Value);
+                textBox5.Text = formatNumeric(row.Cells["boy_cm"].Value);
+                textBox7.Text = formatNumeric(row.Cells["ayak_no"].Value);
+                textBox11.Text = formatNumeric(row.Cells["kalca_diz_mesafesi"].Value);
+                textBox6.Text = formatNumeric(row.Cells["diz_topuk_mesafesi"].Value);
+
+                // Set birth date if available
+                var dogumObj = row.Cells["dogum_tarihi"].Value;
+                if (dogumObj != null && dogumObj != DBNull.Value)
+                {
+                    DateTime dt;
+                    if (dogumObj is DateTime)
+                        dt = (DateTime)dogumObj;
+                    else if (!DateTime.TryParse(dogumObj.ToString(), out dt))
+                        dt = dateTimePicker1.Value; // keep existing if parse fails
+
+                    dateTimePicker1.Value = dt;
+                }
+
                 // Set gender combobox based on DB value if present
                 var genderDbVal = row.Cells["cinsiyet"].Value?.ToString();
                 if (!string.IsNullOrEmpty(genderDbVal))
                 {
                     try { comboBox2.SelectedValue = genderDbVal; } catch { /* ignore if value not found */ }
+                }
+
+                // Fill patient relative info from DB
+                var yakinAd = row.Cells["hasta_yakini_adi"].Value?.ToString() ?? string.Empty;
+                var yakinSoyad = row.Cells["hasta_yakini_soyadi"].Value?.ToString() ?? string.Empty;
+                var yakinNeyi = row.Cells["hasta_yakini_neyi"].Value?.ToString() ?? string.Empty;
+                var yakinTel = row.Cells["hasta_yakini_telefon_no"].Value?.ToString() ?? string.Empty;
+
+                textBox9.Text = yakinAd;
+                textBox10.Text = yakinSoyad;
+                textBox12.Text = yakinTel;
+
+                // Try to select the relation in comboBox4; if not present add it and select
+                if (!string.IsNullOrEmpty(yakinNeyi))
+                {
+                    int foundIndex = -1;
+                    for (int i = 0; i < comboBox4.Items.Count; i++)
+                    {
+                        var itemText = comboBox4.Items[i]?.ToString();
+                        if (!string.IsNullOrEmpty(itemText) && string.Equals(itemText.Trim(), yakinNeyi.Trim(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            foundIndex = i; break;
+                        }
+                    }
+                    if (foundIndex >= 0)
+                    {
+                        comboBox4.SelectedIndex = foundIndex;
+                    }
+                    else
+                    {
+                        // add new display item equal to the DB value and select it
+                        comboBox4.Items.Add(yakinNeyi);
+                        comboBox4.SelectedItem = yakinNeyi;
+                    }
                 }
             }
         }
@@ -465,21 +543,15 @@ namespace DevicesControllerApp.Hasta_kayit
         private bool CheckNumeric(TextBox box, string fieldName)
         {
             string val = box.Text.Trim();
-            bool isEnglish = btnKaydet.Text == "SAVE PATIENT";
+            if (string.IsNullOrEmpty(val)) return true; // empty allowed (handled elsewhere)
 
-            if (!string.IsNullOrEmpty(val) && !val.All(char.IsDigit))
+            // Accept integers and decimals according to current culture
+            if (!decimal.TryParse(val, NumberStyles.Number, CultureInfo.CurrentCulture, out _))
             {
-                string uyari = isEnglish
-                    ? $"{fieldName} must contain only numbers!"
-                    : $"{fieldName} sadece rakam içermelidir!";
-
-                MessageBox.Show(uyari, "Hata/Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+                MessageBox.Show($"{fieldName} sadece sayısal bir değer olmalıdır (ör. 170 veya 170.5).", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 box.Focus();
                 return false;
             }
-
             return true;
         }
 

@@ -418,9 +418,11 @@ namespace DevicesControllerApp.Hasta_kayit
                  textBox2.Text.Trim(), // Referans TC
                  ad, soyad,
                  dateTimePicker1.Value,
+                 comboBox2.SelectedValue != null ? comboBox2.SelectedValue.ToString() : comboBox2.Text, // gender
                  txtmail.Text, textBox3.Text, textBox8.Text,
                  boy, kilo, ayak, kalcaDiz, dizTopuk,
-                 textBox9.Text.Trim(), textBox10.Text.Trim(), comboBox4.Text, textBox12.Text.Trim()
+                 textBox9.Text.Trim(), textBox10.Text.Trim(), comboBox4.Text, textBox12.Text.Trim(),
+                 comboBox3.Text // diagnosis
             );
 
             if (sonuc)

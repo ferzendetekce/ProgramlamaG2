@@ -604,5 +604,10 @@ namespace DevicesControllerApp.Hasta_kayit
         {
 
         }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

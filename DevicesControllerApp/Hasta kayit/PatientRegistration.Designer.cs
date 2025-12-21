@@ -101,11 +101,11 @@ namespace DevicesControllerApp.Hasta_kayit
             // comboBox1
             // 
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(137, 455);
+            this.comboBox1.Location = new System.Drawing.Point(137, 476);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(365, 63);
+            this.comboBox1.Size = new System.Drawing.Size(256, 28);
             this.comboBox1.TabIndex = 1;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
@@ -178,8 +178,8 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             // btnKaydet
             // 
-            this.btnKaydet.BackColor = System.Drawing.Color.Lime;
-            this.btnKaydet.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnKaydet.BackColor = System.Drawing.Color.DarkOliveGreen;
+            this.btnKaydet.Font = new System.Drawing.Font("Microsoft YaHei", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnKaydet.Location = new System.Drawing.Point(0, 617);
             this.btnKaydet.Name = "btnKaydet";
             this.btnKaydet.Size = new System.Drawing.Size(361, 58);
@@ -230,9 +230,9 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(951, 629);
+            this.button3.Location = new System.Drawing.Point(951, 622);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(266, 43);
+            this.button3.Size = new System.Drawing.Size(266, 50);
             this.button3.TabIndex = 15;
             this.button3.Text = "HASTAYI ARA";
             this.button3.UseVisualStyleBackColor = true;
@@ -257,7 +257,7 @@ namespace DevicesControllerApp.Hasta_kayit
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(621, 156);
+            this.label2.Location = new System.Drawing.Point(611, 161);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 13);
             this.label2.TabIndex = 19;
@@ -361,7 +361,7 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(606, 229);
+            this.textBox8.Location = new System.Drawing.Point(482, 226);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(157, 20);
             this.textBox8.TabIndex = 32;
@@ -370,7 +370,7 @@ namespace DevicesControllerApp.Hasta_kayit
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(510, 236);
+            this.label9.Location = new System.Drawing.Point(386, 229);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(90, 13);
             this.label9.TabIndex = 33;
@@ -383,7 +383,7 @@ namespace DevicesControllerApp.Hasta_kayit
             this.comboBox2.Items.AddRange(new object[] {
             "Erkek / Man",
             "Kadın / Woman"});
-            this.comboBox2.Location = new System.Drawing.Point(673, 153);
+            this.comboBox2.Location = new System.Drawing.Point(663, 158);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(90, 21);
             this.comboBox2.TabIndex = 34;
@@ -432,7 +432,7 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             // textBox12
             // 
-            this.textBox12.Location = new System.Drawing.Point(103, 363);
+            this.textBox12.Location = new System.Drawing.Point(105, 357);
             this.textBox12.Name = "textBox12";
             this.textBox12.Size = new System.Drawing.Size(138, 20);
             this.textBox12.TabIndex = 41;
@@ -527,7 +527,7 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             // groupBox1
             // 
-            this.groupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.groupBox1.BackColor = System.Drawing.Color.White;
             this.groupBox1.Controls.Add(this.comboBox4);
             this.groupBox1.Controls.Add(this.label15);
             this.groupBox1.Controls.Add(this.label14);
@@ -547,7 +547,7 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             // groupBox2
             // 
-            this.groupBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.groupBox2.BackColor = System.Drawing.Color.White;
             this.groupBox2.Controls.Add(this.label12);
             this.groupBox2.Controls.Add(this.textBox11);
             this.groupBox2.Controls.Add(this.comboBox3);
@@ -583,11 +583,13 @@ namespace DevicesControllerApp.Hasta_kayit
             this.groupBox2.Size = new System.Drawing.Size(776, 625);
             this.groupBox2.TabIndex = 52;
             this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "0";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
             // 
             // label12
             // 
             this.label12.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label12.Font = new System.Drawing.Font("Impact", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label12.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label12.Location = new System.Drawing.Point(-3, 0);
             this.label12.Name = "label12";
@@ -620,7 +622,7 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             this.btnSil.BackColor = System.Drawing.Color.IndianRed;
             this.btnSil.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.btnSil.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.btnSil.Font = new System.Drawing.Font("Microsoft YaHei", 24F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.btnSil.Location = new System.Drawing.Point(475, 622);
             this.btnSil.Name = "btnSil";
             this.btnSil.Size = new System.Drawing.Size(340, 53);
@@ -633,7 +635,7 @@ namespace DevicesControllerApp.Hasta_kayit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Highlight;
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button3);

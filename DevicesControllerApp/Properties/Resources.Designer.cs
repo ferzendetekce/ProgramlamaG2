@@ -63,6 +63,16 @@ namespace DevicesControllerApp.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Aha_Soft_Business_Toolbar_Conference_48 {
+            get {
+                object obj = ResourceManager.GetObject("Aha-Soft-Business-Toolbar-Conference.48", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Custom_Icon_Design_Pretty_Office_7_Save_64 {
             get {
                 object obj = ResourceManager.GetObject("Custom-Icon-Design-Pretty-Office-7-Save.64", resourceCulture);
@@ -76,6 +86,16 @@ namespace DevicesControllerApp.Properties {
         internal static System.Drawing.Bitmap Everaldo_Crystal_Clear_Action_remove_128 {
             get {
                 object obj = ResourceManager.GetObject("Everaldo-Crystal-Clear-Action-remove.128", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Everaldo_Crystal_Clear_App_personal_128 {
+            get {
+                object obj = ResourceManager.GetObject("Everaldo-Crystal-Clear-App-personal.128", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

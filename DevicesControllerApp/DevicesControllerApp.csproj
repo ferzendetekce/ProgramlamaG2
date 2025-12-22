@@ -218,5 +218,11 @@
   <ItemGroup>
     <None Include="Resources\Everaldo-Crystal-Clear-Action-remove.128.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Everaldo-Crystal-Clear-App-personal.128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Aha-Soft-Business-Toolbar-Conference.48.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

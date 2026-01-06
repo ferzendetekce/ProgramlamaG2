@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections;
+using System.Windows.Forms; // MessageBox için gerekli
+using Npgsql; // Npgsql kütüphanesi
+using System.Linq; // LINQ için eklendi
 
 namespace DevicesControllerApp.Database
 {
-
     internal class DatabaseManager
     {
-        static DatabaseManager instance = null;
+        private static DatabaseManager instance = null;
 
-        internal static DatabaseManager Instance { 
-            get {
-                if ((instance==null))
+        internal static DatabaseManager Instance
+        {
+            get
+            {
+                if (instance == null)
                 {
                     instance = new DatabaseManager();
                 }
@@ -24,345 +24,411 @@ namespace DevicesControllerApp.Database
         }
 
         private string connectionString;
+        private NpgsqlConnection conn;
+
         private DatabaseManager()
         {
-            connectionString = "Server=localhost;Port=5432;Database=lokomat;User Id=postgres;Password=1234;";
+            // ŞİFRENİZİ BURAYA YAZIN. Database ismini backup dosyasına göre 'database' olarak güncelledim.
+            // Eğer veritabanı adınız 'lokomat' ise onu değiştirmeyin.
+            connectionString = "Server=localhost;Port=5432;Database=SonDB;User Id=postgres;Password=1234;";
         }
 
-        Npgsql.NpgsqlConnection conn;
         public bool OpenConnection()
         {
-            conn = new Npgsql.NpgsqlConnection(connectionString);
+            if (conn == null) conn = new NpgsqlConnection(connectionString);
             try
             {
-                conn.Open();
-                if(conn.State == ConnectionState.Open)
-                    return true;
-                else
-                    return false;
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+                return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                MessageBox.Show("Bağlantı Hatası: " + ex.Message);
                 return false;
             }
         }
 
+        public void CloseConnection()
+        {
+            if (conn != null && conn.State == ConnectionState.Open)
+                conn.Close();
+        }
+
+        // ŞEHİRLERİ GETİR
         public DataTable GetAllCitys()
         {
-            if (conn.State == ConnectionState.Open)
-            {
-                string query = "SELECT * FROM sehirler";
-                Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(query, conn);
-                Npgsql.NpgsqlDataAdapter da = new Npgsql.NpgsqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                return dt;
-            }
-                return null;
-        }
-
-        public bool HastaSil(string tc)
-        {
-            string query = "DELETE FROM hastalar WHERE tc_kimlik_no='"+tc+"'";
-            Npgsql.NpgsqlCommand cmd = new Npgsql.NpgsqlCommand(query, conn);
+            DataTable dt = new DataTable();
             try
             {
-                int result = cmd.ExecuteNonQuery();
-                if (result > 0)
-                    return true;
-                else
-                    return false;
+                if (OpenConnection())
+                {
+                    // Backup dosyanızdaki tablo adı: sehirler_tablosu
+                    string query = "SELECT plaka_kodu, sehir_adi FROM sehirler_tablosu ORDER BY sehir_adi";
+                    using (NpgsqlDataAdapter da = new NpgsqlDataAdapter(query, conn))
+                    {
+                        da.Fill(dt);
+                    }
+                }
             }
-            catch (Exception)
-            {
-
-                return false;
-            }
-            
-        }
-        public bool CloseConnection()
-        {
-            return false;
+            catch (Exception ex) { MessageBox.Show("Şehirler getirilemedi: " + ex.Message); }
+            return dt;
         }
 
-        public bool TestConnection()
-        {
-            return false;
-        }
-
-        public bool AddPatient(string tcNo, string firstName, string lastName, DateTime birthDate,
-            string gender, string address, string phone, string email, string diagnosis,
-            int height, int weight, int shoeSize, int hipKneeDistance, int kneeHeelDistance)
-        {
-            return false;
-        }
-
-        public bool UpdatePatient(int patientId, string tcNo, string firstName, string lastName,
-            DateTime birthDate, string gender, string address, string phone, string email,
-            string diagnosis, int height, int weight, int shoeSize, int hipKneeDistance,
-            int kneeHeelDistance)
-        {
-            return false;
-        }
-
-        public bool DeletePatient(int patientId)
-        {
-            return false;
-        }
-
-        public DataTable SearchPatient(string searchTerm)
-        {
-            return null;
-        }
-
+        // HASTALARI LİSTELE (Sadece Aktif Olanlar)
         public DataTable GetAllPatients()
         {
-            return null;
+            DataTable dt = new DataTable();
+            try
+            {
+                if (OpenConnection())
+                {
+                    string query = "SELECT * FROM hasta_bilgileri WHERE aktif_pasif_durumu = 'Aktif' ORDER BY hasta_id DESC";
+                    using (NpgsqlDataAdapter da = new NpgsqlDataAdapter(query, conn))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Hastalar getirilemedi: " + ex.Message); }
+            return dt;
         }
 
-        public DataRow GetPatientDetails(int patientId)
+        // HASTA EKLE
+        public bool AddPatient(string tcNo, string firstName, string lastName, DateTime birthDate,
+            string gender, string address, string phone, string email, string diagnosis,
+            decimal height, decimal weight, decimal shoeSize, decimal hipKneeDistance, decimal kneeHeelDistance,
+            int sehirPlaka, string yakinAd, string yakinSoyad, string yakinDerece, string yakinTel)
         {
-            return null;
-        }
+            try
+            {
+                if (!OpenConnection()) return false;
 
-        public DataRow GetPatientByTcNo(string tcNo)
-        {
-            return null;
-        }
+                // Local helper to attempt insert with a specific gender value
+                bool TryInsert(string genderValue)
+                {
+                    string query = @"INSERT INTO hasta_bilgileri 
+                    (ad, soyad, tc, dogum_tarihi, cinsiyet, adresi, hasta_telefon_no, e_mail, hastalik_tanisi,
+                     boy_cm, kilo_kg, ayak_no, kalca_diz_mesafesi, diz_topuk_mesafesi, 
+                     memleketi_plaka_kodu, hasta_yakini_adi, hasta_yakini_soyadi, hasta_yakini_neyi, hasta_yakini_telefon_no, aktif_pasif_durumu)
+                    VALUES 
+                    (@ad, @soyad, @tc, @dogum, @cinsiyet, @adres, @tel, @email, @tani,
+                     @boy, @kilo, @ayak, @kalcaDiz, @dizTopuk,
+                     @plaka, @yakinAd, @yakinSoyad, @yakinDerece, @yakinTel, 'Aktif')";
 
-        public bool ValidateUserLogin(string username, string password)
-        {
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ad", firstName);
+                        cmd.Parameters.AddWithValue("@soyad", lastName);
+                        cmd.Parameters.AddWithValue("@tc", tcNo);
+                        cmd.Parameters.AddWithValue("@dogum", birthDate);
+                        cmd.Parameters.AddWithValue("@cinsiyet", genderValue ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@adres", address);
+                        cmd.Parameters.AddWithValue("@tel", phone);
+                        cmd.Parameters.AddWithValue("@email", email);
+                        cmd.Parameters.AddWithValue("@tani", diagnosis);
+                        cmd.Parameters.AddWithValue("@boy", height);
+                        cmd.Parameters.AddWithValue("@kilo", weight);
+                        cmd.Parameters.AddWithValue("@ayak", shoeSize);
+                        cmd.Parameters.AddWithValue("@kalcaDiz", hipKneeDistance);
+                        cmd.Parameters.AddWithValue("@dizTopuk", kneeHeelDistance);
+                        cmd.Parameters.AddWithValue("@plaka", sehirPlaka);
+                        cmd.Parameters.AddWithValue("@yakinAd", yakinAd);
+                        cmd.Parameters.AddWithValue("@yakinSoyad", yakinSoyad);
+                        cmd.Parameters.AddWithValue("@yakinDerece", yakinDerece);
+                        cmd.Parameters.AddWithValue("@yakinTel", yakinTel);
+
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+
+                // First try with provided gender
+                try
+                {
+                    if (TryInsert(gender)) return true;
+                }
+                catch (Npgsql.PostgresException pex)
+                {
+                    // If check constraint for gender failed, we'll try mapping to an alternate value and retry
+                    if (string.Equals(pex.ConstraintName, "chk_cinsiyet", StringComparison.OrdinalIgnoreCase))
+                    {
+                        string alt = GetAlternateGender(gender);
+                        if (!string.IsNullOrEmpty(alt) && !string.Equals(alt, gender, StringComparison.Ordinal))
+                        {
+                            try
+                            {
+                                if (TryInsert(alt)) return true;
+                            }
+                            catch (Exception) { /* fall through to show error below */ }
+                        }
+                    }
+                    // For any other PostgresException, show the message below
+                    MessageBox.Show("Ekleme Hatası: " + pex.Message);
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ekleme Hatası: " + ex.Message);
+                return false;
+            }
             return false;
         }
 
-        public DataRow GetUserByUsername(string username)
+        // Map between UI gender representations and common DB representations
+        private string GetAlternateGender(string gender)
         {
-            return null;
+            if (string.IsNullOrWhiteSpace(gender)) return gender;
+            string g = gender.Trim();
+            // If form shows "Erkek / Man" or "Kadın / Woman" earlier code trimmed to part before'/'
+            if (g.Contains("/")) g = g.Split('/')[0].Trim();
+            string lower = g.ToLowerInvariant();
+
+            // Try to read allowed values from DB check constraint for column 'cinsiyet' in table 'hasta_bilgileri'
+            var allowed = GetCheckConstraintAllowedValues("hasta_bilgileri", "cinsiyet");
+            if (allowed != null && allowed.Count > 0)
+            {
+                // Normalize allowed values
+                var allowedLower = allowed.Select(x => x.ToLowerInvariant()).ToList();
+
+                // If exact match to an allowed value, return that allowed value (preserve original allowed casing)
+                for (int i = 0; i < allowedLower.Count; i++)
+                {
+                    if (allowedLower[i] == lower || lower.Contains(allowedLower[i]) || allowedLower[i].Contains(lower))
+                        return allowed[i];
+                }
+
+                // Heuristic mappings: try Turkish/English/short codes
+                if (lower.StartsWith("erk"))
+                {
+                    // prefer allowed value that starts with 'erk' or equals 'm'
+                    for (int i = 0; i < allowedLower.Count; i++)
+                        if (allowedLower[i].StartsWith("erk") || allowedLower[i] == "m") return allowed[i];
+                }
+                if (lower.StartsWith("kad") || lower.StartsWith("kadın"))
+                {
+                    for (int i = 0; i < allowedLower.Count; i++)
+                        if (allowedLower[i].StartsWith("kad") || allowedLower[i] == "f") return allowed[i];
+                }
+                if (lower == "m" || lower == "male")
+                {
+                    for (int i = 0; i < allowedLower.Count; i++)
+                        if (allowedLower[i] == "m" || allowedLower[i].StartsWith("erk") || allowedLower[i].Contains("male")) return allowed[i];
+                }
+                if (lower == "f" || lower == "female" || lower == "woman")
+                {
+                    for (int i = 0; i < allowedLower.Count; i++)
+                        if (allowedLower[i] == "f" || allowedLower[i].StartsWith("kad") || allowedLower[i].Contains("female") || allowedLower[i].Contains("woman")) return allowed[i];
+                }
+
+                // As a last resort return the first allowed value
+                return allowed.First();
+            }
+
+            // Fallback if we couldn't read constraint: prior heuristics
+            // Common mappings: Turkish <-> short codes
+            if (lower.StartsWith("erk")) // "erkek"
+                return "M"; // try short code first
+            if (lower.StartsWith("kad") || lower.StartsWith("kadın")) // "kadın"
+                return "F";
+            if (lower == "m")
+                return "Erkek";
+            if (lower == "f")
+                return "Kadın";
+
+            // Fallback: also support English words
+            if (lower.StartsWith("man") || lower == "male") return "M";
+            if (lower.StartsWith("wom") || lower == "female") return "F";
+
+            // If nothing matched, return original
+            return gender;
         }
 
-        public bool AddUser(string username, string password, string tcNo, string firstName,
-            string lastName, string role, string email, string phone)
+        // Read check constraint definition(s) for given table and column and extract allowed string values
+        private List<string> GetCheckConstraintAllowedValues(string tableName, string columnName)
         {
+            try
+            {
+                if (!OpenConnection()) return null;
+
+                string sql = @"SELECT pg_get_constraintdef(pc.oid) AS def
+FROM pg_constraint pc
+JOIN pg_class c ON pc.conrelid = c.oid
+JOIN pg_namespace n ON c.relnamespace = n.oid
+WHERE c.relname = @table AND pc.contype = 'c' AND pg_get_constraintdef(pc.oid) ILIKE '%' || @col || '%';";
+
+                using (var cmd = new NpgsqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@table", tableName);
+                    cmd.Parameters.AddWithValue("@col", columnName);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        var results = new List<string>();
+                        while (reader.Read())
+                        {
+                            var def = reader[0]?.ToString();
+                            if (string.IsNullOrEmpty(def)) continue;
+                            // Extract single-quoted literals from definition
+                            var matches = System.Text.RegularExpressions.Regex.Matches(def, "'([^']*)'");
+                            foreach (System.Text.RegularExpressions.Match m in matches)
+                            {
+                                string val = m.Groups[1].Value;
+                                if (!results.Contains(val)) results.Add(val);
+                            }
+                        }
+                        return results.Distinct().ToList();
+                    }
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // Public wrapper to get allowed values for a check-constrained column (e.g., cinsiyet)
+        public List<string> GetAllowedValues(string tableName, string columnName)
+        {
+            try
+            {
+                return GetCheckConstraintAllowedValues(tableName, columnName);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        // HASTA GÜNCELLE
+        public bool UpdatePatientByTC(string refTcNo, string firstName, string lastName,
+            DateTime birthDate, string gender, string email, string address, string phone,
+            decimal height, decimal weight, decimal shoeSize, decimal hipKneeDistance, decimal kneeHeelDistance,
+            string yakinAd, string yakinSoyad, string yakinDerece, string yakinTel, string diagnosis)
+        {
+            try
+            {
+                if (OpenConnection())
+                {
+                    string query = @"UPDATE hasta_bilgileri SET 
+                        ad=@ad, soyad=@soyad, dogum_tarihi=@dogum, cinsiyet=@cinsiyet, e_mail=@email, adresi=@adres, hasta_telefon_no=@tel,
+                        boy_cm=@boy, kilo_kg=@kilo, ayak_no=@ayak, kalca_diz_mesafesi=@kalcaDiz, diz_topuk_mesafesi=@dizTopuk,
+                        hasta_yakini_adi=@yakinAd, hasta_yakini_soyadi=@yakinSoyad, hasta_yakini_neyi=@yakinDerece, hasta_yakini_telefon_no=@yakinTel,
+                        hastalik_tanisi=@tani, guncelleme_tarihi=NOW()
+                        WHERE tc=@refTc";
+
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ad", firstName);
+                        cmd.Parameters.AddWithValue("@soyad", lastName);
+                        cmd.Parameters.AddWithValue("@dogum", birthDate);
+                        cmd.Parameters.AddWithValue("@cinsiyet", gender ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@email", email);
+                        cmd.Parameters.AddWithValue("@adres", address);
+                        cmd.Parameters.AddWithValue("@tel", phone);
+                        cmd.Parameters.AddWithValue("@boy", height);
+                        cmd.Parameters.AddWithValue("@kilo", weight);
+                        cmd.Parameters.AddWithValue("@ayak", shoeSize);
+                        cmd.Parameters.AddWithValue("@kalcaDiz", hipKneeDistance);
+                        cmd.Parameters.AddWithValue("@dizTopuk", kneeHeelDistance);
+                        cmd.Parameters.AddWithValue("@yakinAd", yakinAd);
+                        cmd.Parameters.AddWithValue("@yakinSoyad", yakinSoyad);
+                        cmd.Parameters.AddWithValue("@yakinDerece", yakinDerece);
+                        cmd.Parameters.AddWithValue("@yakinTel", yakinTel);
+                        cmd.Parameters.AddWithValue("@tani", diagnosis ?? string.Empty);
+                        cmd.Parameters.AddWithValue("@refTc", refTcNo);
+
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Güncelleme Hatası: " + ex.Message); }
             return false;
         }
 
-        public bool UpdateUser(int userId, string username, string tcNo, string firstName,
-            string lastName, string role, string email, string phone)
+        // HASTA SİL (Pasife Çek)
+        public bool DeletePatientByTC(string tcNo)
         {
+            try
+            {
+                if (OpenConnection())
+                {
+                    string query = "UPDATE hasta_bilgileri SET aktif_pasif_durumu='Pasif' WHERE tc=@tc";
+                    using (NpgsqlCommand cmd = new NpgsqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@tc", tcNo);
+                        return cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Silme Hatası: " + ex.Message);
+                return false;
+            }
             return false;
         }
 
-        public bool DeleteUser(int userId)
+        internal bool AddPatient(string v1, string ad, string soyad, DateTime value, string v2, string v3, string v4, string text1, string v5, string v6, string text2, string v7, string text3, decimal boy, decimal kilo, decimal ayak, decimal kalcaDiz, decimal dizTopuk, int sehirPlaka)
         {
-            return false;
+            // Parametre sıralaması PatientRegistration'daki çağrı ile uyumlu olacak şekilde gelmektedir.
+            // Burada gelen parametreleri public AddPatient metodunun beklediği sıraya yeniden eşleyip delege ediyoruz.
+            return AddPatient(
+                tcNo: v1,
+                firstName: ad,
+                lastName: soyad,
+                birthDate: value,
+                gender: text1,
+                address: v3,
+                phone: v4,
+                email: v2,
+                diagnosis: text3,
+                height: boy,
+                weight: kilo,
+                shoeSize: ayak,
+                hipKneeDistance: kalcaDiz,
+                kneeHeelDistance: dizTopuk,
+                sehirPlaka: sehirPlaka,
+                yakinAd: v5,
+                yakinSoyad: v6,
+                yakinDerece: text2,
+                yakinTel: v7
+            );
         }
 
-        public bool ChangePassword(int userId, string oldPassword, string newPassword)
+        // HASTALARI ARA (TC veya ad soyad ile)
+        public DataTable SearchPatients(string term)
         {
-            return false;
-        }
+            DataTable dt = new DataTable();
+            try
+            {
+                if (!OpenConnection()) return dt;
 
-        public string GeneratePasswordResetToken(string email)
-        {
-            return null;
-        }
+                string query = @"SELECT * FROM hasta_bilgileri 
+WHERE aktif_pasif_durumu = 'Aktif' AND (
+    tc = @term OR
+    (ad || ' ' || soyad) ILIKE '%' || @termLike || '%' OR
+    ad ILIKE '%' || @termLike || '%' OR
+    soyad ILIKE '%' || @termLike || '%'
+)
+ORDER BY hasta_id DESC";
 
-        public bool ResetPasswordWithToken(string token, string newPassword)
-        {
-            return false;
+                using (var cmd = new NpgsqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@term", term ?? string.Empty);
+                    cmd.Parameters.AddWithValue("@termLike", term ?? string.Empty);
+                    using (var da = new NpgsqlDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Arama Hatası: " + ex.Message);
+            }
+            return dt;
         }
-
-        public DataTable GetAllUsers()
-        {
-            return null;
-        }
-
-        public bool UpdateLastLogin(int userId)
-        {
-            return false;
-        }
-
-        public int StartTherapy(int patientId, int operatorId, double speed, double weightReduction,
-            double supportBarHeight, int shoeSize)
-        {
-            return 0;
-        }
-
-        public bool EndTherapy(int therapyId, string notes)
-        {
-            return false;
-        }
-
-        public bool UpdateTherapy(int therapyId, double speed, double weightReduction,
-            double supportBarHeight)
-        {
-            return false;
-        }
-
-        public DataTable SearchTherapy(DateTime? startDate, DateTime? endDate, int? patientId,
-            int? operatorId)
-        {
-            return null;
-        }
-
-        public DataRow GetTherapyDetails(int therapyId)
-        {
-            return null;
-        }
-
-        public DataTable GetPatientTherapyHistory(int patientId)
-        {
-            return null;
-        }
-
-        public bool UpdateTherapyStatus(int therapyId, string status)
-        {
-            return false;
-        }
-
-        public bool SaveLoadCellData(int therapyId, DateTime timestamp, double rightHeel,
-            double leftHeel, double rightToe, double leftToe, double weightBalance, int index)
-        {
-            return false;
-        }
-
-        public bool SaveLoadCellDataBulk(int therapyId, List<LoadCellData> dataList)
-        {
-            return false;
-        }
-
-        public DataTable GetLoadCellData(int therapyId)
-        {
-            return null;
-        }
-
-        public DataTable GetLoadCellDataByTimeRange(int therapyId, DateTime startTime,
-            DateTime endTime)
-        {
-            return null;
-        }
-
-        public bool AddSystemLog(int? userId, string operationType, string operationDetail,
-            string ipAddress, string errorLevel)
-        {
-            return false;
-        }
-
-        public bool AddDeviceStatusLog(string servoMotorStatus, string stepMotorStatus,
-            string limitSwitchStatus, string errorCodes)
-        {
-            return false;
-        }
-
-        public DataTable GetSystemLogs(DateTime? startDate, DateTime? endDate, int? userId,
-            string errorLevel)
-        {
-            return null;
-        }
-
-        public DataTable GetDeviceStatusLogs(DateTime? startDate, DateTime? endDate)
-        {
-            return null;
-        }
-
-        public DataTable GetRecentErrors(int count)
-        {
-            return null;
-        }
-
-        public string GetSetting(string settingKey)
-        {
-            return null;
-        }
-
-        public bool SaveSetting(string settingKey, string settingValue, string description,
-            int updatedByUserId)
-        {
-            return false;
-        }
-
-        public DataTable GetAllSettings()
-        {
-            return null;
-        }
-
-        public bool DeleteSetting(string settingKey)
-        {
-            return false;
-        }
-
-        public int GetTherapyCountByDateRange(DateTime startDate, DateTime endDate)
-        {
-            return 0;
-        }
-
-        public DataTable GetTherapyStatisticsByDateRange(DateTime startDate, DateTime endDate)
-        {
-            return null;
-        }
-
-        public DataTable GetPatientTherapyReport(int patientId)
-        {
-            return null;
-        }
-
-        public DataTable GetOperatorPerformanceReport(DateTime startDate, DateTime endDate)
-        {
-            return null;
-        }
-
-        public DataTable GetOperatorTherapyCount(int operatorId, DateTime startDate,
-            DateTime endDate)
-        {
-            return null;
-        }
-
-        public DataTable GetAverageTherapyDuration(DateTime startDate, DateTime endDate)
-        {
-            return null;
-        }
-
-        public DataTable GetPatientProgressReport(int patientId)
-        {
-            return null;
-        }
-
-        public DataTable GetMostActivePatients(int topCount, DateTime startDate, DateTime endDate)
-        {
-            return null;
-        }
-
-        public DataTable GetDeviceUsageStatistics(DateTime startDate, DateTime endDate)
-        {
-            return null;
-        }
-
-        private string HashPassword(string password)
-        {
-            return null;
-        }
-
-        private bool VerifyPassword(string password, string hashedPassword)
-        {
-            return false;
-        }
-
-        private void LogError(Exception ex, string methodName)
-        {
-            // Hata loglama
-        }
-
-    }
-    // LoadCell verisi için model class
-    public class LoadCellData
-    {
-        public DateTime Timestamp { get; set; }
-        public double RightHeel { get; set; }
-        public double LeftHeel { get; set; }
-        public double RightToe { get; set; }
-        public double LeftToe { get; set; }
-        public double WeightBalance { get; set; }
-        public int Index { get; set; }
     }
 }
